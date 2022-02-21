@@ -14,13 +14,19 @@ public class RoomManager : MonoBehaviour
 
     public static RoomManager Instance;
 
+    int[] maskX = { 0, 1, 0, -1 };
+    int[] maskY = { -1, 0, 1, 0 };
+
+
     public int xSize;
     public int ySize;
 
-    //public Dictionary<Room, Vector2> roomMap = new Dictionary<Room, Vector2>();
     public List<Room> roomMap = new List<Room>();
     public Room currentRoom;
     public List<Room> activeRooms = new List<Room>();
+    public List<Room> activeDebug = new List<Room>();
+
+    public bool LoadFromData;
 
     private void Awake()
     {
@@ -33,12 +39,12 @@ public class RoomManager : MonoBehaviour
 
     public Room InitialRoom()
     {
-        MoveToNextRoom(Direction.none);
+        if (LoadFromData)
+            GenerateFromSaveState();
+        else
+            MoveToNextRoom(Direction.none);
 
-        //Room r = RoomGeneratorManager.GenerateRoom(null, Vector2.zero, Direction.west, xSize, ySize);
-        //roomMap.Add(r, new Vector2(0, 0));
-        //roomMap.Add(r);
-        //currentRoom = r;
+
         return currentRoom;
     }
 
@@ -50,15 +56,12 @@ public class RoomManager : MonoBehaviour
             index = ChangeIndex(d, currentRoom.index);
         }
 
+
         currentRoom = GenerateRoom(index, d);
 
 
-        activeRooms.Clear();
-        activeRooms.Add(currentRoom);
-        GetNeighbours();
+        ActivateCorrectRooms(currentRoom);
         currentRoom.depth = index.magnitude;
-
-        Debug.Log($"Depth of current room: {currentRoom.depth}");
 
         GameManager.Instance.SetPlayerPos(currentRoom.center);
     }
@@ -71,49 +74,125 @@ public class RoomManager : MonoBehaviour
         {
             r = RoomGeneratorManager.GenerateRoom(currentRoom, index, d, xSize, ySize);
             roomMap.Add(r);
-
-            //NPCManager.Instance.SpawnEnemies(currentRoom);
         }
         else
         {
             r = roomMap.Where(a => a.index == index).First();
+            if (!activeRooms.Contains(r))
+                RoomGeneratorManager.ReGenerateRoom(r);
         }
         return r;
     }
 
-
-    public void GetNeighbours()
+    public void RemoveFromActive(Room r)
     {
-
-        Vector2 n = currentRoom.index;
-        n.y += 1;
-        activeRooms.Add(GenerateRoom(n, Direction.north));
-
-        Vector2 e = currentRoom.index;
-        e.x += 1;
-        activeRooms.Add(GenerateRoom(e, Direction.east));
-
-
-        Vector2 s = currentRoom.index;
-        s.y -= 1;
-        activeRooms.Add(GenerateRoom(s, Direction.south));
-
-        Vector2 w = currentRoom.index;
-        w.x -= 1;
-        activeRooms.Add(GenerateRoom(w, Direction.west));
-
+        Destroy(r.GetParent());
+        r.SetParent(null);
+        activeRooms.Remove(r);
     }
 
 
-    public void GenerateFromRoomData(Room r)
+    public void ActivateCorrectRooms(Room org)
     {
+        if (!activeRooms.Contains(org))
+            activeRooms.Add(org);
 
+        int xInd = (int)org.index.x;
+        int yInd = (int)org.index.y;
+
+        List<Room> nRooms = new List<Room>();
+
+
+        for(int i = 0; i < 4; i++)
+        {
+            int nx = xInd + maskX[i];
+            int ny = yInd + maskY[i];
+
+            Vector2 ne = new Vector2(nx, ny);
+            nRooms.Add(GetRoomFromIndex(ne));
+        }
+
+        RemoveNotActiveRooms(nRooms);
+
+        foreach(Room room in nRooms)
+        {
+            AddIfNotContaining(room);
+        }
+    }
+
+    void RemoveNotActiveRooms(List<Room> neighs)
+    {
+        for (int i = activeRooms.Count - 1; i >= 0; i--)
+        {
+            Room r = activeRooms[i];
+            if (!neighs.Contains(r) && r != currentRoom)
+            {
+                RemoveFromActive(r);
+            }
+        }
+    }
+
+    void AddIfNotContaining(Room r)
+    {
+        if (r == null)
+            return;
+
+            if (!activeRooms.Any(a => a.index == r.index))
+        {
+            activeRooms.Add(r);
+            RoomGeneratorManager.ReGenerateRoom(r);
+        }
+    }
+
+    public Room GetRoomFromIndex(Vector2 ind)
+    {
+        return roomMap.Where(a => a.index == ind).FirstOrDefault();
+    }
+
+    public void ToggleRooms(bool act)
+    {
+        if (act)
+        {
+            foreach (Room room in roomMap)
+            {
+                if (!activeRooms.Any(a => a == room))
+                {
+                    if(room.GetTiles().Count >0)
+                        activeDebug.Add(RoomGeneratorManager.ReGenerateRoom(room));
+                    else
+                        activeDebug.Add(RoomGeneratorManager.ReGenerateRoomFromSave(room));
+                }
+            }
+        }
+        else
+        {
+            foreach (Room r in activeDebug)
+            {
+                Destroy(r.GetParent());
+                r.SetParent(null);
+            }
+        }
+    }
+
+
+    public void GenerateFromSaveState()
+    {
+        string fileUrl = Path.Combine(saveUrl, "savedRoom.txt");
+        StreamReader sr = new StreamReader(fileUrl);
+        roomMap = JsonConvert.DeserializeObject<List<Room>>(sr.ReadToEnd());
+        currentRoom = roomMap.First();
+        activeRooms.Add(RoomGeneratorManager.ReGenerateRoomFromSave(currentRoom));
+        GameManager.Instance.SetPlayerPos(currentRoom.center);
     }
 
     public void SerializeRoom()
     {
         var settings = new Newtonsoft.Json.JsonSerializerSettings();
         settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        foreach (Room r in roomMap)
+        {
+            r.GenerateTileDataString();
+        }
 
         string json = JsonConvert.SerializeObject(roomMap, settings);
 

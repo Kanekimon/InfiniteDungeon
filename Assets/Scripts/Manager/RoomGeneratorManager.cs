@@ -14,7 +14,6 @@ public class RoomGeneratorManager : MonoBehaviour
     public GameObject FloorPrefab;
     public GameObject DoorPrefab;
 
-    public Dictionary<Vector2, Room> roomMap = new Dictionary<Vector2, Room>();
     public static Dictionary<TileType, GameObject> tileResources = new Dictionary<TileType, GameObject>();
 
 
@@ -43,11 +42,56 @@ public class RoomGeneratorManager : MonoBehaviour
 
     }
 
+
+    public static Room ReGenerateRoom(Room r)
+    {
+        if (r.GetTiles().Count == 0)
+            r = ReGenerateRoomFromSave(r);
+        else
+        {
+
+            GameObject g = new GameObject(r.Id);
+
+            foreach (Tile t in r.GetTiles())
+            {
+                GenerateTile(g, t.x, t.y, t.type, r);
+            }
+
+            r.SetParent(g);
+        }
+        return r;
+    }
+
+    public static Room ReGenerateRoomFromSave(Room r)
+    {
+        GameObject g = new GameObject(r.Id);
+
+        int x = 0;
+        int y = 0;
+        string tD = r.GetTileData();
+        Debug.Log($"TD Length: {tD.Length}");
+        for (int i = 0; i < tD.Length; i++)
+        {
+            if (x >= r.xLength)
+            {
+                x = 0;
+                y++;
+            }
+
+            int index = (x) + (y * (r.xLength));
+            GenerateTile(g, x + r.bounds.startX, y + r.bounds.startY, (TileType)int.Parse(tD[index].ToString()), r);
+            x++;
+        }
+
+        r.SetParent(g);
+        return r;
+    }
+
     public static Room GenerateRoom(Room oldRoom, Vector2 index, Direction d, int xSize, int ySize)
     {
         Vector2 startPoint = new Vector2();
 
-        if(oldRoom != null)
+        if (oldRoom != null)
         {
             Boundary oldBounds = oldRoom.GetBoundary();
 
@@ -65,10 +109,8 @@ public class RoomGeneratorManager : MonoBehaviour
             startPoint = new Vector2(0, 0);
         }
 
-
-        Room r = new Room(System.Guid.NewGuid().ToString(), index, xSize, ySize, (int)startPoint.x, (int)startPoint.y);
-
         GameObject g = new GameObject();
+        Room r = new Room(System.Guid.NewGuid().ToString(), index, xSize, ySize, (int)startPoint.x, (int)startPoint.y, g);
         g.name = r.Id;
 
         for (int y = 0; y < ySize; y++)
@@ -87,7 +129,7 @@ public class RoomGeneratorManager : MonoBehaviour
                 int xCord = x + (int)startPoint.x;
                 int yCord = y + (int)startPoint.y;
 
-                r.AddTileToRoom(new Vector2(xCord, yCord), GenerateTile(g,xCord , yCord, t), t);
+                r.AddTileToRoom(new Vector2(xCord, yCord), GenerateTile(g, xCord, yCord, t, r), t);
 
             }
         }
@@ -95,86 +137,17 @@ public class RoomGeneratorManager : MonoBehaviour
         return r;
     }
 
-
-
-    //public Vector2 GenerateRoom()
-    //{
-    //    Vector2 roomCoord = GetRoomCoord();
-    //    Vector2 centerTile = new Vector2((int)(roomCoord.x + roomXSize) / 2, (int)(roomCoord.y + roomYSize) / 2);
-
-    //    //Room r = new Room(System.Guid.NewGuid().ToString(), roomXSize, roomYSize,);
-
-    //    GameObject g = new GameObject();
-    //    g.name = r.Id;
-
-    //    for (int y = 0; y < roomYSize; y++)
-    //    {
-    //        for (int x = 0; x < roomXSize; x++)
-    //        {
-    //            TileType t = TileType.floor;
-    //            if ((y == 0 || y == roomYSize - 1) || x == 0 || x == roomXSize - 1)
-    //            {
-    //                t = TileType.wall;
-    //            }
-
-    //            if ((x == (roomXSize / 2) && y == 0) || (x == (roomXSize / 2) && y == roomYSize - 1) || (x == 0 && y == (roomYSize / 2)) || (x == roomXSize - 1 && y == (roomYSize / 2)))
-    //                t = TileType.door;
-    //            r.AddTileToRoom(new Vector2(x, y), GenerateTile(g, x + (int)roomCoord.x, y + (int)roomCoord.y, t), t);
-
-    //        }
-    //    }
-    //    roomMap.Add(roomCoord, r);
-    //    return new Vector2((roomCoord.x + roomXSize) / 2, (roomCoord.y + roomYSize) / 2);
-    //}
-
-    private Vector2 GetRoomCoord()
-    {
-        if (roomMap.Count == 0)
-        {
-            return Vector2.zero;
-        }
-        else
-        {
-            return GetRandom();
-        }
-    }
-
-
-    private Vector2 GetRandom()
-    {
-        bool found = false;
-        int counter = 0;
-        while (!found)
-        {
-
-            if (counter >= 100)
-                found = true;
-
-            Vector2 randElement = roomMap.ElementAt(UnityEngine.Random.Range(0, roomMap.Count)).Key;
-            Room r = roomMap[randElement];
-            if (roomMap.ContainsKey(new Vector2(randElement.x + r.xLength, randElement.y)))
-            {
-                if (!roomMap.ContainsKey(new Vector2(randElement.x, randElement.y + r.yLength)))
-                {
-                    return new Vector2(randElement.x, randElement.y + r.yLength);
-                }
-            }
-            else
-            {
-                return new Vector2(randElement.x + r.xLength, randElement.y);
-            }
-            counter++;
-        }
-        return new Vector2(-1, -1);
-    }
-
-
-
-    static GameObject GenerateTile(GameObject parentRoom, int x, int y, TileType tileType)
+    static GameObject GenerateTile(GameObject parentRoom, float x, float y, TileType tileType, Room r)
     {
         GameObject w = Instantiate(tileResources[tileType]);
         w.transform.position = new Vector3(x, y, 2);
         w.transform.parent = parentRoom.transform;
+
+        if (tileType == TileType.door)
+        {
+            r.SetupDoor(new Vector2(x, y), w);
+        }
+
         return w;
     }
 }

@@ -23,6 +23,11 @@ public class Boundary
         endY = eY;
     }
 
+    public Vector2 GetStart()
+    {
+        return new Vector2(startX, startY);
+    }
+
     public bool IsInBounds(Vector2 point)
     {
         bool inBounds = true;
