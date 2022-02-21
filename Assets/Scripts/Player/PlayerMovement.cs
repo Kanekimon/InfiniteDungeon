@@ -1,3 +1,4 @@
+using Assets.Scripts.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,16 @@ public class PlayerMovement : MonoBehaviour
     Vector2 movement;
     float angle;
 
+    PlayerTargeting pTarget;
+
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        pTarget = GetComponent<PlayerTargeting>();
         SetRotation();
+
     }
 
     // Update is called once per frame
@@ -39,28 +45,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetRotation()
     {
-        Vector2 mR = RelMouseCoords();
+        Vector2 mR = pTarget.RelMouseCoords();
         float angle = Mathf.Atan2(mR.y, mR.x) * Mathf.Rad2Deg - 90;
         Quaternion quaternion = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = quaternion;
         transform.GetChild(0).rotation = Quaternion.identity;
     }
 
-    private Vector3 RelMouseCoords()
-    {
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Vector3 mouse = RelMouseCoords();
-        mouse.z = 0;
-        Gizmos.DrawRay(this.transform.position, mouse);
-    }
 
     public Vector3 GetDirection()
     {
-        Vector3 norm = RelMouseCoords();
+        Vector3 norm = pTarget.RelMouseCoords();
         norm.z = 0;
         return norm.normalized;
     }

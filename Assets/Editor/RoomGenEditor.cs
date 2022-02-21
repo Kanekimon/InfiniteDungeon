@@ -15,7 +15,7 @@ public class RoomGenEditor : Editor
 
         if(GUILayout.Button("Generate Room"))
         {
-            roomGeneratorManager.GenerateRoom();
+            //roomGeneratorManager.GenerateRoom();
         }
     }
 

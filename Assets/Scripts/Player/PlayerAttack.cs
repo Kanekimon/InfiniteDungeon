@@ -22,16 +22,7 @@ public class PlayerAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timer > 1f/AttacksPerSecond)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                Attack();
-                timer = 0;
-            }
 
-        }
-        timer += Time.deltaTime;
     }
 
     public void Attack()

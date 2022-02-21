@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instance;
-    private GameObject player;
+    public GameObject player;
 
 
     private void Awake()
@@ -20,10 +20,17 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Vector2 startpoint = RoomGeneratorManager.Instance.GenerateRoom();
-        SpawnPlayer(startpoint);
+        Room r = RoomManager.Instance.InitialRoom();
+        
+        
+        SpawnPlayer(r.center);
 
+        UiManager.Instance.SetUpCamera(GetCamera());
+    }
 
+    public void SetPlayerPos(Vector2 pos)
+    {
+        this.player.transform.position = pos;  
     }
 
     // Update is called once per frame
@@ -37,10 +44,15 @@ public class GameManager : MonoBehaviour
         return player;
     }
 
+    public Camera GetCamera()
+    {
+        return this.player.transform.Find("Camera").GetComponent<Camera>();
+    }
+
 
     public void SpawnPlayer(Vector3 pos)
     {
-        player = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
+         //Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
         pos.z = 0;
         player.transform.position = pos;
     }
