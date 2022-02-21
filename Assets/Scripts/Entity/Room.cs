@@ -10,11 +10,12 @@ public class Room
 
    // public Dictionary<Vector2, GameObject> RoomMap = new Dictionary<Vector2, GameObject>();
 
-    public List<Tile> RoomTiles = new List<Tile>();
+    private List<Tile> RoomTiles = new List<Tile>();
 
     public int xLength;
     public int yLength;
 
+    public Vector2 index;
     
     public Boundary bounds;
 
@@ -22,11 +23,12 @@ public class Room
 
     public Vector2 center;
 
-    public Room(string Id, int xLen, int yLen, int startX, int startY)
+    public Room(string Id, Vector2 index,int xLen, int yLen, int startX, int startY)
     {
         this.Id = Id;
         this.xLength = xLen;
         this.yLength = yLen;
+        this.index = index;
 
         bounds = new Boundary(startX, startY, startX+xLen, startY+yLen);
 

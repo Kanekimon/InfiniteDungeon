@@ -43,7 +43,7 @@ public class RoomGeneratorManager : MonoBehaviour
 
     }
 
-    public static Room GenerateRoom(Room oldRoom, Direction d, int xSize, int ySize)
+    public static Room GenerateRoom(Room oldRoom, Vector2 index, Direction d, int xSize, int ySize)
     {
         Vector2 startPoint = new Vector2();
 
@@ -66,7 +66,7 @@ public class RoomGeneratorManager : MonoBehaviour
         }
 
 
-        Room r = new Room(System.Guid.NewGuid().ToString(), xSize, ySize, (int)startPoint.x, (int)startPoint.y);
+        Room r = new Room(System.Guid.NewGuid().ToString(), index, xSize, ySize, (int)startPoint.x, (int)startPoint.y);
 
         GameObject g = new GameObject();
         g.name = r.Id;

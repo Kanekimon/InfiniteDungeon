@@ -17,10 +17,10 @@ public class RoomManager : MonoBehaviour
     public int xSize;
     public int ySize;
 
-    public Dictionary<Room, Vector2> roomMap = new Dictionary<Room, Vector2>();
-
+    //public Dictionary<Room, Vector2> roomMap = new Dictionary<Room, Vector2>();
+    public List<Room> roomMap = new List<Room>();
     public Room currentRoom;
-    public List<Room> activeRooms = new List<Room> ();
+    public List<Room> activeRooms = new List<Room>();
 
     private void Awake()
     {
@@ -33,35 +33,74 @@ public class RoomManager : MonoBehaviour
 
     public Room InitialRoom()
     {
-        Room r = RoomGeneratorManager.GenerateRoom(null, Direction.west, xSize, ySize);
-        roomMap.Add(r, new Vector2(0, 0));
-        currentRoom = r;
-        return r;
+        MoveToNextRoom(Direction.none);
+
+        //Room r = RoomGeneratorManager.GenerateRoom(null, Vector2.zero, Direction.west, xSize, ySize);
+        //roomMap.Add(r, new Vector2(0, 0));
+        //roomMap.Add(r);
+        //currentRoom = r;
+        return currentRoom;
     }
 
     public void MoveToNextRoom(Direction d)
     {
-        Vector2 index = roomMap[currentRoom];
-        index = ChangeIndex(d, index);
-
-        if (!roomMap.ContainsValue(index))
+        Vector2 index = Vector2.zero;
+        if (currentRoom != null)
         {
-            Room r = RoomGeneratorManager.GenerateRoom(currentRoom, d, xSize, ySize);
-            roomMap.Add(r, index);
-            currentRoom = r;
-            NPCManager.Instance.SpawnEnemies(currentRoom);
-        }
-        else
-        {
-            currentRoom = roomMap.Where(a => a.Value == index).First().Key;
+            index = ChangeIndex(d, currentRoom.index);
         }
 
+        currentRoom = GenerateRoom(index, d);
+
+
+        activeRooms.Clear();
+        activeRooms.Add(currentRoom);
+        GetNeighbours();
         currentRoom.depth = index.magnitude;
 
         Debug.Log($"Depth of current room: {currentRoom.depth}");
 
         GameManager.Instance.SetPlayerPos(currentRoom.center);
+    }
 
+
+    public Room GenerateRoom(Vector2 index, Direction d)
+    {
+        Room r = null;
+        if (!roomMap.Any(a => a.index == index))
+        {
+            r = RoomGeneratorManager.GenerateRoom(currentRoom, index, d, xSize, ySize);
+            roomMap.Add(r);
+
+            //NPCManager.Instance.SpawnEnemies(currentRoom);
+        }
+        else
+        {
+            r = roomMap.Where(a => a.index == index).First();
+        }
+        return r;
+    }
+
+
+    public void GetNeighbours()
+    {
+
+        Vector2 n = currentRoom.index;
+        n.y += 1;
+        activeRooms.Add(GenerateRoom(n, Direction.north));
+
+        Vector2 e = currentRoom.index;
+        e.x += 1;
+        activeRooms.Add(GenerateRoom(e, Direction.east));
+
+
+        Vector2 s = currentRoom.index;
+        s.y -= 1;
+        activeRooms.Add(GenerateRoom(s, Direction.south));
+
+        Vector2 w = currentRoom.index;
+        w.x -= 1;
+        activeRooms.Add(GenerateRoom(w, Direction.west));
 
     }
 
@@ -80,7 +119,7 @@ public class RoomManager : MonoBehaviour
 
         string fileUrl = Path.Combine(saveUrl, "savedRoom.txt");
 
-        if(!File.Exists(fileUrl))
+        if (!File.Exists(fileUrl))
             File.Create(fileUrl);
 
         using (StreamWriter sw = new StreamWriter(fileUrl))
