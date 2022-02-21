@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    public Vector2 target;
     public float AttacksPerSecond;
     public float Velocity;
 
@@ -44,7 +43,7 @@ public class Attack : MonoBehaviour
             g.transform.parent = null;
 
 
-            Vector2 dir = (pDir - (Vector2)this.transform.position).normalized;
+            Vector2 dir = (pDir - (Vector2)this.transform.position.normalized).normalized;
 
             g.transform.position = this.transform.position + new Vector3(dir.x * this.transform.localScale.x, dir.y * this.transform.localScale.y, 0);
 
@@ -56,12 +55,4 @@ public class Attack : MonoBehaviour
         }
     }
 
-
-    //private void OnDrawGizmos()
-    //{
-
-    //    Gizmos.color = Color.red;
-    //    Vector2 dir = target * 10f;
-    //    Gizmos.DrawRay(this.transform.position, dir);
-    //}
 }

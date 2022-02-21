@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 184889157369803876}
   - component: {fileID: -1010676728894609414}
   - component: {fileID: 6300349858538802093}
+  - component: {fileID: 3373500588094098643}
   m_Layer: 8
   m_Name: Enemo
   m_TagString: Enemy
@@ -98,10 +99,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1338851806890178995}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64cc1b62879f8ee49a33312ab019abc1, type: 3}
+  m_Script: {fileID: 11500000, guid: 452a81f6e781d4a468d302b7f46e8a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 50
 --- !u!70 &-7546855910855004383
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -193,6 +193,18 @@ MonoBehaviour:
   Range: 10
   DistanceToTarget: 0
   obstacleInDirection: 0
+--- !u!114 &3373500588094098643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338851806890178995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cc3811b2e4dc574ea250e1fa59591bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7076551400400109412
 GameObject:
   m_ObjectHideFlags: 0

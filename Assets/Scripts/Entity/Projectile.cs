@@ -55,11 +55,11 @@ public class Projectile : MonoBehaviour
 
         if(hit.tag != "Wall")
         {
-            HealthComponent health = null;
-            hit.TryGetComponent<HealthComponent>(out health); 
-            if(health != null)
+            AttributeSystem att = null;
+            hit.TryGetComponent<AttributeSystem>(out att); 
+            if(att != null)
             {
-                health.ChangeHealth(-damage);
+                att.ChangeAttribute("health", -damage);
             }
         }
 

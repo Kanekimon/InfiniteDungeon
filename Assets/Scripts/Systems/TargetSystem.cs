@@ -46,7 +46,7 @@ public class TargetSystem : MonoBehaviour
                 if (DistanceToTarget <= Range)
                 {
                     Vector2 normShotDir = ((Vector2)target.transform.position);
-                    attack.Shot(normShotDir);
+                    attack.Shot(normShotDir.normalized);
                     move.ToggleMovement(false);
                 }
                 else

@@ -39,6 +39,13 @@ namespace Assets.Scripts.Player
                 if (!successfulHit)
                     interactionText.text = "";
             }
+
+            if (Input.GetMouseButton(0))
+            {
+                this.GetComponent<Attack>().Shot(RelMouseCoords());
+            }
+            
+
         }
 
 
@@ -78,7 +85,7 @@ namespace Assets.Scripts.Player
         }
 
 
-        public Vector3 RelMouseCoords()
+        public Vector2 RelMouseCoords()
         {
             return Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
         }
@@ -86,9 +93,9 @@ namespace Assets.Scripts.Player
 
         private void OnDrawGizmos()
         {
-            Vector3 mouse = Vector2.ClampMagnitude(RelMouseCoords(), interActionRange); 
+            Vector2 mouse = Vector2.ClampMagnitude(RelMouseCoords(), interActionRange); 
             
-            mouse.z = 0;
+            //mouse.z = 0;
             Gizmos.DrawRay(this.transform.position, mouse);
         }
     }
