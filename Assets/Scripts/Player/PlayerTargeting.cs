@@ -93,10 +93,13 @@ namespace Assets.Scripts.Player
 
         private void OnDrawGizmos()
         {
-            Vector2 mouse = Vector2.ClampMagnitude(RelMouseCoords(), interActionRange); 
-            
-            //mouse.z = 0;
-            Gizmos.DrawRay(this.transform.position, mouse);
+            if (!GameManager.Instance.GamePaused)
+            {
+                Vector2 mouse = Vector2.ClampMagnitude(RelMouseCoords(), interActionRange);
+
+                //mouse.z = 0;
+                Gizmos.DrawRay(this.transform.position, mouse);
+            }
         }
     }
 }

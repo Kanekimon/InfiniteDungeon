@@ -24,9 +24,12 @@ public class RoomGeneratorManager : MonoBehaviour
         else
             Destroy(this);
 
-        tileResources.Add(TileType.wall, WallPrefab);
-        tileResources.Add(TileType.floor, FloorPrefab);
-        tileResources.Add(TileType.door, DoorPrefab);
+        if (tileResources.Count <= 0)
+        {
+            tileResources.Add(TileType.wall, WallPrefab);
+            tileResources.Add(TileType.floor, FloorPrefab);
+            tileResources.Add(TileType.door, DoorPrefab);
+        }
 
     }
 

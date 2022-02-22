@@ -15,7 +15,7 @@ public class RoomManagerEditor : Editor
         base.OnInspectorGUI();
         RoomManager roomManager = (RoomManager)target;
 
-        if(GUILayout.Button(showButton))
+        if (GUILayout.Button(showButton))
         {
             if (showButton.Contains("Show"))
             {
@@ -27,11 +27,6 @@ public class RoomManagerEditor : Editor
                 showButton = "Show All Rooms";
                 roomManager.ToggleRooms(false);
             }
-        }
-
-        if (GUILayout.Button("Serialize"))
-        {
-            roomManager.SerializeRoom();
         }
 
     }

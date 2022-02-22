@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
-    public static string saveUrl = @"D:\Unity Workspace\InfiniteDungeon\Assets\SaveData";
+
 
     public static RoomManager Instance;
 
@@ -26,8 +26,7 @@ public class RoomManager : MonoBehaviour
     public List<Room> activeRooms = new List<Room>();
     public List<Room> activeDebug = new List<Room>();
 
-    public bool LoadFromData;
-
+    //Singelton Approach
     private void Awake()
     {
         if (Instance == null)
@@ -37,17 +36,36 @@ public class RoomManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Creates the first Room for a new game
+    /// </summary>
+    /// <returns></returns>
     public Room InitialRoom()
     {
-        if (LoadFromData)
-            GenerateFromSaveState();
-        else
-            MoveToNextRoom(Direction.none);
-
-
+        MoveToNextRoom(Direction.none);
         return currentRoom;
     }
 
+    /// <summary>
+    /// Loads the roomLayout and player position from given save
+    /// </summary>
+    /// <param name="rooms">all rooms from the save</param>
+    /// <param name="playerIndex">Index of room where player was</param>
+    /// <param name="playerPos">Actuall position of player</param>
+    public void StartFromSave(List<Room> rooms, Vector2 playerIndex, Vector2 playerPos)
+    {
+        roomMap = rooms;
+
+        currentRoom = roomMap.Where(r => r.index == playerIndex).FirstOrDefault();
+
+        activeRooms.Add(RoomGeneratorManager.ReGenerateRoomFromSave(currentRoom));
+        GameManager.Instance.SetPlayerPos(playerPos);
+    }
+
+    /// <summary>
+    /// Triggers the creation of the next room
+    /// </summary>
+    /// <param name="d"></param>
     public void MoveToNextRoom(Direction d)
     {
         Vector2 index = Vector2.zero;
@@ -66,7 +84,22 @@ public class RoomManager : MonoBehaviour
         GameManager.Instance.SetPlayerPos(currentRoom.center);
     }
 
+    /// <summary>
+    /// Returns the current room
+    /// </summary>
+    /// <returns>Room in which Player is</returns>
+    public Room GetCurrentRoom()
+    {
+        return currentRoom;
+    }
 
+    /// <summary>
+    /// Triggers the static Method for generating new rooms
+    /// or the regeneration of an inactive room
+    /// </summary>
+    /// <param name="index">index of room</param>
+    /// <param name="d"></param>
+    /// <returns></returns>
     public Room GenerateRoom(Vector2 index, Direction d)
     {
         Room r = null;
@@ -84,6 +117,11 @@ public class RoomManager : MonoBehaviour
         return r;
     }
 
+    /// <summary>
+    /// Destorys gameobjects of room which is
+    /// not longer in proximity
+    /// </summary>
+    /// <param name="r"></param>
     public void RemoveFromActive(Room r)
     {
         Destroy(r.GetParent());
@@ -91,7 +129,10 @@ public class RoomManager : MonoBehaviour
         activeRooms.Remove(r);
     }
 
-
+    /// <summary>
+    /// Activates the room and neighbouring rooms
+    /// </summary>
+    /// <param name="org"></param>
     public void ActivateCorrectRooms(Room org)
     {
         if (!activeRooms.Contains(org))
@@ -103,7 +144,7 @@ public class RoomManager : MonoBehaviour
         List<Room> nRooms = new List<Room>();
 
 
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             int nx = xInd + maskX[i];
             int ny = yInd + maskY[i];
@@ -114,12 +155,16 @@ public class RoomManager : MonoBehaviour
 
         RemoveNotActiveRooms(nRooms);
 
-        foreach(Room room in nRooms)
+        foreach (Room room in nRooms)
         {
             AddIfNotContaining(room);
         }
     }
 
+    /// <summary>
+    /// Removes all rooms that are not active anymore
+    /// </summary>
+    /// <param name="neighs"></param>
     void RemoveNotActiveRooms(List<Room> neighs)
     {
         for (int i = activeRooms.Count - 1; i >= 0; i--)
@@ -132,23 +177,36 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if a room is already inside the active list
+    /// </summary>
+    /// <param name="r"></param>
     void AddIfNotContaining(Room r)
     {
         if (r == null)
             return;
 
-            if (!activeRooms.Any(a => a.index == r.index))
+        if (!activeRooms.Any(a => a.index == r.index))
         {
             activeRooms.Add(r);
             RoomGeneratorManager.ReGenerateRoom(r);
         }
     }
 
+    /// <summary>
+    /// Returns room from given index
+    /// </summary>
+    /// <param name="ind">Room index</param>
+    /// <returns>Room at index or null</returns>
     public Room GetRoomFromIndex(Vector2 ind)
     {
         return roomMap.Where(a => a.index == ind).FirstOrDefault();
     }
 
+    /// <summary>
+    /// Shows/Hides all rooms
+    /// </summary>
+    /// <param name="act"></param>
     public void ToggleRooms(bool act)
     {
         if (act)
@@ -157,7 +215,7 @@ public class RoomManager : MonoBehaviour
             {
                 if (!activeRooms.Any(a => a == room))
                 {
-                    if(room.GetTiles().Count >0)
+                    if (room.GetTiles().Count > 0)
                         activeDebug.Add(RoomGeneratorManager.ReGenerateRoom(room));
                     else
                         activeDebug.Add(RoomGeneratorManager.ReGenerateRoomFromSave(room));
@@ -174,42 +232,12 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-
-    public void GenerateFromSaveState()
-    {
-        string fileUrl = Path.Combine(saveUrl, "savedRoom.txt");
-        StreamReader sr = new StreamReader(fileUrl);
-        roomMap = JsonConvert.DeserializeObject<List<Room>>(sr.ReadToEnd());
-        currentRoom = roomMap.First();
-        activeRooms.Add(RoomGeneratorManager.ReGenerateRoomFromSave(currentRoom));
-        GameManager.Instance.SetPlayerPos(currentRoom.center);
-    }
-
-    public void SerializeRoom()
-    {
-        var settings = new Newtonsoft.Json.JsonSerializerSettings();
-        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        foreach (Room r in roomMap)
-        {
-            r.GenerateTileDataString();
-        }
-
-        string json = JsonConvert.SerializeObject(roomMap, settings);
-
-        string fileUrl = Path.Combine(saveUrl, "savedRoom.txt");
-
-        if (!File.Exists(fileUrl))
-            File.Create(fileUrl);
-
-        using (StreamWriter sw = new StreamWriter(fileUrl))
-        {
-            sw.Write(json);
-        }
-    }
-
-
-
-
+    /// <summary>
+    /// Changes index based on direction
+    /// </summary>
+    /// <param name="d">Direction of next room</param>
+    /// <param name="ind">index of old room</param>
+    /// <returns></returns>
     Vector2 ChangeIndex(Direction d, Vector2 ind)
     {
         switch (d)
