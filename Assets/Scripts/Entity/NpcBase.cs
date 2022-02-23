@@ -9,6 +9,8 @@ public class NpcBase : MonoBehaviour
 {
 
     AttributeSystem aSystem;
+    int entityId;
+
 
     private void Start()
     {
@@ -25,4 +27,9 @@ public class NpcBase : MonoBehaviour
         UiManager.Instance.ChangeCurrency( UnityEngine.Random.Range(0f, 10f));
     }
 
+
+    public int GetId()
+    {
+        return entityId;
+    }
 }

@@ -2,6 +2,7 @@ using Assets.Scripts.Enum;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,16 +13,23 @@ public class Room
     // public Dictionary<Vector2, GameObject> RoomMap = new Dictionary<Vector2, GameObject>();
 
     private List<Tile> RoomTiles = new List<Tile>();
+    private Dictionary<Tile, GameObject> resourceMap = new Dictionary<Tile, GameObject>();
 
     public int xLength;
     public int yLength;
     public float depth;
     public Vector2 index;
     public Vector2 center;
+    public Vector2 playerSpawnPoint;
     public Boundary bounds;
+
     private GameObject parent;
+    private GameObject resource;
 
     List<Door> doors = new List<Door>();
+
+    [JsonProperty]
+    Dictionary<int,int> enemies = new Dictionary<int,int>();
 
     [JsonProperty]
     private string tileData = "";
@@ -36,7 +44,7 @@ public class Room
         this.index = index;
         this.parent = par;
 
-        bounds = new Boundary(startX, startY, startX + xLen, startY + yLen);
+        bounds = new Boundary(startX, startY, startX + xLen-1, startY + yLen-1);
 
         center = new Vector2((startX + bounds.endX) / 2, (startY + bounds.endY) / 2);
 
@@ -49,6 +57,16 @@ public class Room
         RoomTiles.Add(tile);
     }
 
+
+    public void AddResourceToTile(Vector2 tileCoord, GameObject resource)
+    {
+        resourceMap[RoomTiles.Where(a => a.x == (int)tileCoord.x && a.y == (int)tileCoord.y).First()] = resource;
+    }
+
+    public Dictionary<int,int> GetEnemies()
+    {
+        return enemies;
+    }
 
     public GameObject GetParent()
     {
@@ -63,6 +81,14 @@ public class Room
     public string GetTileData()
     {
         return tileData;
+    }
+
+    public void AddEnemyToRoom(int enemyId, int amount)
+    {
+        if (enemies.ContainsKey(enemyId))
+            enemies[enemyId] += amount;
+        else
+            enemies.Add(enemyId, amount);
     }
 
     public void SetupDoor(Vector2 coords, GameObject g)

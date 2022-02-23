@@ -20,6 +20,9 @@ public class RoomManager : MonoBehaviour
 
     public int xSize;
     public int ySize;
+    public bool genRa;
+
+    public float gizSphere;
 
     public List<Room> roomMap = new List<Room>();
     public Room currentRoom;
@@ -58,6 +61,8 @@ public class RoomManager : MonoBehaviour
 
         currentRoom = roomMap.Where(r => r.index == playerIndex).FirstOrDefault();
 
+        NPCManager.Instance.SpawnFromSave(currentRoom.GetEnemies(), currentRoom);
+
         activeRooms.Add(RoomGeneratorManager.ReGenerateRoomFromSave(currentRoom));
         GameManager.Instance.SetPlayerPos(playerPos);
     }
@@ -73,15 +78,13 @@ public class RoomManager : MonoBehaviour
         {
             index = ChangeIndex(d, currentRoom.index);
         }
-
-
         currentRoom = GenerateRoom(index, d);
 
 
         ActivateCorrectRooms(currentRoom);
         currentRoom.depth = index.magnitude;
 
-        GameManager.Instance.SetPlayerPos(currentRoom.center);
+
     }
 
     /// <summary>
@@ -105,15 +108,18 @@ public class RoomManager : MonoBehaviour
         Room r = null;
         if (!roomMap.Any(a => a.index == index))
         {
-            r = RoomGeneratorManager.GenerateRoom(currentRoom, index, d, xSize, ySize);
+            r = RoomGeneratorManager.GenerateRoom(currentRoom, index, d, xSize, ySize, genRa);
             roomMap.Add(r);
         }
         else
         {
             r = roomMap.Where(a => a.index == index).First();
             if (!activeRooms.Contains(r))
-                RoomGeneratorManager.ReGenerateRoom(r);
+                RoomGeneratorManager.ReGenerateRoom(r, d);
         }
+
+
+        GameManager.Instance.SetPlayerPos(r.playerSpawnPoint);
         return r;
     }
 
@@ -260,6 +266,35 @@ public class RoomManager : MonoBehaviour
         return ind;
     }
 
+    private void OnDrawGizmos()
+    {
+        if (Application.isPlaying)
+        {
+            foreach (Room room in roomMap)
+            {
+                Boundary b = room.GetBoundary();
+
+                Gizmos.color = Color.blue;
+                Vector2 leftBottom = new Vector2(b.startX, b.startY);
+                Gizmos.DrawSphere(leftBottom, gizSphere);
+
+                Gizmos.color = Color.red;
+                Vector2 leftTop = new Vector2(b.startX, b.endY);
+                Gizmos.DrawSphere(leftTop, gizSphere);
+
+                Gizmos.color = Color.green;
+                Vector2 rightBottom = new Vector2(b.endX, b.startY);
+                Gizmos.DrawSphere (rightBottom, gizSphere);
+
+                Gizmos.color = Color.yellow;
+                Vector2 topRight = new Vector2(b.endX, b.endY);
+                Gizmos.DrawSphere(topRight, gizSphere);
+
+                Gizmos.color = Color.black;
+                Gizmos.DrawSphere(room.center, gizSphere);
+            }
+        }
+
+    }
 
 }
-

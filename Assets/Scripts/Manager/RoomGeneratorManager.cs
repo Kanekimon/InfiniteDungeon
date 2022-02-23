@@ -13,6 +13,8 @@ public class RoomGeneratorManager : MonoBehaviour
     public GameObject WallPrefab;
     public GameObject FloorPrefab;
     public GameObject DoorPrefab;
+    public GameObject PathPrefab;
+    public GameObject ResourcePrefab;
 
     public static Dictionary<TileType, GameObject> tileResources = new Dictionary<TileType, GameObject>();
 
@@ -29,6 +31,8 @@ public class RoomGeneratorManager : MonoBehaviour
             tileResources.Add(TileType.wall, WallPrefab);
             tileResources.Add(TileType.floor, FloorPrefab);
             tileResources.Add(TileType.door, DoorPrefab);
+            tileResources.Add(TileType.path, PathPrefab);
+            tileResources.Add(TileType.resource, ResourcePrefab);
         }
 
     }
@@ -46,7 +50,7 @@ public class RoomGeneratorManager : MonoBehaviour
     }
 
 
-    public static Room ReGenerateRoom(Room r)
+    public static Room ReGenerateRoom(Room r, Direction d = Direction.none)
     {
         if (r.GetTiles().Count == 0)
             r = ReGenerateRoomFromSave(r);
@@ -59,6 +63,8 @@ public class RoomGeneratorManager : MonoBehaviour
             {
                 GenerateTile(g, t.x, t.y, t.type, r);
             }
+            if(d != Direction.none)
+                r.playerSpawnPoint =  GetRoomStartPoint(d, r);
 
             r.SetParent(g);
         }
@@ -90,32 +96,30 @@ public class RoomGeneratorManager : MonoBehaviour
         return r;
     }
 
-    public static Room GenerateRoom(Room oldRoom, Vector2 index, Direction d, int xSize, int ySize)
+    public static Room GenerateRoom(Room oldRoom, Vector2 index, Direction d, int xSize, int ySize, bool genRa)
     {
-        Vector2 startPoint = new Vector2();
-
-        if (oldRoom != null)
-        {
-            Boundary oldBounds = oldRoom.GetBoundary();
-
-            if (d == Direction.north)
-                startPoint = new Vector2(oldBounds.startX, oldBounds.endY);
-            else if (d == Direction.south)
-                startPoint = new Vector2(oldBounds.startX, oldBounds.startY - ySize);
-            else if (d == Direction.west)
-                startPoint = new Vector2(oldBounds.startX - xSize, oldBounds.startY);
-            else
-                startPoint = new Vector2(oldBounds.endX, oldBounds.startY);
-        }
-        else
-        {
-            startPoint = new Vector2(0, 0);
-        }
+        Vector2 startPoint = new Vector2(index.x * xSize, index.y * ySize);
 
         GameObject g = new GameObject();
         Room r = new Room(System.Guid.NewGuid().ToString(), index, xSize, ySize, (int)startPoint.x, (int)startPoint.y, g);
-        g.name = r.Id;
+        g.name = $"Room: ({index.x} | {index.y})";
+        Boundary b = r.GetBoundary();
 
+        Vector2 startPointPath = GetRoomStartPoint(d, r);
+
+        r.playerSpawnPoint = startPointPath;
+
+        List<Vector2> path = new List<Vector2>();
+        List<Vector2> res = new List<Vector2>();
+        if (genRa)
+        {
+            if (startPoint != startPointPath)
+            {
+                path = RandomPathGenerator.GenerateRandomPath(r, startPointPath);
+
+                res = RandomResourceGenerator.GenerateResources(r, path);
+            }
+        }
         for (int y = 0; y < ySize; y++)
         {
             for (int x = 0; x < xSize; x++)
@@ -132,12 +136,64 @@ public class RoomGeneratorManager : MonoBehaviour
                 int xCord = x + (int)startPoint.x;
                 int yCord = y + (int)startPoint.y;
 
-                r.AddTileToRoom(new Vector2(xCord, yCord), GenerateTile(g, xCord, yCord, t, r), t);
+                if (path.Count > 0 && path.Contains(new Vector2(xCord, yCord)))
+                {
+                    t = TileType.path;
+                    r.AddTileToRoom(new Vector2(xCord, yCord), GenerateTile(g, xCord, yCord, t, r), t);
+                }
+                else if (res.Count > 0 && res.Contains(new Vector2(xCord, yCord)))
+                {
+                    GameObject tile = GenerateTile(g, xCord, yCord, t, r);
+                    Vector2 tileCoord = new Vector2(xCord, yCord);
+                    r.AddTileToRoom(tileCoord, tile, t);
+                    r.AddResourceToTile(tileCoord, GenerateResource(tile));
+
+                }
+                else
+                {
+                    r.AddTileToRoom(new Vector2(xCord, yCord), GenerateTile(g, xCord, yCord, t, r), t);
+                }
+
+
 
             }
         }
 
         return r;
+    }
+
+    static Vector2 GetRoomStartPoint(Direction d, Room r)
+    {
+        Vector2 startPointPath = new Vector2();
+        Boundary b = r.GetBoundary();
+        if (d == Direction.north)
+        {
+            startPointPath = new Vector2(r.center.x, b.startY + 1);
+        }
+        else if (d == Direction.east)
+        {
+            startPointPath = new Vector2(b.startX + 1, r.center.y);
+        }
+        else if (d == Direction.south)
+        {
+            startPointPath = new Vector2(r.center.x, b.startY + r.yLength - 2);
+        }
+        else if (d == Direction.west)
+        {
+            startPointPath = new Vector2(b.startX + r.xLength - 2, r.center.y);
+        }
+
+        return startPointPath;
+    }
+
+    static GameObject GenerateResource(GameObject parent)
+    {
+        GameObject re = Instantiate(tileResources[TileType.resource]);
+
+        re.transform.position = parent.transform.position;
+
+        re.transform.parent = parent.transform;
+        return re;
     }
 
     static GameObject GenerateTile(GameObject parentRoom, float x, float y, TileType tileType, Room r)

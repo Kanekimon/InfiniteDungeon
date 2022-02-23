@@ -797,6 +797,8 @@ MonoBehaviour:
   WallPrefab: {fileID: 7670428619007317825, guid: 82b8042348fef7846a57c6fe162bd352, type: 3}
   FloorPrefab: {fileID: 8080606201525099023, guid: c27e9f26685776448bee2d4ba6ccb0fb, type: 3}
   DoorPrefab: {fileID: 2354823893750413473, guid: 1ae702eaa1e7a7743b65c417cbf119a5, type: 3}
+  PathPrefab: {fileID: 7741216997292334676, guid: 159134aef651ee54e99d73112c55b01d, type: 3}
+  ResourcePrefab: {fileID: 8839403842275313696, guid: 7ad13f0247be892479cacc09d2d46165, type: 3}
 --- !u!4 &417431538
 Transform:
   m_ObjectHideFlags: 0
@@ -825,6 +827,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSize: 51
   ySize: 51
+  genRa: 1
+  gizSphere: 0.5
   roomMap: []
   currentRoom:
     Id: 
@@ -833,6 +837,7 @@ MonoBehaviour:
     depth: 0
     index: {x: 0, y: 0}
     center: {x: 0, y: 0}
+    playerSpawnPoint: {x: 0, y: 0}
     bounds:
       startX: 0
       startY: 0
@@ -1111,6 +1116,14 @@ PrefabInstance:
     - target: {fileID: 3706852311265675798, guid: cf46563143cfd824ab86d1126424afe2, type: 3}
       propertyPath: m_RootOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706852311265675798, guid: cf46563143cfd824ab86d1126424afe2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706852311265675798, guid: cf46563143cfd824ab86d1126424afe2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 3706852311265675798, guid: cf46563143cfd824ab86d1126424afe2, type: 3}
       propertyPath: m_LocalPosition.x

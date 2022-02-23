@@ -93,7 +93,7 @@ namespace Assets.Scripts.Player
 
         private void OnDrawGizmos()
         {
-            if (!GameManager.Instance.GamePaused)
+            if (Application.isPlaying && !GameManager.Instance.GamePaused)
             {
                 Vector2 mouse = Vector2.ClampMagnitude(RelMouseCoords(), interActionRange);
 

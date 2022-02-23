@@ -44,6 +44,25 @@ public class Boundary
     }
 
 
+    public bool IsInsideWalls(Vector2 point)
+    {
+        bool inBounds = true;
+
+        int pX = (int)point.x;
+        int pY = (int)point.y;
+
+
+        if (pX <= startX || pX >= endX)
+            inBounds = false;
+        if (pY <= startY || pY >= endY)
+            inBounds = false;
+
+
+        return inBounds;
+
+
+    }
+
 
 
 }

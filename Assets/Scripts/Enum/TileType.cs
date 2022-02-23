@@ -10,7 +10,9 @@ namespace Assets.Scripts.Enum
     {
         wall = 0,
         floor =1,
-        door =2
+        door =2,
+        path = 3,
+        resource = 4
 
     }
 }

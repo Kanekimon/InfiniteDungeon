@@ -83,18 +83,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SpawnEnemies()
     {
-        int nOe = UnityEngine.Random.Range(0, 100);
-
-        for(int i = 0; i < nOe; i++)
-        {
-            float x = Random.Range(1f, 100f);
-            float y = Random.Range(1f, 100f);
-
-            GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo"));
-
-            e.transform.position = new Vector3(x, y, 0);
-
-        }
+        NPCManager.Instance.SpawnEnemies(RoomManager.Instance.GetCurrentRoom());
     }
 
     /// <summary>
