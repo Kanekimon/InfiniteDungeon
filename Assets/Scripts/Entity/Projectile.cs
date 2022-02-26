@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     public float lifeTime;
     public float timer;
     public float damage;
+    public GameObject owner;
 
     public bool fly = false;
 
@@ -40,12 +41,24 @@ public class Projectile : MonoBehaviour
         //}
     }
 
+    public void SetOwner(GameObject g)
+    {
+        owner = g;
+
+        damage = g.GetComponent<AttributeSystem>().GetAttributeValue("str");
+
+
+
+    }
+
+
+
     private void FixedUpdate()
     {
         if (fly)
         {
             speed += velocity * Time.fixedDeltaTime;
-            rb.MovePosition(rb.position + direction * speed);
+            rb.MovePosition(rb.position + direction + owner.GetComponent<Rigidbody2D>().velocity * speed);
         }
     }
 
@@ -56,13 +69,14 @@ public class Projectile : MonoBehaviour
         if(hit.tag != "Wall")
         {
             AttributeSystem att = null;
-            hit.TryGetComponent<AttributeSystem>(out att); 
+            hit.TryGetComponent(out att); 
             if(att != null)
             {
-                att.ChangeAttribute("health", -damage);
+                att.ChangeHealth(-damage);
             }
         }
 
+        this.owner = null;
         ProjectilePoolManager.Instance.AddToPool(this.gameObject);
 
     }

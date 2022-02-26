@@ -20,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         pTarget = GetComponent<PlayerTargeting>();
         SetRotation();
-
     }
 
     // Update is called once per frame
@@ -40,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime * Speed);
+        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime * this.GetComponent<AttributeSystem>().GetAttributeValue("dex"));
     }
 
     private void SetRotation()

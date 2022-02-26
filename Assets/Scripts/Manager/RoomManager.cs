@@ -73,11 +73,16 @@ public class RoomManager : MonoBehaviour
     /// <param name="d"></param>
     public void MoveToNextRoom(Direction d)
     {
+
         Vector2 index = Vector2.zero;
         if (currentRoom != null)
         {
             index = ChangeIndex(d, currentRoom.index);
         }
+
+
+        //Debug.Log($"From room: ({currentRoom.index.x}|{currentRoom.index.y}) to room ({index.x}|{index.y}) in direction {d}");
+
         currentRoom = GenerateRoom(index, d);
 
 
@@ -118,6 +123,7 @@ public class RoomManager : MonoBehaviour
                 RoomGeneratorManager.ReGenerateRoom(r, d);
         }
 
+        r.playerSpawnPoint = RoomGeneratorManager.GetRoomStartPoint(d, r);
 
         GameManager.Instance.SetPlayerPos(r.playerSpawnPoint);
         return r;

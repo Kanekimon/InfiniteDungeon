@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using UnityEngine.Profiling;
 
 public class Node
 {
@@ -40,9 +40,12 @@ public static class RandomPathGenerator
 
     public static List<Vector2> GenerateRandomPath(Room r, Vector2 startPoint)
     {
+        Profiler.BeginSample("My Sample");
+        Debug.Log("This code is being profiled");
+
         Boundary b = r.GetBoundary();
 
-        Vector2 nDoor = new Vector2(b.startX + (r.xLength/2), b.endY -1);
+        Vector2 nDoor = new Vector2(b.startX + (r.xLength / 2), b.endY - 1);
         Vector2 sDoor = new Vector2(b.startX + (r.xLength / 2), b.startY + 1);
         Vector2 eDoor = new Vector2(b.endX - 1, r.center.y);
         Vector2 wDoor = new Vector2(b.startX + 1, r.center.y);
@@ -69,9 +72,11 @@ public static class RandomPathGenerator
 
         Node end = new Node(endPoint, float.MaxValue, float.MaxValue, float.MaxValue);
 
+
+
         List<Node> openNodes = new List<Node>();
         List<Node> closedNodes = new List<Node>();
-
+        bool[,] visited = new bool[r.xLength, r.yLength];
 
 
         openNodes.Add(start);
@@ -79,47 +84,50 @@ public static class RandomPathGenerator
         bool run = true;
 
 
-
         while (run && openNodes.Count > 0)
         {
             Node current = GetRandom(openNodes); //openNodes.OrderBy(a => a.fCost).First(); ////GetAverage(openNodes);
 
             closedNodes.Add(current);
+            visited[(int)current.nodePos.x - b.startX, (int)current.nodePos.y - b.startY] = true;
+
             openNodes.Remove(current);
 
-            if (closedNodes.Any(a => a.nodePos == end.nodePos))
+            if (current.nodePos == end.nodePos)
             {
-                end.pre = closedNodes.Where(a => a.nodePos == end.nodePos).First().pre;
-                break;
+                end = closedNodes.Last();
+                run = false;
             }
-
-
-            List<Vector2> adjNodePos = AdjacentNodes(current, r);
-            g++;
-
-
-            foreach (Vector2 adj in adjNodePos)
+            else
             {
 
-                if (closedNodes.Any(a => a.nodePos == adj))
-                    continue;
+                List<Vector2> adjNodePos = AdjacentNodes(current, r);
+                g++;
 
-                if (!openNodes.Any(a => a.nodePos == adj))
+
+                foreach (Vector2 adj in adjNodePos)
                 {
-                    float h = Vector2.Distance(adj, end.nodePos);
-                    float f = h + g;
-                    Node n = new Node(adj, g, f, h);
-                    n.pre = current;
-                    openNodes.Add(n);
-                }
-                else
-                {
-                    Node n = openNodes.Where(a => a.nodePos == adj).FirstOrDefault();
-                    if (g + n.hCost < n.fCost)
+
+                    if (visited[(int)adj.x - b.startX, (int)adj.y - b.startY]) //closedNodes.Any(a => a.nodePos == adj))
+                        continue;
+
+                    if (!openNodes.Any(a => a.nodePos == adj))
                     {
-                        n.gCost = g;
-                        n.fCost = n.gCost + n.hCost;
+                        float h = Vector2.Distance(adj, end.nodePos);
+                        float f = h + g;
+                        Node n = new Node(adj, g, f, h);
                         n.pre = current;
+                        openNodes.Add(n);
+                    }
+                    else
+                    {
+                        Node n = openNodes.Where(a => a.nodePos == adj).FirstOrDefault();
+                        if (g + n.hCost < n.fCost)
+                        {
+                            n.gCost = g;
+                            n.fCost = n.gCost + n.hCost;
+                            n.pre = current;
+                        }
                     }
                 }
             }
@@ -127,7 +135,7 @@ public static class RandomPathGenerator
         }
 
         List<Vector2> path = BackTrackPath(end);
-
+        Profiler.EndSample();
         return BackTrackPath(end);
     }
 

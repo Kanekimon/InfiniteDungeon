@@ -23,9 +23,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        if(StartParameters.newGame == true)
+        player = Instantiate(player);
+        if (StartParameters.newGame == true)
+        {
             RoomManager.Instance.InitialRoom();
+            player.GetComponent<PlayerSystem>().InitPlayer();
+        }
         else
         {
             SaveStateManager.Instance.LoadGame();
@@ -56,6 +59,11 @@ public class GameManager : MonoBehaviour
     public GameObject GetPlayer()
     {
         return player;
+    }
+
+    public PlayerSystem GetPlayerSystem()
+    {
+        return player.GetComponent<PlayerSystem>();
     }
 
     /// <summary>

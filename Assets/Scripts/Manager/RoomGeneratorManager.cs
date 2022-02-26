@@ -63,8 +63,8 @@ public class RoomGeneratorManager : MonoBehaviour
             {
                 GenerateTile(g, t.x, t.y, t.type, r);
             }
-            if(d != Direction.none)
-                r.playerSpawnPoint =  GetRoomStartPoint(d, r);
+            //if (d != Direction.none)
+            //    r.playerSpawnPoint = GetRoomStartPoint(d, r);
 
             r.SetParent(g);
         }
@@ -162,7 +162,7 @@ public class RoomGeneratorManager : MonoBehaviour
         return r;
     }
 
-    static Vector2 GetRoomStartPoint(Direction d, Room r)
+    public static Vector2 GetRoomStartPoint(Direction d, Room r)
     {
         Vector2 startPointPath = new Vector2();
         Boundary b = r.GetBoundary();

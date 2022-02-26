@@ -58,6 +58,7 @@ public class SaveStateManager : MonoBehaviour
         SaveData s = JsonConvert.DeserializeObject<SaveData>(sr.ReadToEnd());
 
         RoomManager.Instance.StartFromSave(s.rooms, s.playerRoomIndex, s.playerPosition);
+        GameManager.Instance.GetPlayer().GetComponent<PlayerSystem>().LoadAttributes(s.playerAtts);
     }
 
     /// <summary>
@@ -79,7 +80,7 @@ public class SaveStateManager : MonoBehaviour
         List<Room> rooms = RoomManager.Instance.roomMap;
         float currency = 0;
 
-        SaveData s = new SaveData(playerRoomIndex, playerPos, currency, rooms);
+        SaveData s = new SaveData(playerRoomIndex, playerPos, currency, rooms, GameManager.Instance.GetPlayer().GetComponent<AttributeSystem>().attributes);
 
         return s;
     }

@@ -12,6 +12,7 @@ public class NPCManager : MonoBehaviour
 
     public int spawnCount;
 
+
     public Dictionary<Room, List<GameObject>> roomEnemies = new Dictionary<Room, List<GameObject>>();
 
     private void Awake()
@@ -21,6 +22,11 @@ public class NPCManager : MonoBehaviour
         else
             Destroy(this);
     }
+    private void Start()
+    {
+        
+    }
+
 
 
     public void SpawnEnemies(Room r)
@@ -35,8 +41,11 @@ public class NPCManager : MonoBehaviour
             int randX = UnityEngine.Random.Range(bounds.startX, bounds.endX);
             int randY = UnityEngine.Random.Range(bounds.startY, bounds.endY);
 
-            GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo"));
 
+
+            GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo" + UnityEngine.Random.Range(0,2)));
+            NpcBase nBase = e.GetComponent<NpcBase>();
+            nBase.SetDifficulty(r);
             e.transform.position = new Vector3(randX, randY, 0);
             r.AddEnemyToRoom(e.GetComponent<NpcBase>().GetId(),1);
 

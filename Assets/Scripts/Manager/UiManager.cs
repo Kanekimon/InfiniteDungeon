@@ -104,11 +104,14 @@ public class UiManager : MonoBehaviour
 
     public void ChangeCurrency(float value)
     {
-        float val = float.Parse(currency.text.Replace("Money: ", ""));
+        string currentCurrency = currency.text.Replace("Money: ", "");
+        Debug.Log(currentCurrency);
+        if (currentCurrency == string.Empty)
+            currentCurrency = "0";
+        float val = float.Parse(currentCurrency);
 
         val += value;
         currency.text = "Money: " + val;
-
     }
 
 

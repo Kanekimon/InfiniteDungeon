@@ -99,6 +99,8 @@ GameObject:
   - component: {fileID: -7557146548172942753}
   - component: {fileID: -4502047547151942757}
   - component: {fileID: -8048442991973800558}
+  - component: {fileID: -403224483188481066}
+  - component: {fileID: 8605721388689661744}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -234,6 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452a81f6e781d4a468d302b7f46e8a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attributes: []
 --- !u!114 &-4502047547151942757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fde521d992742cf4d8cee96a36b6960b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 0, y: 0}
   AttacksPerSecond: 1
   Velocity: 5
   canShot: 1
@@ -268,3 +270,27 @@ MonoBehaviour:
     m_Bits: 503
   interActionRange: 10
   interactionText: {fileID: 0}
+--- !u!114 &-403224483188481066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706852311265675792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e7eff4c27ce5243bb53735d812def2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8605721388689661744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706852311265675792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5ca5b3e338028428429ebffc7a56fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

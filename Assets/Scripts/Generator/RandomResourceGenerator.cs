@@ -17,21 +17,25 @@ public static class RandomResourceGenerator
 
         Boundary b = r.GetBoundary();
 
-        for(int x = b.startX+1; x < b.endX ; x++)
+
+        int max = 200;
+
+        int added = 0;
+
+
+        while(added < max)
         {
-            for(int y = b.startY+1; y < b.endY ; y++)
-            {
-                Vector2 point = new Vector2(x, y);
+            int randomX = UnityEngine.Random.Range(b.startX + 1, b.endX);
+            int randomY = UnityEngine.Random.Range(b.startY + 1, b.endY);
 
-                if (path.Contains(point))
-                    continue;
+            Vector2 point = new Vector2(randomX, randomY);
 
-                res.Add(point);
+            if (path.Contains(point))
+                continue;
 
-            }
+            res.Add(point);
+            added++;
         }
-
-
 
         return res;
     }

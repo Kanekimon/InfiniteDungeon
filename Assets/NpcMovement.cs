@@ -11,16 +11,22 @@ public class NpcMovement : MonoBehaviour
     public float delay = 3f;
     public Vector2 direction;
     public GameObject targetObject;
+    public Vector2 targetPos;
     Rigidbody2D rb;
     public bool run = true;
 
     private TargetSystem targetSystem;
+    private AttributeSystem attributeSystem;
+    private Room r;
+
 
     // Start is called before the first frame update
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
         targetSystem = this.GetComponent<TargetSystem>();
+        attributeSystem = this.GetComponent<AttributeSystem>();
+        r = this.GetComponent<NpcBase>().r;
     }
 
     // Update is called once per frame
@@ -39,22 +45,39 @@ public class NpcMovement : MonoBehaviour
     {
         if (run)
         {
-            if (timer > delay)
+
+            if (targetPos == null || targetPos == Vector2.zero || Vector2.Distance(targetPos, (Vector2)this.transform.position) < 0.5f)
             {
-                delay = Random.Range(0.1f, 2f);
-                direction = (targetObject == null ? GetRandomVector() : ((Vector2)targetObject.transform.position) - (Vector2)this.transform.position);
+                targetPos = GetNewTargetPosition();
+                direction = (targetObject == null ? (targetPos-(Vector2)this.transform.position) : ((Vector2)targetObject.transform.position) - (Vector2)this.transform.position);
                 direction.Normalize();
-                timer = 0;
-
-                this.GetComponent<TargetSystem>().targetDirection = direction;
-
+                this.GetComponent<TargetSystem>().targetDirection = targetPos;
             }
-            rb.MovePosition(rb.position + direction * Speed * Time.fixedDeltaTime);
+            else
+            {
+                direction = (targetPos - (Vector2)this.transform.position);
+                direction.Normalize();
+                rb.MoveRotation(Quaternion.LookRotation(direction));
+                rb.MovePosition(rb.position + direction * attributeSystem.GetAttributeValue("dex") * Time.fixedDeltaTime);
+            }
+
+
 
             timer += Time.fixedDeltaTime;
         }
     }
 
+    private Vector2 GetNewTargetPosition()
+    {
+        float currentX = this.transform.position.x;
+        float currentY = this.transform.position.y;
+
+
+        float newPosX = Mathf.Clamp(UnityEngine.Random.Range(currentX-10, currentX+10), r.bounds.startX+2, r.bounds.endX-2);
+        float newPosY = Mathf.Clamp(UnityEngine.Random.Range(currentY - 10, currentY + 10), r.bounds.startY + 2, r.bounds.endY - 2);
+
+        return new Vector2(newPosX, newPosY);
+    }
 
 
     private Vector2 GetAverageVector()
@@ -106,6 +129,9 @@ public class NpcMovement : MonoBehaviour
 
         Vector2 dir0 = direction * 10f;
         Gizmos.DrawRay(this.transform.position, dir0);
+
+
+        Gizmos.DrawSphere(targetPos, 0.5f);
     }
 
 }

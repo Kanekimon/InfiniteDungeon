@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6300349858538802093}
   - component: {fileID: 3373500588094098643}
   m_Layer: 8
-  m_Name: Enemo
+  m_Name: Enemo0
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,6 +102,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452a81f6e781d4a468d302b7f46e8a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attributes:
+  - baseValue: 10
+    name: str
+    value: 0
+  - baseValue: 10
+    name: dex
+    value: 0
+  - baseValue: 10
+    name: con
+    value: 0
 --- !u!70 &-7546855910855004383
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -169,7 +179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fde521d992742cf4d8cee96a36b6960b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 0, y: 0}
   AttacksPerSecond: 1
   Velocity: 0.5
   canShot: 1
