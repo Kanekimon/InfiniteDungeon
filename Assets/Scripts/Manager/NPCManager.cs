@@ -24,7 +24,7 @@ public class NPCManager : MonoBehaviour
     }
     private void Start()
     {
-        
+
     }
 
 
@@ -33,8 +33,14 @@ public class NPCManager : MonoBehaviour
     {
         Boundary bounds = r.GetBoundary();
 
+        int spC = spawnCount;
+
         if (!roomEnemies.ContainsKey(r))
             roomEnemies.Add(r, new List<GameObject>());
+        else
+            spC = roomEnemies[r].Count;
+
+
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -43,14 +49,16 @@ public class NPCManager : MonoBehaviour
 
 
 
-            GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo" + UnityEngine.Random.Range(0,2)));
+            GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo" + UnityEngine.Random.Range(0, 2)));
             NpcBase nBase = e.GetComponent<NpcBase>();
             nBase.SetDifficulty(r);
             e.transform.position = new Vector3(randX, randY, 0);
-            r.AddEnemyToRoom(e.GetComponent<NpcBase>().GetId(),1);
+            r.AddEnemyToRoom(e.GetComponent<NpcBase>().GetId(), 1);
 
             roomEnemies[r].Add(e);
         }
+
+
     }
 
     public void SpawnRandomPosition()
@@ -61,7 +69,7 @@ public class NPCManager : MonoBehaviour
     public void SpawnFromSave(Dictionary<int, int> enemies, Room r)
     {
         Boundary bounds = r.bounds;
-        foreach(KeyValuePair<int, int> keyVal in enemies)
+        foreach (KeyValuePair<int, int> keyVal in enemies)
         {
             for (int i = 0; i < keyVal.Value; i++)
             {

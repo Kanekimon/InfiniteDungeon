@@ -84,7 +84,7 @@ public class RoomManager : MonoBehaviour
         //Debug.Log($"From room: ({currentRoom.index.x}|{currentRoom.index.y}) to room ({index.x}|{index.y}) in direction {d}");
 
         currentRoom = GenerateRoom(index, d);
-
+        NPCManager.Instance.SpawnEnemies(currentRoom);
 
         ActivateCorrectRooms(currentRoom);
         currentRoom.depth = index.magnitude;

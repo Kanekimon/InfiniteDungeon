@@ -40,8 +40,6 @@ public static class RandomPathGenerator
 
     public static List<Vector2> GenerateRandomPath(Room r, Vector2 startPoint)
     {
-        Profiler.BeginSample("My Sample");
-        Debug.Log("This code is being profiled");
 
         Boundary b = r.GetBoundary();
 
@@ -73,34 +71,33 @@ public static class RandomPathGenerator
         Node end = new Node(endPoint, float.MaxValue, float.MaxValue, float.MaxValue);
 
 
+        Dictionary<Vector2, Node> open = new Dictionary<Vector2, Node>();
+        Dictionary<Vector2, Node> closed = new Dictionary<Vector2, Node>();
 
-        List<Node> openNodes = new List<Node>();
-        List<Node> closedNodes = new List<Node>();
+        System.Diagnostics.Stopwatch stp = new System.Diagnostics.Stopwatch();
+        stp.Start();
         bool[,] visited = new bool[r.xLength, r.yLength];
 
-
-        openNodes.Add(start);
-
+        open.Add(start.nodePos, start);
         bool run = true;
 
 
-        while (run && openNodes.Count > 0)
+        while (run && open.Count > 0)
         {
-            Node current = GetRandom(openNodes); //openNodes.OrderBy(a => a.fCost).First(); ////GetAverage(openNodes);
+            Node current = GetRandom(open); //openNodes.OrderBy(a => a.fCost).First(); ////GetAverage(openNodes);
 
-            closedNodes.Add(current);
+            closed[current.nodePos] = current;
             visited[(int)current.nodePos.x - b.startX, (int)current.nodePos.y - b.startY] = true;
 
-            openNodes.Remove(current);
+            open.Remove(current.nodePos);
 
             if (current.nodePos == end.nodePos)
             {
-                end = closedNodes.Last();
+                end = closed.ElementAt(closed.Count-1).Value;
                 run = false;
             }
             else
             {
-
                 List<Vector2> adjNodePos = AdjacentNodes(current, r);
                 g++;
 
@@ -108,20 +105,20 @@ public static class RandomPathGenerator
                 foreach (Vector2 adj in adjNodePos)
                 {
 
-                    if (visited[(int)adj.x - b.startX, (int)adj.y - b.startY]) //closedNodes.Any(a => a.nodePos == adj))
+                    if (visited[(int)adj.x - b.startX, (int)adj.y - b.startY])
                         continue;
 
-                    if (!openNodes.Any(a => a.nodePos == adj))
+                    if (!open.ContainsKey(adj))
                     {
                         float h = Vector2.Distance(adj, end.nodePos);
                         float f = h + g;
                         Node n = new Node(adj, g, f, h);
                         n.pre = current;
-                        openNodes.Add(n);
+                        open[adj] = n;
                     }
                     else
                     {
-                        Node n = openNodes.Where(a => a.nodePos == adj).FirstOrDefault();
+                        Node n = open[adj];
                         if (g + n.hCost < n.fCost)
                         {
                             n.gCost = g;
@@ -134,8 +131,8 @@ public static class RandomPathGenerator
 
         }
 
-        List<Vector2> path = BackTrackPath(end);
-        Profiler.EndSample();
+        //List<Vector2> path = BackTrackPath(end);
+        Debug.Log($"Took {stp.ElapsedMilliseconds / 1000}s ({stp.ElapsedMilliseconds}ms with dictionary");
         return BackTrackPath(end);
     }
 
@@ -151,6 +148,10 @@ public static class RandomPathGenerator
         return op[UnityEngine.Random.Range(0, op.Count)];
     }
 
+    public static Node GetRandom(Dictionary<Vector2,Node> op)
+    {
+        return op.ElementAt(UnityEngine.Random.Range(0, op.Count)).Value;
+    }
 
     private static List<Vector2> AdjacentNodes(Node current, Room r)
     {
