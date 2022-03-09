@@ -17,6 +17,7 @@ public class TargetSystem : MonoBehaviour
     private NpcMovement move;
     private Attack attack;
 
+    private Transform player;
 
 
     public List<RaycastHit2D> hits = new List<RaycastHit2D>();
@@ -30,18 +31,16 @@ public class TargetSystem : MonoBehaviour
 
     private void Update()
     {
-        CheckRayHits();
+        player = CheckIfTargetIsInRange();
 
-        GameObject player = CheckIfTargetIsInRange();
-        
-        GameObject target = player != null ? player : move.targetObject;
+        Transform target = player != null ? player : move.targetObject.transform;
 
         if (target != null)
         {
             if (target.tag == "Player")
             {
                 obstacleInDirection = false;
-                move.targetObject = target;
+                move.targetObject = target.gameObject;
                 DistanceToTarget = Vector2.Distance((Vector2)target.transform.position, (Vector2)this.transform.position);
                 if (DistanceToTarget <= Range)
                 {
@@ -64,14 +63,14 @@ public class TargetSystem : MonoBehaviour
 
         if (CheckForObstacles())
         {
-            move.ChangeDirection();
+            //move.ChangeDirection();
         }
 
     }
 
     public bool CheckForObstacles()
     {
-        foreach(RaycastHit2D hit in hits)
+        foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider != null && hit.collider.gameObject.tag == "Wall")
                 return true;
@@ -80,16 +79,12 @@ public class TargetSystem : MonoBehaviour
         return false;
     }
 
-    public GameObject CheckIfTargetIsInRange()
+    public Transform CheckIfTargetIsInRange()
     {
-
-        foreach(RaycastHit2D hit in hits)
-        {
-            if (hit.collider != null && hit.collider.gameObject.tag == "Player")
-                return hit.collider.gameObject;
-        }
-
-        return null;
+        if (Vector2.Distance(this.transform.position, player.position) > 10)
+            return null;
+        else
+            return player;
     }
 
     private void CheckRayHits()

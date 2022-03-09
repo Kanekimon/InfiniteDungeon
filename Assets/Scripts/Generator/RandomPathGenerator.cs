@@ -38,31 +38,20 @@ public static class RandomPathGenerator
 
 
 
-    public static List<Vector2> GenerateRandomPath(Room r, Vector2 startPoint)
+    public static List<Vector2> GenerateRandomPath(Room r, Vector2 startPoint, Vector2 endPoint,PathMode mode)
     {
 
         Boundary b = r.GetBoundary();
 
-        Vector2 nDoor = new Vector2(b.startX + (r.xLength / 2), b.endY - 1);
-        Vector2 sDoor = new Vector2(b.startX + (r.xLength / 2), b.startY + 1);
-        Vector2 eDoor = new Vector2(b.endX - 1, r.center.y);
-        Vector2 wDoor = new Vector2(b.startX + 1, r.center.y);
-
-        List<Vector2> doors = new List<Vector2>();
-
-        if (nDoor != startPoint)
-            doors.Add(nDoor);
-        if (sDoor != startPoint)
-            doors.Add(sDoor);
-        if (eDoor != startPoint)
-            doors.Add(eDoor);
-        if (wDoor != startPoint)
-            doors.Add(wDoor);
-
-
-        int rand = UnityEngine.Random.Range(0, doors.Count);
-
-        Vector2 endPoint = doors[rand];
+        if(endPoint == Vector2.zero)
+        {
+            endPoint = GetRandomDoorEndPoint(r, startPoint);
+        }
+        else
+        {
+            endPoint = new Vector2((int)endPoint.x, (int)endPoint.y);
+        }
+        
 
         int g = 0;
         Node start = new Node(startPoint, g, 0, 0);
@@ -76,7 +65,7 @@ public static class RandomPathGenerator
 
         System.Diagnostics.Stopwatch stp = new System.Diagnostics.Stopwatch();
         stp.Start();
-        bool[,] visited = new bool[r.xLength, r.yLength];
+        bool[,] visited = (bool[,])r.aMap.Clone();
 
         open.Add(start.nodePos, start);
         bool run = true;
@@ -84,7 +73,7 @@ public static class RandomPathGenerator
 
         while (run && open.Count > 0)
         {
-            Node current = GetRandom(open); //openNodes.OrderBy(a => a.fCost).First(); ////GetAverage(openNodes);
+            Node current = GetPathWithMode(mode, open); //openNodes.OrderBy(a => a.fCost).First(); ////GetAverage(openNodes);
 
             closed[current.nodePos] = current;
             visited[(int)current.nodePos.x - b.startX, (int)current.nodePos.y - b.startY] = true;
@@ -133,26 +122,111 @@ public static class RandomPathGenerator
 
         //List<Vector2> path = BackTrackPath(end);
         Debug.Log($"Took {stp.ElapsedMilliseconds / 1000}s ({stp.ElapsedMilliseconds}ms with dictionary");
-        return BackTrackPath(end);
+        try
+        {
+            return BackTrackPath(end);
+        }
+        catch(Exception e)
+        {
+            return new List<Vector2>();
+        }
     }
 
-    private static Node GetAverage(List<Node> op)
+    private static Vector2 GetRandomDoorEndPoint(Room r, Vector2 startPoint)
     {
-        float sum = op.Sum(a => a.fCost) / op.Count;
+        Boundary b = r.bounds;
 
-        return op.OrderBy(a => Mathf.Abs(a.fCost - sum)).First();
+        Vector2 nDoor = new Vector2(b.startX + (r.xLength / 2), b.endY - 1);
+        Vector2 sDoor = new Vector2(b.startX + (r.xLength / 2), b.startY + 1);
+        Vector2 eDoor = new Vector2(b.endX - 1, r.center.y);
+        Vector2 wDoor = new Vector2(b.startX + 1, r.center.y);
+
+        List<Vector2> doors = new List<Vector2>();
+
+        if (nDoor != startPoint)
+            doors.Add(nDoor);
+        if (sDoor != startPoint)
+            doors.Add(sDoor);
+        if (eDoor != startPoint)
+            doors.Add(eDoor);
+        if (wDoor != startPoint)
+            doors.Add(wDoor);
+
+
+        int rand = UnityEngine.Random.Range(0, doors.Count);
+        return doors[rand];
     }
 
-    public static Node GetRandom(List<Node> op)
+    /// <summary>
+    /// Returns the next node for the path finding algorithm
+    /// </summary>
+    /// <param name="mode">Average: Returns the Node closest to the average distance to the end
+    ///                   Shortest: Returns the Node closest to the end
+    ///                   Longest:  Returns the Node furthest away from the end
+    ///                   Random:   Returns a random Node from the open Dictionary
+    /// </param>
+    /// <param name="op">Dictionary of open nodes</param>
+    /// <returns></returns>
+    private static Node GetPathWithMode(PathMode mode, Dictionary<Vector2,Node> op)
     {
-        return op[UnityEngine.Random.Range(0, op.Count)];
+        if (mode == PathMode.average)
+            return GetAverage(op);
+        else if (mode == PathMode.shortest)
+            return GetShortest(op);
+        else if (mode == PathMode.longest)
+            return GetLongest(op);
+
+        return GetRandom(op);
     }
 
+    /// <summary>
+    /// Calculates the average distance to the end and returns the first node that is closest to the average value
+    /// </summary>
+    /// <param name="op"></param>
+    /// <returns></returns>
+    private static Node GetAverage(Dictionary<Vector2, Node> op)
+    {
+        float sum = op.Sum(a => a.Value.fCost) / op.Count;
+
+        return op.OrderBy(a => Mathf.Abs(a.Value.fCost - sum)).First().Value;
+    }
+
+    /// <summary>
+    /// Returns the node that is most close to the end
+    /// </summary>
+    /// <param name="op"></param>
+    /// <returns></returns>
+    private static Node GetShortest(Dictionary<Vector2,Node> op)
+    {
+        return op.OrderBy(a => a.Value.fCost).First().Value;
+    }
+
+    /// <summary>
+    /// Returns the node that is furthest away from the target
+    /// </summary>
+    /// <param name="op"></param>
+    /// <returns></returns>
+    private static Node GetLongest(Dictionary<Vector2,Node> op)
+    {
+        return op.OrderByDescending(a => a.Value.fCost).First().Value;
+    }
+
+    /// <summary>
+    /// Returns a random Node from the dictionary
+    /// </summary>
+    /// <param name="op"></param>
+    /// <returns></returns>
     public static Node GetRandom(Dictionary<Vector2,Node> op)
     {
         return op.ElementAt(UnityEngine.Random.Range(0, op.Count)).Value;
     }
 
+    /// <summary>
+    /// Returns all Nodes that are adjacent to current node
+    /// </summary>
+    /// <param name="current"></param>
+    /// <param name="r"></param>
+    /// <returns></returns>
     private static List<Vector2> AdjacentNodes(Node current, Room r)
     {
 
@@ -177,20 +251,11 @@ public static class RandomPathGenerator
         return adjNodePos;
     }
 
-
-
-    private static List<Vector2> DrawAllClosed(List<Node> clo)
-    {
-        List<Vector2> path = new List<Vector2>();
-
-        foreach (Node node in clo)
-        {
-            path.Add(node.nodePos);
-        }
-        return path;
-    }
-
-
+    /// <summary>
+    /// Back trace of the path
+    /// </summary>
+    /// <param name="n"></param>
+    /// <returns></returns>
     private static List<Vector2> BackTrackPath(Node n)
     {
         List<Vector2> path = new List<Vector2>();

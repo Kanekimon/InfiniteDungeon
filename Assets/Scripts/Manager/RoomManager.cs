@@ -29,6 +29,8 @@ public class RoomManager : MonoBehaviour
     public List<Room> activeRooms = new List<Room>();
     public List<Room> activeDebug = new List<Room>();
 
+    public bool ShowWalkableArea = false;
+
     //Singelton Approach
     private void Awake()
     {
@@ -84,7 +86,7 @@ public class RoomManager : MonoBehaviour
         //Debug.Log($"From room: ({currentRoom.index.x}|{currentRoom.index.y}) to room ({index.x}|{index.y}) in direction {d}");
 
         currentRoom = GenerateRoom(index, d);
-        NPCManager.Instance.SpawnEnemies(currentRoom);
+        //NPCManager.Instance.SpawnEnemies(currentRoom,1);
 
         ActivateCorrectRooms(currentRoom);
         currentRoom.depth = index.magnitude;
@@ -245,6 +247,18 @@ public class RoomManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Returns wether a tile is walkable or not
+    /// </summary>
+    /// <param name="r"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public bool IsTileWalkable(Room r, int x, int y)
+    {
+        return !r.aMap[x - r.bounds.startX, y - r.bounds.startY];
+    }
+
+    /// <summary>
     /// Changes index based on direction
     /// </summary>
     /// <param name="d">Direction of next room</param>
@@ -290,7 +304,7 @@ public class RoomManager : MonoBehaviour
 
                 Gizmos.color = Color.green;
                 Vector2 rightBottom = new Vector2(b.endX, b.startY);
-                Gizmos.DrawSphere (rightBottom, gizSphere);
+                Gizmos.DrawSphere(rightBottom, gizSphere);
 
                 Gizmos.color = Color.yellow;
                 Vector2 topRight = new Vector2(b.endX, b.endY);
@@ -298,6 +312,22 @@ public class RoomManager : MonoBehaviour
 
                 Gizmos.color = Color.black;
                 Gizmos.DrawSphere(room.center, gizSphere);
+            }
+
+            if (ShowWalkableArea)
+            {
+                for (int y = currentRoom.bounds.startY; y < currentRoom.bounds.endY + 1; y++)
+                {
+                    for (int x = currentRoom.bounds.startX; x < currentRoom.bounds.endX + 1; x++)
+                    {
+                        if (currentRoom.aMap[x - currentRoom.bounds.startX, y - currentRoom.bounds.startY])
+                            Gizmos.color = Color.green;
+                        else
+                            Gizmos.color = Color.red;
+
+                        Gizmos.DrawCube(new Vector2(x, y), new Vector3(0.5f, 0.5f));
+                    }
+                }
             }
         }
 

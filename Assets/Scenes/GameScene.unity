@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnCount: 10
+  SpeedModifier: 1
 --- !u!114 &158160807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -843,8 +844,10 @@ MonoBehaviour:
       startY: 0
       endX: 0
       endY: 0
+    core: {fileID: 0}
   activeRooms: []
   activeDebug: []
+  ShowWalkableArea: 0
 --- !u!1 &436768234
 GameObject:
   m_ObjectHideFlags: 0

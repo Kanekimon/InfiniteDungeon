@@ -267,7 +267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask:
     serializedVersion: 2
-    m_Bits: 503
+    m_Bits: 247
   interActionRange: 10
   interactionText: {fileID: 0}
 --- !u!114 &-403224483188481066
@@ -282,6 +282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6e7eff4c27ce5243bb53735d812def2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttributeSystem: {fileID: 0}
+  InventorySystem: {fileID: 0}
 --- !u!114 &8605721388689661744
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SpawnEnemies()
     {
-        NPCManager.Instance.SpawnEnemies(RoomManager.Instance.GetCurrentRoom());
+        NPCManager.Instance.SpawnEnemies(RoomManager.Instance.GetCurrentRoom(),1);
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NpcMovement : MonoBehaviour
@@ -11,14 +12,19 @@ public class NpcMovement : MonoBehaviour
     public float delay = 3f;
     public Vector2 direction;
     public GameObject targetObject;
-    public Vector2 targetPos;
+
     Rigidbody2D rb;
     public bool run = true;
 
     private TargetSystem targetSystem;
     private AttributeSystem attributeSystem;
-    private Room r;
+    private FoVTargetSystem fov;
+    private Attack attack;
 
+
+    private Room r;
+    private List<Vector2> nodes = new List<Vector2>();
+    private Vector2 nextNode = Vector2.zero;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +33,8 @@ public class NpcMovement : MonoBehaviour
         targetSystem = this.GetComponent<TargetSystem>();
         attributeSystem = this.GetComponent<AttributeSystem>();
         r = this.GetComponent<NpcBase>().r;
+        fov = this.GetComponent<FoVTargetSystem>();
+        attack = this.GetComponent<Attack>();
     }
 
     // Update is called once per frame
@@ -43,40 +51,108 @@ public class NpcMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!run)
+        {
+            if (fov.player == null || (fov.player != null && Vector2.Distance((Vector2)fov.player.position, (Vector2)this.transform.position) > fov.combatRadius))
+                run = true;
+            else
+            {
+                attack.Shot(direction);
+            }
+        }
+
+
+
+
+
         if (run)
         {
 
-            if (targetPos == null || targetPos == Vector2.zero || Vector2.Distance(targetPos, (Vector2)this.transform.position) < 0.5f)
+            if (fov.player != null)
             {
-                targetPos = GetNewTargetPosition();
-                direction = (targetObject == null ? (targetPos-(Vector2)this.transform.position) : ((Vector2)targetObject.transform.position) - (Vector2)this.transform.position);
-                direction.Normalize();
-                this.GetComponent<TargetSystem>().targetDirection = targetPos;
+                if (Vector2.Distance((Vector2)fov.player.position, (Vector2)this.transform.position) > fov.combatRadius)
+                {
+                    GetPathToPlayer();
+                    nextNode = nodes.Last();
+                    nodes.Remove(nodes.Last());
+                }
+                else
+                {
+                    run = false;
+                }
+
+
+            }
+
+
+            if (nodes.Count == 0)
+            {
+                if (nextNode == Vector2.zero || Vector2.Distance(nextNode, (Vector2)this.transform.position) < 0.01f)
+                {
+                    GetNewPath();
+                    nextNode = nodes.Last();
+                    nodes.Remove(nodes.Last());
+                }
             }
             else
             {
-                direction = (targetPos - (Vector2)this.transform.position);
-                direction.Normalize();
-                rb.MoveRotation(Quaternion.LookRotation(direction));
-                rb.MovePosition(rb.position + direction * attributeSystem.GetAttributeValue("dex") * Time.fixedDeltaTime);
+                if (Vector2.Distance(nextNode, (Vector2)this.transform.position) < 0.5f)
+                {
+                    nextNode = nodes.Last();
+                    nodes.Remove(nodes.Last());
+                }
             }
+            direction = MyIdeaOfNormalized((nextNode - (Vector2)this.transform.position).normalized);
 
+            rb.MoveRotation(Quaternion.LookRotation(direction));
+            rb.MovePosition(rb.position + direction * (attributeSystem.GetAttributeValue("dex") / 2) * Time.fixedDeltaTime * NPCManager.Instance.SpeedModifier);
 
 
             timer += Time.fixedDeltaTime;
         }
+
     }
 
-    private Vector2 GetNewTargetPosition()
+    private Vector2 MyIdeaOfNormalized(Vector2 input)
+    {
+        Vector2 smallest = new Vector2(float.MaxValue, float.MaxValue);
+        if (Mathf.Abs(Vector2.Distance(smallest, input)) > Mathf.Abs(Vector2.Distance(input, Vector2.up)))
+            smallest = Vector2.up;
+        if (Mathf.Abs(Vector2.Distance(smallest, input)) > Mathf.Abs(Vector2.Distance(input, Vector2.down)))
+            smallest = Vector2.down;
+        if (Mathf.Abs(Vector2.Distance(smallest, input)) > Mathf.Abs(Vector2.Distance(input, Vector2.left)))
+            smallest = Vector2.left;
+        if (Mathf.Abs(Vector2.Distance(smallest, input)) > Mathf.Abs(Vector2.Distance(input, Vector2.right)))
+            smallest = Vector2.right;
+
+        return smallest;
+    }
+
+    private void GetNewPath()
     {
         float currentX = this.transform.position.x;
         float currentY = this.transform.position.y;
 
 
-        float newPosX = Mathf.Clamp(UnityEngine.Random.Range(currentX-10, currentX+10), r.bounds.startX+2, r.bounds.endX-2);
-        float newPosY = Mathf.Clamp(UnityEngine.Random.Range(currentY - 10, currentY + 10), r.bounds.startY + 2, r.bounds.endY - 2);
+        int newPosX = (int)Mathf.Clamp(UnityEngine.Random.Range(currentX - 10, currentX + 10), r.bounds.startX + 2, r.bounds.endX - 2);
+        int newPosY = (int)Mathf.Clamp(UnityEngine.Random.Range(currentY - 10, currentY + 10), r.bounds.startY + 2, r.bounds.endY - 2);
 
-        return new Vector2(newPosX, newPosY);
+        Vector2 targetPos = new Vector2(newPosX, newPosY);
+        while (!RoomManager.Instance.IsTileWalkable(r, newPosX, newPosY))
+        {
+
+            newPosX = (int)Mathf.Clamp(UnityEngine.Random.Range(currentX - 10, currentX + 10), r.bounds.startX + 2, r.bounds.endX - 2);
+            newPosY = (int)Mathf.Clamp(UnityEngine.Random.Range(currentY - 10, currentY + 10), r.bounds.startY + 2, r.bounds.endY - 2);
+
+            targetPos = new Vector2(newPosX, newPosY);
+        }
+
+        nodes = RandomPathGenerator.GenerateRandomPath(r, this.transform.position, targetPos, PathMode.shortest);
+    }
+
+    private void GetPathToPlayer()
+    {
+        nodes = RandomPathGenerator.GenerateRandomPath(r, this.transform.position, fov.player.position, PathMode.shortest);
     }
 
 
@@ -96,25 +172,13 @@ public class NpcMovement : MonoBehaviour
         return (dir / boids.Count).normalized;
     }
 
-    private Vector2 AvoidObstacle()
+    public void SetTargetPos(Vector2 targetP)
     {
-        if (this.GetComponent<TargetSystem>().obstacleInDirection)
-            return GetRandomVector();
-        return Vector2.zero;
+        //Debug.Log("Changing Direction");
+        //direction = (targetP - (Vector2)this.transform.position).normalized;
+        //targetPos = targetP;
     }
 
-    public void ChangeDirection()
-    {
-        this.direction = direction * -1;
-    }
-
-
-
-    private Vector2 GetDirection()
-    {
-        Vector2 dir = GetAverageVector() + AvoidObstacle() + GetRandomVector();
-        return dir;
-    }
 
     private Vector2 GetRandomVector()
     {
@@ -125,13 +189,13 @@ public class NpcMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.white;
-
-        Vector2 dir0 = direction * 10f;
-        Gizmos.DrawRay(this.transform.position, dir0);
-
-
-        Gizmos.DrawSphere(targetPos, 0.5f);
+        //Gizmos.color = Color.white;
+        foreach (Vector2 node in nodes)
+        {
+            if (fov.player != null)
+                Gizmos.color = Color.red;
+            Gizmos.DrawSphere(node, 0.1f);
+        }
     }
 
 }

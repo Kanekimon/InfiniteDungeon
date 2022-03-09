@@ -115,7 +115,7 @@ public class RoomGeneratorManager : MonoBehaviour
         {
             if (startPoint != startPointPath)
             {
-                path = RandomPathGenerator.GenerateRandomPath(r, startPointPath);
+                path = RandomPathGenerator.GenerateRandomPath(r, startPointPath, Vector2.zero, PathMode.random);
 
                 res = RandomResourceGenerator.GenerateResources(r, path);
             }
@@ -147,10 +147,11 @@ public class RoomGeneratorManager : MonoBehaviour
                     Vector2 tileCoord = new Vector2(xCord, yCord);
                     r.AddTileToRoom(tileCoord, tile, t);
                     r.AddResourceToTile(tileCoord, GenerateResource(tile));
-
+                    r.aMap[x, y] = true;
                 }
                 else
                 {
+                    r.aMap[x, y] = t != TileType.floor && t != TileType.path;
                     r.AddTileToRoom(new Vector2(xCord, yCord), GenerateTile(g, xCord, yCord, t, r), t);
                 }
 
@@ -158,6 +159,8 @@ public class RoomGeneratorManager : MonoBehaviour
 
             }
         }
+
+        r.CreateCorruptionCore();
 
         return r;
     }

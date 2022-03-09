@@ -23,6 +23,10 @@ public class Room
     public Vector2 playerSpawnPoint;
     public Boundary bounds;
 
+    public CorruptionCore core;
+
+    public bool[,] aMap;
+
     private GameObject parent;
     private GameObject resource;
 
@@ -35,7 +39,16 @@ public class Room
     private string tileData = "";
 
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Id"></param>
+    /// <param name="index"></param>
+    /// <param name="xLen"></param>
+    /// <param name="yLen"></param>
+    /// <param name="startX"></param>
+    /// <param name="startY"></param>
+    /// <param name="par"></param>
     public Room(string Id, Vector2 index, int xLen, int yLen, int startX, int startY, GameObject par)
     {
         this.Id = Id;
@@ -49,40 +62,84 @@ public class Room
         center = new Vector2((startX + bounds.endX) / 2, (startY + bounds.endY) / 2);
 
         depth = Vector2.Distance(Vector2.zero, center);
+        aMap = new bool[xLen, yLen];
     }
 
+
+    /// <summary>
+    /// Registers a tile to the tilemap
+    /// </summary>
+    /// <param name="coords"></param>
+    /// <param name="g"></param>
+    /// <param name="t"></param>
     public void AddTileToRoom(Vector2 coords, GameObject g, TileType t)
     {
-        Tile tile = new Tile(coords.x, coords.y, t);
+        Tile tile = new Tile(coords.x, coords.y, t, g);
         RoomTiles.Add(tile);
     }
 
-
+    /// <summary>
+    /// Adds resource to the tile
+    /// </summary>
+    /// <param name="tileCoord"></param>
+    /// <param name="resource"></param>
     public void AddResourceToTile(Vector2 tileCoord, GameObject resource)
     {
         resourceMap[RoomTiles.Where(a => a.x == (int)tileCoord.x && a.y == (int)tileCoord.y).First()] = resource;
     }
 
+    /// <summary>
+    /// Returns all enemies in this room
+    /// Dictionary Key: Enemy Id
+    /// Dictionary Value: Count of entities of id
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<int,int> GetEnemies()
     {
         return enemies;
     }
 
+    /// <summary>
+    /// Returns the parent container of this room
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetParent()
     {
         return parent;
     }
 
+    /// <summary>
+    /// Sets the parent container for this object
+    /// </summary>
+    /// <param name="parent"></param>
     public void SetParent(GameObject parent)
     {
         this.parent = parent;
     }
 
+    /// <summary>
+    /// Returns Tile map
+    /// </summary>
+    /// <returns></returns>
     public string GetTileData()
     {
         return tileData;
     }
 
+    /// <summary>
+    /// Returns the resources
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetResources()
+    {
+        return resource;
+    }
+
+    /// <summary>
+    /// Registers Enemy in room
+    /// </summary>
+    /// <param name="enemyId"></param>
+    /// <param name="amount"></param>
     public void AddEnemyToRoom(int enemyId, int amount)
     {
         if (enemies.ContainsKey(enemyId))
@@ -91,6 +148,11 @@ public class Room
             enemies.Add(enemyId, amount);
     }
 
+    /// <summary>
+    /// Creates doors
+    /// </summary>
+    /// <param name="coords"></param>
+    /// <param name="g"></param>
     public void SetupDoor(Vector2 coords, GameObject g)
     {
         Vector2 fromCenter = (center - coords).normalized;
@@ -109,6 +171,12 @@ public class Room
         doors.Add(g.GetComponent<Door>());
     }
 
+    /// <summary>
+    /// Clamps Values to Direction Vectors
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="clm"></param>
+    /// <returns></returns>
     private float ClampVals(float value, float[] clm)
     {
         int smallest = -1;
@@ -128,16 +196,27 @@ public class Room
         return clm[smallest];
     }
 
+    /// <summary>
+    /// Returns the Bounds of the room
+    /// </summary>
+    /// <returns></returns>
     public Boundary GetBoundary()
     {
         return bounds;
     }
 
+    /// <summary>
+    /// Returns a list of the Tiles
+    /// </summary>
+    /// <returns></returns>
     public List<Tile> GetTiles()
     {
         return RoomTiles;
     }
 
+    /// <summary>
+    /// Generates the string for saving the room
+    /// </summary>
     public void GenerateTileDataString()
     {
         if (RoomTiles.Count > 0)
@@ -147,6 +226,21 @@ public class Room
             {
                 tileData += (int)tile.type + "";
             }
+        }
+    }
+
+    /// <summary>
+    /// Creates the corruption core on a random tile
+    /// </summary>
+    public void CreateCorruptionCore()
+    {
+        if(core == null)
+        {
+            Tile t = this.RoomTiles.ElementAt(UnityEngine.Random.Range(0,RoomTiles.Count));
+            GameObject g = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Core"));
+            g.transform.SetParent(t.tileObject.transform);
+            g.transform.localPosition = Vector2.zero;
+
         }
     }
 }
