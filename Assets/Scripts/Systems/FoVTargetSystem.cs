@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
 
 public class FoVTargetSystem : MonoBehaviour
@@ -147,9 +142,9 @@ public class FoVTargetSystem : MonoBehaviour
             RaycastHit2D oFa = new RaycastHit2D();
             int smallestIndex = -1;
 
-            int perAngle = (int)(viewAngle/2) / 10;
+            int perAngle = (int)(viewAngle / 2) / 10;
 
-            for (int i = -(int)(viewAngle/2); i < (int)(viewAngle/2); i += perAngle)
+            for (int i = -(int)(viewAngle / 2); i < (int)(viewAngle / 2); i += perAngle)
             {
                 Vector2 rotAngle = Quaternion.Euler(0, 0, i) * baseDir;
                 Gizmos.DrawLine(fowPos, rotAngle.normalized + (Vector2)fowPos);
@@ -166,7 +161,7 @@ public class FoVTargetSystem : MonoBehaviour
                 }
                 else
                 {
-                    if(oFa.distance < hit.distance)
+                    if (oFa.distance < hit.distance)
                     {
                         smallestIndex = i;
                         oFa = hit;
@@ -174,8 +169,8 @@ public class FoVTargetSystem : MonoBehaviour
                 }
             }
 
-            if(smallestIndex != -1)
-                this.GetComponent<NpcMovement>().SetTargetPos((Vector2)fowPos + (Vector2)( Quaternion.Euler(0, 0, smallestIndex) * baseDir));
+            if (smallestIndex != -1)
+                this.GetComponent<NpcMovement>().SetTargetPos((Vector2)fowPos + (Vector2)(Quaternion.Euler(0, 0, smallestIndex) * baseDir));
 
             Gizmos.DrawSphere((Vector2)fowPos + (Vector2)(Quaternion.Euler(0, 0, smallestIndex) * baseDir), 0.5f);
         }

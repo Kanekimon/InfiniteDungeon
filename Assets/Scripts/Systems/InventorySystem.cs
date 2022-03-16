@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.UI;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
@@ -23,7 +20,7 @@ public class InventorySystem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
             ChangeCurrency(100);
-        
+
     }
 
 
@@ -42,7 +39,7 @@ public class InventorySystem : MonoBehaviour
     /// <param name="amount"></param>
     public void ChangeCurrency(float amount)
     {
-        if(amount < 0)
+        if (amount < 0)
         {
             if ((currency - amount) < 0)
                 return;
@@ -52,7 +49,9 @@ public class InventorySystem : MonoBehaviour
 
         if (this.gameObject.CompareTag("Player"))
         {
-            UiManager.Instance.ChangeCurrency(amount);
+            UiManager.Instance.ChangeCurrency(currency);
+
+            //oldUiManager.Instance.ChangeCurrency(amount);
         }
 
     }

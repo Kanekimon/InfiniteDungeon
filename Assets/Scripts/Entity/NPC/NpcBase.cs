@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NpcBase : MonoBehaviour
 {
@@ -17,18 +12,18 @@ public class NpcBase : MonoBehaviour
     {
         aSystem = GetComponent<AttributeSystem>();
 
-        if(aSystem.attributes.Count > 0)
+        if (aSystem.attributes.Count > 0)
         {
-            aSystem.attributes.Add(new Attribute("hp", aSystem.GetAttributeValue("con") * Mathf.Max(aSystem.GetAttributeValue("dex"), aSystem.GetAttributeValue("str")) * Mathf.Max(roomDepth,1)));
+            aSystem.attributes.Add(new Attribute("hp", aSystem.GetAttributeValue("con") * Mathf.Max(aSystem.GetAttributeValue("dex"), aSystem.GetAttributeValue("str")) * Mathf.Max(roomDepth, 1)));
         }
 
     }
 
     private void OnDestroy()
     {
-        if(aSystem.GetAttribute("hp").ChangableValue <= 0)
+        if (aSystem.GetAttribute("hp").ChangableValue <= 0)
         {
-            GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(1f, 10f) * Mathf.Max(r.depth,1f));
+            GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(1f, 10f) * Mathf.Max(r.depth, 1f));
         }
 
     }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
@@ -18,7 +13,7 @@ namespace Assets.Scripts.Player
 
         private void Start()
         {
-            this.interactionText = GameObject.Find("InteractionText").GetComponent<TextMeshProUGUI>();
+            //this.interactionText = GameObject.Find("InteractionText").GetComponent<TextMeshProUGUI>();
         }
 
         private void Update()
@@ -31,20 +26,20 @@ namespace Assets.Scripts.Player
                 if (interactable != null)
                 {
                     HandleInteraction(interactable);
-                    interactionText.transform.position = hit.point;
-                    interactionText.text = interactable.GetDescription();
+                    //interactionText.transform.position = hit.point;
+                    //interactionText.text = interactable.GetDescription();
                     successfulHit = true;
                 }
 
-                if (!successfulHit)
-                    interactionText.text = "";
+                //if (!successfulHit)
+                //    interactionText.text = "";
             }
 
             if (Input.GetMouseButton(0))
             {
                 this.GetComponent<Attack>().Shot(RelMouseCoords());
             }
-            
+
 
         }
 

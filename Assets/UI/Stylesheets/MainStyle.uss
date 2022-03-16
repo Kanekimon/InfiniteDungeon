@@ -1,0 +1,22 @@
+.border {
+    border-radius: 16px;
+    border-width: 2px;
+    border-color: black;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.header {
+    font-size: 45px;
+    -unity-font-style: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}

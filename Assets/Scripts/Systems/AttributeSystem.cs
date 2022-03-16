@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class AttributeSystem : MonoBehaviour
@@ -39,7 +36,7 @@ public class AttributeSystem : MonoBehaviour
     {
         return GetAttribute(name).ChangeValue(amount);
     }
-    
+
     public void ChangeHealth(float amount)
     {
         Attribute hp = GetAttribute("hp");

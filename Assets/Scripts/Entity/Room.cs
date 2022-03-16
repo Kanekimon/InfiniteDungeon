@@ -1,6 +1,5 @@
 using Assets.Scripts.Enum;
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,7 +32,7 @@ public class Room
     List<Door> doors = new List<Door>();
 
     [JsonProperty]
-    Dictionary<int,int> enemies = new Dictionary<int,int>();
+    Dictionary<int, int> enemies = new Dictionary<int, int>();
 
     [JsonProperty]
     private string tileData = "";
@@ -57,7 +56,7 @@ public class Room
         this.index = index;
         this.parent = par;
 
-        bounds = new Boundary(startX, startY, startX + xLen-1, startY + yLen-1);
+        bounds = new Boundary(startX, startY, startX + xLen - 1, startY + yLen - 1);
 
         center = new Vector2((startX + bounds.endX) / 2, (startY + bounds.endY) / 2);
 
@@ -94,7 +93,7 @@ public class Room
     /// Dictionary Value: Count of entities of id
     /// </summary>
     /// <returns></returns>
-    public Dictionary<int,int> GetEnemies()
+    public Dictionary<int, int> GetEnemies()
     {
         return enemies;
     }
@@ -234,9 +233,9 @@ public class Room
     /// </summary>
     public void CreateCorruptionCore()
     {
-        if(core == null)
+        if (core == null)
         {
-            Tile t = this.RoomTiles.ElementAt(UnityEngine.Random.Range(0,RoomTiles.Count));
+            Tile t = this.RoomTiles.ElementAt(UnityEngine.Random.Range(0, RoomTiles.Count));
             GameObject g = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Core"));
             g.transform.SetParent(t.tileObject.transform);
             g.transform.localPosition = Vector2.zero;

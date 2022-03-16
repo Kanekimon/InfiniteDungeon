@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
@@ -20,7 +18,7 @@ public class Attack : MonoBehaviour
     {
         AttacksPerSecond = this.GetComponent<AttributeSystem>().GetAttributeValue("dex");
 
-        if(timer > 1f / AttacksPerSecond)
+        if (timer > 1f / AttacksPerSecond)
         {
             canShot = true;
             timer = 0;

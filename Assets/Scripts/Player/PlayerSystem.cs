@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -38,12 +34,12 @@ public class PlayerSystem : MonoBehaviour
 
     void AddAttributes()
     {
-        Attribute strength = new Attribute("str", 10f);
-        Attribute dexterity = new Attribute("dex", 10f);
-        Attribute constitution = new Attribute("con", 10f);
-        Attribute wisdom = new Attribute("wis", 10f);
-        Attribute intelligence = new Attribute("int", 10f);
-        Attribute charisma = new Attribute("cha", 10f);
+        Attribute strength = new Attribute("str", GetRandom());
+        Attribute dexterity = new Attribute("dex", GetRandom());
+        Attribute constitution = new Attribute("con", GetRandom());
+        Attribute wisdom = new Attribute("wis", GetRandom());
+        Attribute intelligence = new Attribute("int", GetRandom());
+        Attribute charisma = new Attribute("cha", GetRandom());
         Attribute health = new Attribute("hp", constitution.Value * Mathf.Max(strength.Value, dexterity.Value) * 0.5f);
         Attribute speed = new Attribute("sp", dexterity.Value);
 
@@ -64,5 +60,11 @@ public class PlayerSystem : MonoBehaviour
         GameManager.Instance.ExitToMainMenu();
     }
 
+    private float GetRandom()
+    {
+        return UnityEngine.Random.Range(1f, 20f);
+    }
+
 }
+
 

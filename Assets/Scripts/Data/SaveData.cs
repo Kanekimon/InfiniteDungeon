@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 [Serializable]
@@ -23,7 +20,7 @@ public class SaveData
     /// <param name="pPos">Actual position of Player</param>
     /// <param name="cur">The amount of currency</param>
     /// <param name="r">List of all generated rooms</param>
-    public SaveData(Vector2 pIndex, Vector2 pPos, float cur, List<Room> r, List<Attribute> pAtt) 
+    public SaveData(Vector2 pIndex, Vector2 pPos, float cur, List<Room> r, List<Attribute> pAtt)
     {
         this.playerRoomIndex = pIndex;
         this.playerPosition = pPos;

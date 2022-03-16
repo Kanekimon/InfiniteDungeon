@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="/Assets/UI/Stylesheets/Buttons.uss" />
+    <Style src="/Assets/UI/Stylesheets/MainStyle.uss" />
+    <ui:VisualElement focusable="true" style="align-items: center; justify-content: flex-start; flex-direction: column; flex-wrap: wrap; padding-left: 0; padding-right: 0; padding-top: 1%; padding-bottom: 0;">
+        <ui:VisualElement name="upgrade-menu" class="border" style="width: 50%; height: auto; flex-grow: 1; flex-direction: row; flex-wrap: wrap; align-items: stretch; background-color: rgba(77, 77, 77, 0.35); display: flex; padding-top: 20px; padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+            <ui:VisualElement name="str" class="border" style="width: 100%; height: auto; flex-direction: row; justify-content: space-around; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: rgba(101, 101, 101, 0.51);">
+                <ui:Label text="Strength    " display-tooltip-when-elided="true" name="str-label" style="width: 33%; -unity-text-align: middle-center;" />
+                <ui:Label text="10" display-tooltip-when-elided="true" name="str-value" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Button text="Increase" display-tooltip-when-elided="true" name="str-upgr" class="border" style="width: 33%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="dex" class="border" style="width: 100%; height: auto; flex-direction: row; justify-content: space-around; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: rgba(101, 101, 101, 0.51);">
+                <ui:Label text="Dexterity" display-tooltip-when-elided="true" name="dex-label" style="width: 33%; -unity-text-align: middle-center;" />
+                <ui:Label text="10" display-tooltip-when-elided="true" name="dex-value" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Button text="Increase" display-tooltip-when-elided="true" name="dex-upgr" class="border" style="width: 33%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="con" class="border" style="width: 100%; height: auto; flex-direction: row; justify-content: space-around; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: rgba(101, 101, 101, 0.51);">
+                <ui:Label text="Constitution" display-tooltip-when-elided="true" name="con-label" style="width: 33%; -unity-text-align: middle-center; white-space: nowrap;" />
+                <ui:Label text="10" display-tooltip-when-elided="true" name="con-value" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Button text="Increase" display-tooltip-when-elided="true" name="con-upgr" class="border" style="width: 33%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="wis" class="border" style="width: 100%; height: auto; flex-direction: row; justify-content: space-around; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: rgba(101, 101, 101, 0.51);">
+                <ui:Label text="Wisdom" display-tooltip-when-elided="true" name="wis-label" style="width: 33%; -unity-text-align: upper-center;" />
+                <ui:Label text="10" display-tooltip-when-elided="true" name="wis-value" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Button text="Increase" display-tooltip-when-elided="true" name="wis-upgr" class="border" style="width: 33%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="int" class="border" style="width: 100%; height: auto; flex-direction: row; justify-content: space-around; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: rgba(101, 101, 101, 0.51);">
+                <ui:Label text="Intelligence" display-tooltip-when-elided="true" name="int-label" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Label text="10" display-tooltip-when-elided="true" name="int-value" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Button text="Increase" display-tooltip-when-elided="true" name="int-upgr" class="border" style="width: 33%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="cha" class="border" style="width: 100%; height: auto; flex-direction: row; justify-content: space-around; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: rgba(101, 101, 101, 0.51);">
+                <ui:Label text="Charisma" display-tooltip-when-elided="true" name="cha-label" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Label text="10" display-tooltip-when-elided="true" name="cha-value" style="-unity-text-align: middle-center; width: 33%;" />
+                <ui:Button text="Increase" display-tooltip-when-elided="true" name="cha-upgr" class="border" style="width: 33%;" />
+            </ui:VisualElement>
+            <ui:Button text="Close" display-tooltip-when-elided="true" name="close-update" class="border" style="align-items: flex-start; width: 100%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

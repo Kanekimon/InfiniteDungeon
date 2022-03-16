@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Stylesheets/MainStyle.uss" />
+    <Style src="/Assets/UI/Stylesheets/Buttons.uss" />
+    <ui:VisualElement name="main" style="align-items: center;">
+        <ui:VisualElement name="overlay" style="flex-grow: 1; width: 100%; height: 100%; display: flex;">
+            <ui:VisualElement style="height: 40px;">
+                <ui:Label text="Money: " display-tooltip-when-elided="true" name="money" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

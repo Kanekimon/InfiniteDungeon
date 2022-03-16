@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -38,18 +36,18 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        UiManager.Instance.SetUpCamera(GetCamera());
+        //UiManager.Instance.SetUpCamera(GetCamera());
     }
 
     public void SetPlayerPos(Vector2 pos)
     {
-        this.player.transform.position = pos;  
+        this.player.transform.position = pos;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -81,7 +79,7 @@ public class GameManager : MonoBehaviour
     /// <param name="pos">Spawnpoint</param>
     public void SpawnPlayer(Vector3 pos)
     {
-         //Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
+        //Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
         pos.z = 0;
         player.transform.position = pos;
     }
@@ -91,7 +89,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SpawnEnemies()
     {
-        NPCManager.Instance.SpawnEnemies(RoomManager.Instance.GetCurrentRoom(),1);
+        NPCManager.Instance.SpawnEnemies(RoomManager.Instance.GetCurrentRoom(), 1);
     }
 
     /// <summary>
@@ -99,7 +97,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ExitToMainMenu()
     {
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("MainMenu");
     }
 
 }

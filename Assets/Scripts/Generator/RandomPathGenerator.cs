@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class Node
 {
@@ -38,12 +35,12 @@ public static class RandomPathGenerator
 
 
 
-    public static List<Vector2> GenerateRandomPath(Room r, Vector2 startPoint, Vector2 endPoint,PathMode mode)
+    public static List<Vector2> GenerateRandomPath(Room r, Vector2 startPoint, Vector2 endPoint, PathMode mode)
     {
 
         Boundary b = r.GetBoundary();
 
-        if(endPoint == Vector2.zero)
+        if (endPoint == Vector2.zero)
         {
             endPoint = GetRandomDoorEndPoint(r, startPoint);
         }
@@ -51,7 +48,7 @@ public static class RandomPathGenerator
         {
             endPoint = new Vector2((int)endPoint.x, (int)endPoint.y);
         }
-        
+
 
         int g = 0;
         Node start = new Node(startPoint, g, 0, 0);
@@ -82,7 +79,7 @@ public static class RandomPathGenerator
 
             if (current.nodePos == end.nodePos)
             {
-                end = closed.ElementAt(closed.Count-1).Value;
+                end = closed.ElementAt(closed.Count - 1).Value;
                 run = false;
             }
             else
@@ -126,7 +123,7 @@ public static class RandomPathGenerator
         {
             return BackTrackPath(end);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return new List<Vector2>();
         }
@@ -167,7 +164,7 @@ public static class RandomPathGenerator
     /// </param>
     /// <param name="op">Dictionary of open nodes</param>
     /// <returns></returns>
-    private static Node GetPathWithMode(PathMode mode, Dictionary<Vector2,Node> op)
+    private static Node GetPathWithMode(PathMode mode, Dictionary<Vector2, Node> op)
     {
         if (mode == PathMode.average)
             return GetAverage(op);
@@ -196,7 +193,7 @@ public static class RandomPathGenerator
     /// </summary>
     /// <param name="op"></param>
     /// <returns></returns>
-    private static Node GetShortest(Dictionary<Vector2,Node> op)
+    private static Node GetShortest(Dictionary<Vector2, Node> op)
     {
         return op.OrderBy(a => a.Value.fCost).First().Value;
     }
@@ -206,7 +203,7 @@ public static class RandomPathGenerator
     /// </summary>
     /// <param name="op"></param>
     /// <returns></returns>
-    private static Node GetLongest(Dictionary<Vector2,Node> op)
+    private static Node GetLongest(Dictionary<Vector2, Node> op)
     {
         return op.OrderByDescending(a => a.Value.fCost).First().Value;
     }
@@ -216,7 +213,7 @@ public static class RandomPathGenerator
     /// </summary>
     /// <param name="op"></param>
     /// <returns></returns>
-    public static Node GetRandom(Dictionary<Vector2,Node> op)
+    public static Node GetRandom(Dictionary<Vector2, Node> op)
     {
         return op.ElementAt(UnityEngine.Random.Range(0, op.Count)).Value;
     }

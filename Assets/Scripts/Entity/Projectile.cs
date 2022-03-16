@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -66,11 +64,11 @@ public class Projectile : MonoBehaviour
     {
         GameObject hit = collision.gameObject;
 
-        if(hit.tag != "Wall")
+        if (hit.tag != "Wall")
         {
             AttributeSystem att = null;
-            hit.TryGetComponent(out att); 
-            if(att != null)
+            hit.TryGetComponent(out att);
+            if (att != null)
             {
                 att.ChangeHealth(-damage);
             }

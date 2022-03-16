@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CorruptionCore : MonoBehaviour
 {
@@ -12,7 +7,7 @@ public class CorruptionCore : MonoBehaviour
     [SerializeField]
     public float CorruptionStrength { get; set; }
     [SerializeField]
-    public int Level{ get; set; }
+    public int Level { get; set; }
 
     public int EnemyCount;
 

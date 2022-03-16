@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -90,7 +86,7 @@ public class NPCManager : MonoBehaviour
         for (int i = 0; i < sp; i++)
         {
             if (startPos != null)
-                SpawnFromPosition(r,startPos ?? new Vector2(0,0));
+                SpawnFromPosition(r, startPos ?? new Vector2(0, 0));
             else
                 SpawnRandom(r);
         }
@@ -113,7 +109,7 @@ public class NPCManager : MonoBehaviour
                 int randX = UnityEngine.Random.Range(bounds.startX, bounds.endX);
                 int randY = UnityEngine.Random.Range(bounds.startY, bounds.endY);
 
-                GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo"));
+                GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo0"));
 
                 e.transform.position = new Vector3(randX, randY, 0);
             }

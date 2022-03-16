@@ -1,9 +1,4 @@
 ﻿using Assets.Scripts.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 internal class Door : Interactable
@@ -33,7 +28,7 @@ internal class Door : Interactable
         RoomManager.Instance.MoveToNextRoom(dir);
     }
 
-    public void SetDir(Direction d )
+    public void SetDir(Direction d)
     {
         dir = d;
     }
