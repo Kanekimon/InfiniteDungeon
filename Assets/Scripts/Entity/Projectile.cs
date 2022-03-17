@@ -22,21 +22,6 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (fly)
-        //{
-        //    if (timer <= lifeTime)
-        //    {
-
-        //        speed = velocity * Time.deltaTime;
-        //        this.transform.position += direction * speed;
-
-        //        timer += Time.deltaTime;
-        //    }
-        //    else
-        //    {
-        //        Destroy(this.gameObject);
-        //    }
-        //}
     }
 
     public void SetOwner(GameObject g)
@@ -53,7 +38,7 @@ public class Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (fly)
+        if (fly && owner != null)
         {
             speed += velocity * Time.fixedDeltaTime;
             rb.MovePosition(rb.position + direction + owner.GetComponent<Rigidbody2D>().velocity * speed);
@@ -64,7 +49,7 @@ public class Projectile : MonoBehaviour
     {
         GameObject hit = collision.gameObject;
 
-        if (hit.tag != "Wall")
+        if (hit.tag != "Wall" && owner != null && owner.GetComponent<Attack>().Targets.Contains(hit.tag))
         {
             AttributeSystem att = null;
             hit.TryGetComponent(out att);
@@ -75,6 +60,7 @@ public class Projectile : MonoBehaviour
         }
 
         this.owner = null;
+        this.fly = false;
         ProjectilePoolManager.Instance.AddToPool(this.gameObject);
 
     }

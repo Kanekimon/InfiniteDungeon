@@ -16,7 +16,7 @@ public class Room
 
     public int xLength;
     public int yLength;
-    public float depth;
+    public int depth;
     public Vector2 index;
     public Vector2 center;
     public Vector2 playerSpawnPoint;
@@ -60,7 +60,7 @@ public class Room
 
         center = new Vector2((startX + bounds.endX) / 2, (startY + bounds.endY) / 2);
 
-        depth = Vector2.Distance(Vector2.zero, center);
+        depth = (int)Vector2.Distance(Vector2.zero, index);
         aMap = new bool[xLen, yLen];
     }
 
@@ -239,7 +239,7 @@ public class Room
             GameObject g = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Core"));
             g.transform.SetParent(t.tileObject.transform);
             g.transform.localPosition = Vector2.zero;
-
+            core = g.GetComponent<CorruptionCore>();
         }
     }
 }

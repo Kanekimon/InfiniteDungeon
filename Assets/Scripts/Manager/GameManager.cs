@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -100,4 +102,17 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+
+
+    private void OnDrawGizmos()
+    {
+        List<GameObject> allActors = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+        allActors.AddRange(GameObject.FindGameObjectsWithTag("Player").ToList());
+
+        foreach(GameObject actor in allActors)
+        {
+            Debug.Log("Actor position: " + actor.transform.position);
+            Gizmos.DrawSphere(actor.transform.position, 0.2f);
+        }
+    }
 }

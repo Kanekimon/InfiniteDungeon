@@ -74,47 +74,6 @@ public class FoVTargetSystem : MonoBehaviour
     }
 
 
-    void StartAvoidance()
-    {
-
-        Debug.Log("Avoiding");
-        Vector2 fowPos = this.transform.position;
-
-        Vector2 baseDir = this.GetComponent<NpcMovement>().direction;
-        RaycastHit2D oFa = new RaycastHit2D();
-        int smallestIndex = -1;
-
-        int perAngle = (int)(viewAngle / 2) / 10;
-
-        for (int i = -(int)(viewAngle / 2); i < (int)(viewAngle / 2); i += perAngle)
-        {
-            Vector2 rotAngle = Quaternion.Euler(0, 0, i) * baseDir;
-
-            RaycastHit2D hit = Physics2D.Raycast(fowPos, (Vector2)fowPos + rotAngle.normalized, 100f, obstacleMask);
-
-            if (hit.collider == null)
-                this.GetComponent<NpcMovement>().SetTargetPos((Vector2)fowPos + rotAngle.normalized);
-
-            if (smallestIndex == -1)
-            {
-                oFa = hit;
-                smallestIndex = i;
-            }
-            else
-            {
-                if (oFa.distance < hit.distance)
-                {
-                    smallestIndex = i;
-                    oFa = hit;
-                }
-            }
-        }
-
-        if (smallestIndex != -1)
-            this.GetComponent<NpcMovement>().SetTargetPos((Vector2)fowPos + (Vector2)(Quaternion.Euler(0, 0, smallestIndex) * baseDir));
-
-    }
-
 
     private void OnDrawGizmos()
     {

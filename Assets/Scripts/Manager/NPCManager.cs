@@ -24,6 +24,27 @@ public class NPCManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="r"></param>
+    /// <param name="state"></param>
+    public void SetActiveStatusForRoom(Room r, bool state)
+    {
+        r.core.Paused = state;
+        List<GameObject> en = roomEnemies[r];
+        if (en != null && en.Count > 0)
+        {
+            foreach (GameObject enemy in en)
+            {
+                if (enemy != null)
+                {
+                    enemy.SetActive(!state);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Spawns enemies from a specific point
     /// </summary>
     /// <param name="r"></param>
@@ -109,7 +130,7 @@ public class NPCManager : MonoBehaviour
                 int randX = UnityEngine.Random.Range(bounds.startX, bounds.endX);
                 int randY = UnityEngine.Random.Range(bounds.startY, bounds.endY);
 
-                GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo0"));
+                GameObject e = Instantiate(Resources.Load<GameObject>($"Prefabs/Enemo{keyVal.Key}"));
 
                 e.transform.position = new Vector3(randX, randY, 0);
             }

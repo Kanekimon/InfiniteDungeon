@@ -13,6 +13,7 @@ public class CorruptionCore : MonoBehaviour
 
     public float Timer;
     public float Delay;
+    public bool Paused;
 
 
     public CorruptionCore(Vector2 pos, float corStr, int level)
@@ -32,15 +33,18 @@ public class CorruptionCore : MonoBehaviour
 
     private void Update()
     {
-        if (EnemyCount > 0)
+        if (!Paused)
         {
-            if (Timer > Delay)
+            if (EnemyCount > 0)
             {
-                NPCManager.Instance.SpawnEnemies(RoomManager.Instance.GetCurrentRoom(), 1, this.transform.position);
-                EnemyCount--;
-                Timer = 0;
+                if (Timer > Delay && !Paused)
+                {
+                    NPCManager.Instance.SpawnEnemies(RoomManager.Instance.GetCurrentRoom(), 1, this.transform.position);
+                    EnemyCount--;
+                    Timer = 0;
+                }
+                Timer += Time.deltaTime;
             }
-            Timer += Time.deltaTime;
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Player
 {
@@ -37,7 +36,7 @@ namespace Assets.Scripts.Player
 
             if (Input.GetMouseButton(0))
             {
-                this.GetComponent<Attack>().Shot(RelMouseCoords());
+                this.GetComponent<Attack>().Shot((Vector2)this.transform.position + RelMouseCoords());
             }
 
 

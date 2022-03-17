@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
     public float AttacksPerSecond;
     public float Velocity;
-
     public bool canShot = true;
     public float timer;
+    public Vector2 Direction;
+    public List<string> Targets;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +34,7 @@ public class Attack : MonoBehaviour
     }
 
 
-    public void Shot(Vector2 pDir)
+    public void Shot(Vector2 targetCoords)
     {
         if (canShot)
         {
@@ -43,15 +46,23 @@ public class Attack : MonoBehaviour
             g.transform.parent = null;
 
 
-            Vector2 dir = (pDir - (Vector2)this.transform.position.normalized).normalized;
+            Direction = (targetCoords - (Vector2)this.transform.position).normalized;
 
-            g.transform.position = this.transform.position + new Vector3(dir.x * this.transform.localScale.x, dir.y * this.transform.localScale.y, 0);
+            g.transform.position = this.transform.position + new Vector3(Direction.x * this.transform.localScale.x, Direction.y * this.transform.localScale.y, 0);
             Projectile p = g.GetComponent<Projectile>();
             p.SetOwner(this.gameObject);
             p.velocity = 1;
             p.lifeTime = 3;
-            p.direction = dir;
+            p.direction = Direction;
             p.fly = true;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(Direction != null)
+        {
+            Gizmos.DrawLine(transform.position, (Vector2) transform.position + Direction * 5f);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Enum;
+using Assets.Scripts.UI;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -78,15 +79,15 @@ public class RoomManager : MonoBehaviour
         }
 
 
-        //Debug.Log($"From room: ({currentRoom.index.x}|{currentRoom.index.y}) to room ({index.x}|{index.y}) in direction {d}");
-
+        Room oldTemp = currentRoom;
         currentRoom = GenerateRoom(index, d);
         //NPCManager.Instance.SpawnEnemies(currentRoom,1);
 
         ActivateCorrectRooms(currentRoom);
-        currentRoom.depth = index.magnitude;
+        UiManager.Instance.ChangeDepth(currentRoom);
 
-
+        if (oldTemp.core != null)
+            NPCManager.Instance.SetActiveStatusForRoom(oldTemp, true);
     }
 
     /// <summary>
@@ -118,11 +119,15 @@ public class RoomManager : MonoBehaviour
             r = roomMap.Where(a => a.index == index).First();
             if (!activeRooms.Contains(r))
                 RoomGeneratorManager.ReGenerateRoom(r, d);
+
+            NPCManager.Instance.SetActiveStatusForRoom(r, false);
         }
 
         r.playerSpawnPoint = RoomGeneratorManager.GetRoomStartPoint(d, r);
 
         GameManager.Instance.SetPlayerPos(r.playerSpawnPoint);
+
+
         return r;
     }
 

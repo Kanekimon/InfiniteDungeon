@@ -56,13 +56,9 @@ public class NpcMovement : MonoBehaviour
                 run = true;
             else
             {
-                attack.Shot(direction);
+                attack.Shot(fov.player.transform.position);
             }
         }
-
-
-
-
 
         if (run)
         {
@@ -72,8 +68,11 @@ public class NpcMovement : MonoBehaviour
                 if (Vector2.Distance((Vector2)fov.player.position, (Vector2)this.transform.position) > fov.combatRadius)
                 {
                     GetPathToPlayer();
-                    nextNode = nodes.Last();
-                    nodes.Remove(nodes.Last());
+                    if (nodes.Count > 0)
+                    {
+                        nextNode = nodes.Last();
+                        nodes.Remove(nodes.Last());
+                    }
                 }
                 else
                 {
@@ -83,19 +82,21 @@ public class NpcMovement : MonoBehaviour
 
             }
 
-
             if (nodes.Count == 0)
             {
                 if (nextNode == Vector2.zero || Vector2.Distance(nextNode, (Vector2)this.transform.position) < 0.01f)
                 {
                     GetNewPath();
-                    nextNode = nodes.Last();
-                    nodes.Remove(nodes.Last());
+                    if (nodes.Count > 0)
+                    {
+                        nextNode = nodes.Last();
+                        nodes.Remove(nodes.Last());
+                    }
                 }
             }
             else
             {
-                if (Vector2.Distance(nextNode, (Vector2)this.transform.position) < 0.5f)
+                if (Vector2.Distance(nextNode, (Vector2)this.transform.position) < 0.1f)
                 {
                     nextNode = nodes.Last();
                     nodes.Remove(nodes.Last());

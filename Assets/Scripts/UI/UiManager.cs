@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -66,11 +62,11 @@ namespace Assets.Scripts.UI
         {
             GameObject window = uiWindows[menuName];
             bool newstate = !window.activeInHierarchy;
-            
+
 
             if (newstate)
             {
-                if(currentActive != null)
+                if (currentActive != null)
                 {
                     ToggleMenu(currentActive.name);
                 }
@@ -95,7 +91,12 @@ namespace Assets.Scripts.UI
             float val = float.Parse(currentCurrency);
 
             val += value;
-            money.text = "Money: " + val;
+            money.text = $"Money: {val:00}";
+        }
+
+        public void ChangeDepth(Room room)
+        {
+            root.Q<Label>("level-value").text = "" + room.depth;
         }
 
 

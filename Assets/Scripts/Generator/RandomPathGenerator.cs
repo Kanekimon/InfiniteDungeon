@@ -31,10 +31,6 @@ public static class RandomPathGenerator
     static int[] maskY = { -1, 0, 1, 0 };
 
 
-
-
-
-
     public static List<Vector2> GenerateRandomPath(Room r, Vector2 startPoint, Vector2 endPoint, PathMode mode)
     {
 

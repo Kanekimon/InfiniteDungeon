@@ -68,8 +68,8 @@ public class MenuUiManager : MonoBehaviour
                 {
                     MenuManager.Instance.LoadGame(i);
                 };
-            b.text = $"Save Game #{i}"; 
-            
+            b.text = $"Save Game #{i}";
+
             root.Q<VisualElement>("save-games").Add(tc);
         }
     }

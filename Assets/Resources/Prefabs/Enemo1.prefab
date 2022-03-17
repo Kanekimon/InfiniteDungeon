@@ -198,7 +198,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &2908976336630987092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,6 +215,9 @@ MonoBehaviour:
   Velocity: 0.5
   canShot: 1
   timer: 0
+  Direction: {x: 0, y: 0}
+  Targets:
+  - Player
 --- !u!114 &1065328492917347587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +262,7 @@ MonoBehaviour:
       startY: 0
       endX: 0
       endY: 0
+    core: {fileID: 0}
 --- !u!114 &1015763227592363572
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -253,6 +253,9 @@ MonoBehaviour:
   Velocity: 5
   canShot: 1
   timer: 0
+  Direction: {x: 0, y: 0}
+  Targets:
+  - Enemy
 --- !u!114 &-8048442991973800558
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,7 +3,9 @@
         <ui:VisualElement name="esc-menu" style="flex-grow: 1; align-items: center; justify-content: space-between; width: 50%; padding-top: 40px; display: flex;">
             <ui:Label text="Pause" display-tooltip-when-elided="true" name="pause-label" class="header" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 50px;" />
             <ui:Button text="Resume" display-tooltip-when-elided="true" name="resume" class="button border" style="width: 50%;" />
+            <ui:Button text="Save" display-tooltip-when-elided="true" name="save" class="button border" style="width: 50%;" />
             <ui:Button text="Exit" display-tooltip-when-elided="true" name="exit" class="border button" style="align-items: auto; width: 50%;" />
         </ui:VisualElement>
+        <ui:VisualElement name="save-menu" />
     </ui:VisualElement>
 </ui:UXML>

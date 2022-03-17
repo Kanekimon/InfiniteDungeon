@@ -53,8 +53,8 @@ public class AttributeSystem : MonoBehaviour
 
         if (a != null)
         {
-            float price = GetUpgradePrice(name);
-            if (GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().GetCurrency() > price)
+            float price = 0;// GetUpgradePrice(name);
+            if (true || GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().GetCurrency() > price)
             {
                 AttributeModifier am = a.GetAttributeModifier(ModifierType.upgrade);
                 GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().ChangeCurrency(-price);
