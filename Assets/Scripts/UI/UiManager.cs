@@ -11,6 +11,7 @@ namespace Assets.Scripts.UI
         VisualElement root;
         Dictionary<string, GameObject> uiWindows = new Dictionary<string, GameObject>();
         GameObject currentActive = null;
+        public GameObject WindowParent;
 
         private void Awake()
         {
@@ -20,7 +21,7 @@ namespace Assets.Scripts.UI
                 Destroy(this);
 
 
-            foreach (Transform menu in this.transform)
+            foreach (Transform menu in WindowParent.transform)
             {
                 if (menu != null)
                 {
@@ -79,6 +80,31 @@ namespace Assets.Scripts.UI
 
             //VisualElement men = root.Q<VisualElement>(menuName);
             //men.style.display = men.style.display != DisplayStyle.Flex ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        public void SetHp(float maxhp, float currenthp)
+        {
+            VisualElement container = root.Q<VisualElement>("hp-container");
+            VisualElement bar = root.Q<VisualElement>("hp-bar");
+            Label hp_value = root.Q<Label>("hp-value");
+
+            float percHealth = (currenthp / maxhp) * 100;
+
+            bar.style.width = new Length(percHealth, LengthUnit.Percent);
+
+            Color color = Color.green;
+
+            if (percHealth < 20f)
+                color = Color.red;
+            else if (percHealth >= 20f && percHealth < 75f)
+                color = Color.yellow;
+
+            bar.style.backgroundColor = color;
+
+            container.style.backgroundColor = Color.Lerp(color, Color.black, .5f);
+
+
+            hp_value.text = $"{currenthp} / {maxhp}";
         }
 
         public void ChangeCurrency(float value)

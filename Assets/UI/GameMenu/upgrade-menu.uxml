@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="/Assets/UI/Stylesheets/Buttons.uss" />
     <Style src="/Assets/UI/Stylesheets/MainStyle.uss" />
-    <ui:VisualElement focusable="true" style="align-items: center; justify-content: flex-start; flex-direction: column; flex-wrap: wrap; padding-left: 0; padding-right: 0; padding-top: 1%; padding-bottom: 0;">
+    <ui:VisualElement focusable="true" style="align-items: center; justify-content: flex-start; flex-direction: column; flex-wrap: nowrap; padding-left: 0; padding-right: 0; padding-top: 1%; padding-bottom: 0; flex-grow: 0;">
         <ui:VisualElement name="upgrade-menu" class="border" style="width: 50%; height: auto; flex-grow: 1; flex-direction: row; flex-wrap: wrap; align-items: stretch; background-color: rgba(77, 77, 77, 0.35); display: flex; padding-top: 20px; padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
             <ui:VisualElement name="str" class="border" style="width: 100%; height: auto; flex-direction: row; justify-content: space-around; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; background-color: rgba(101, 101, 101, 0.51);">
                 <ui:Label text="Strength    " display-tooltip-when-elided="true" name="str-label" style="width: 33%; -unity-text-align: middle-center;" />

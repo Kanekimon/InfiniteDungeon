@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.UI;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -52,6 +53,8 @@ public class PlayerSystem : MonoBehaviour
         AttributeSystem.AddAttribute(charisma);
         AttributeSystem.AddAttribute(health);
         AttributeSystem.AddAttribute(speed);
+
+        UiManager.Instance.SetHp(health.Value, health.ChangableValue);
     }
 
 

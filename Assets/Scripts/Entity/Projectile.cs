@@ -1,3 +1,4 @@
+using Assets.Scripts.UI;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -55,7 +56,10 @@ public class Projectile : MonoBehaviour
             hit.TryGetComponent(out att);
             if (att != null)
             {
+                Attribute health = att.GetAttribute("hp");
                 att.ChangeHealth(-damage);
+                if (hit.CompareTag("Player"))
+                    UiManager.Instance.SetHp(health.BaseValue, health.ChangableValue);
             }
         }
 
