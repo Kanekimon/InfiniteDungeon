@@ -11,7 +11,7 @@ public class TargetSystem : MonoBehaviour
     public bool obstacleInDirection;
 
     private NpcMovement move;
-    private Attack attack;
+    private AttackSystem attack;
 
     private Transform player;
 
@@ -21,7 +21,7 @@ public class TargetSystem : MonoBehaviour
     private void Start()
     {
         move = this.GetComponent<NpcMovement>();
-        attack = this.GetComponent<Attack>();
+        attack = this.GetComponent<AttackSystem>();
         CheckRayHits();
     }
 

@@ -1,8 +1,8 @@
+using Assets.Scripts.Data.StaticData;
 using Assets.Scripts.Enum;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
-
 
 public class RoomGeneratorManager : MonoBehaviour
 {
@@ -14,8 +14,11 @@ public class RoomGeneratorManager : MonoBehaviour
     public GameObject PathPrefab;
     public GameObject ResourcePrefab;
 
+
     public static Dictionary<TileType, GameObject> tileResources = new Dictionary<TileType, GameObject>();
 
+    static int[] maskX = { 0, 1, 1, 1, 0, -1, -1, -1 };
+    static int[] maskY = { -1, -1, 0, 1, 1, 1, 0, 1 };
 
     private void Awake()
     {
@@ -94,12 +97,51 @@ public class RoomGeneratorManager : MonoBehaviour
         return r;
     }
 
+    static Biome GetBiome(Room r, Direction d)
+    {
+
+        BiomeMatrix bMatrix = new BiomeMatrix();
+
+        //Debug.Log($"Get biome for room ({index.x} | {index.y})");
+
+        //Biome biome = Biome.grassland;
+        //List<Biome> nBiomes = new List<Biome>();
+        //for (int i = 0; i < 8; i++)
+        //{
+        //    Vector2 nIndex = index + new Vector2(maskX[i], maskY[i]);
+        //    Room nR = RoomManager.Instance.GetRoomFromIndex(nIndex);
+        //    if (nR != null)
+        //    {
+        //        nBiomes.Add(nR.biome);
+        //    }
+
+        //}
+
+
+
+        List<Biome> pos = bMatrix.GetPossibleBiomeDirection(r, d);//bMatrix.GetPossibleBiomes(nBiomes);
+
+        if (pos.Count == 0)
+            return Biome.grassland;
+
+        foreach (Biome b in pos)
+        {
+            Debug.Log($"Possible biome: {b}");
+        }
+
+
+        return pos.ElementAt(Random.Range(0, pos.Count));
+    }
+
     public static Room GenerateRoom(Room oldRoom, Vector2 index, Direction d, int xSize, int ySize, bool genRa)
     {
         Vector2 startPoint = new Vector2(index.x * xSize, index.y * ySize);
 
         GameObject g = new GameObject();
+
+
         Room r = new Room(System.Guid.NewGuid().ToString(), index, xSize, ySize, (int)startPoint.x, (int)startPoint.y, g);
+        r.SetBiome(GetBiome(r, d));
         g.name = $"Room: ({index.x} | {index.y})";
         Boundary b = r.GetBoundary();
 
@@ -115,7 +157,7 @@ public class RoomGeneratorManager : MonoBehaviour
             {
                 path = RandomPathGenerator.GenerateRandomPath(r, startPointPath, Vector2.zero, PathMode.random);
 
-                res = RandomResourceGenerator.GenerateResources(r, path);
+                res = RandomResourceGenerator.GenerateStone(r, path, Random.Range(1, 10), Random.Range(1f, 1f));
             }
         }
         for (int y = 0; y < ySize; y++)
@@ -158,10 +200,12 @@ public class RoomGeneratorManager : MonoBehaviour
             }
         }
 
-        r.CreateCorruptionCore();
+        if (RoomManager.Instance.SpawnCorruptionCore)
+            r.CreateCorruptionCore();
 
         return r;
     }
+
 
     public static Vector2 GetRoomStartPoint(Direction d, Room r)
     {
@@ -207,7 +251,29 @@ public class RoomGeneratorManager : MonoBehaviour
         {
             r.SetupDoor(new Vector2(x, y), w);
         }
+        if (tileType == TileType.floor)
+            w.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Textures/Tiles/{r.biome}/base");
+        if (tileType == TileType.path)
+            w.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Textures/Tiles/{r.biome}/path");
+
 
         return w;
+    }
+
+
+    public GameObject LoadHub(int xSize, int ySize, bool genRa)
+    {
+        GameObject hub = new GameObject();
+
+        if (GameObject.Find("Hub") != null)
+        {
+            return GameObject.Find("Hub");
+        }
+        else
+        {
+            
+        }
+
+        return hub;
     }
 }

@@ -109,9 +109,8 @@ public class GameManager : MonoBehaviour
         List<GameObject> allActors = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         allActors.AddRange(GameObject.FindGameObjectsWithTag("Player").ToList());
 
-        foreach(GameObject actor in allActors)
+        foreach (GameObject actor in allActors)
         {
-            Debug.Log("Actor position: " + actor.transform.position);
             Gizmos.DrawSphere(actor.transform.position, 0.2f);
         }
     }

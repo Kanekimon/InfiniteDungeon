@@ -57,6 +57,11 @@ namespace Assets.Scripts.UI
             {
                 ToggleMenu("upgrade-menu");
             }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                ToggleMenu("inventory-menu");
+            }
         }
 
         public void ToggleMenu(string menuName)
@@ -125,6 +130,14 @@ namespace Assets.Scripts.UI
             root.Q<Label>("level-value").text = "" + room.depth;
         }
 
+
+        public void UpdateInventory()
+        {
+            if (currentActive != null && currentActive.name.Contains("inventory"))
+            {
+                currentActive.GetComponent<InventoryWindow>().AddItems();
+            }
+        }
 
     }
 }

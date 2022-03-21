@@ -31,6 +31,8 @@ public class NPCManager : MonoBehaviour
     public void SetActiveStatusForRoom(Room r, bool state)
     {
         r.core.Paused = state;
+        if (!roomEnemies.ContainsKey(r))
+            return;
         List<GameObject> en = roomEnemies[r];
         if (en != null && en.Count > 0)
         {

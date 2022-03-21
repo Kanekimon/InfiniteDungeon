@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.UI;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
@@ -64,10 +65,16 @@ public class InventorySystem : MonoBehaviour
     /// <param name="amount">Amount of item</param>
     public void AddItem(Item i, int amount)
     {
-        if (items.ContainsKey(i))
-            items[i] += amount;
+        Item item = items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Key ?? null;
+
+
+        if (item != null)
+            items[item] += amount;
         else
             items[i] = amount;
+
+        UiManager.Instance.UpdateInventory();
+
     }
 
     /// <summary>
@@ -113,8 +120,14 @@ public class InventorySystem : MonoBehaviour
         return true;
     }
 
-
-
+    /// <summary>
+    /// Returns all Items
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<Item, int> GetAllItems()
+    {
+        return items;
+    }
 
 
 }

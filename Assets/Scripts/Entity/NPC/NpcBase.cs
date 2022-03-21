@@ -24,6 +24,7 @@ public class NpcBase : MonoBehaviour
         if (aSystem.GetAttribute("hp").ChangableValue <= 0)
         {
             GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(1f, 10f) * Mathf.Max(r.depth, 1f));
+            GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(new Item(0, "rock"), 1);
         }
 
     }

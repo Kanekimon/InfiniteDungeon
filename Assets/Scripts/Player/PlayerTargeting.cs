@@ -36,7 +36,7 @@ namespace Assets.Scripts.Player
 
             if (Input.GetMouseButton(0))
             {
-                this.GetComponent<Attack>().Shot((Vector2)this.transform.position + RelMouseCoords());
+                this.GetComponent<AttackSystem>().Attack((Vector2)this.transform.position + RelMouseCoords());
             }
 
 

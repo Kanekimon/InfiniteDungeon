@@ -21,6 +21,7 @@ public class Room
     public Vector2 center;
     public Vector2 playerSpawnPoint;
     public Boundary bounds;
+    public Biome biome;
 
     public CorruptionCore core;
 
@@ -62,6 +63,12 @@ public class Room
 
         depth = (int)Vector2.Distance(Vector2.zero, index);
         aMap = new bool[xLen, yLen];
+
+    }
+
+    public void SetBiome(Biome b)
+    {
+        this.biome = b;
     }
 
 

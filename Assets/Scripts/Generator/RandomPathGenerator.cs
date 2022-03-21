@@ -114,7 +114,6 @@ public static class RandomPathGenerator
         }
 
         //List<Vector2> path = BackTrackPath(end);
-        Debug.Log($"Took {stp.ElapsedMilliseconds / 1000}s ({stp.ElapsedMilliseconds}ms with dictionary");
         try
         {
             return BackTrackPath(end);

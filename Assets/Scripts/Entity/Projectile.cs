@@ -50,7 +50,7 @@ public class Projectile : MonoBehaviour
     {
         GameObject hit = collision.gameObject;
 
-        if (hit.tag != "Wall" && owner != null && owner.GetComponent<Attack>().Targets.Contains(hit.tag))
+        if (hit.tag != "Wall" && owner != null && owner.GetComponent<AttackSystem>().Targets.Contains(hit.tag))
         {
             AttributeSystem att = null;
             hit.TryGetComponent(out att);

@@ -4,15 +4,12 @@ using UnityEngine;
 public static class RandomResourceGenerator
 {
 
-
+    static int[] maskX = { 0, 1, 1, 1, 0, -1, -1, -1 };
+    static int[] maskY = { -1, -1, 0, 1, 1, 1, 0, 1 };
 
     public static List<Vector2> GenerateResources(Room r, List<Vector2> path)
     {
         List<Vector2> res = new List<Vector2>();
-
-
-        Boundary b = r.GetBoundary();
-
 
         int max = 200;
 
@@ -21,10 +18,7 @@ public static class RandomResourceGenerator
 
         while (added < max)
         {
-            int randomX = UnityEngine.Random.Range(b.startX + 1, b.endX);
-            int randomY = UnityEngine.Random.Range(b.startY + 1, b.endY);
-
-            Vector2 point = new Vector2(randomX, randomY);
+            Vector2 point = GetRandomPointInRoom(r);
 
             if (path.Contains(point))
                 continue;
@@ -36,6 +30,52 @@ public static class RandomResourceGenerator
         return res;
     }
 
+
+
+    public static List<Vector2> GenerateStone(Room r, List<Vector2> path, int seedPoints, float decayRate)
+    {
+        List<Vector2> stonePos = new List<Vector2>();
+
+
+        for (int i = 0; i < seedPoints; i++)
+        {
+            Vector2 point = GetRandomPointInRoom(r);
+
+            while (path.Contains(point))
+                point = GetRandomPointInRoom(r);
+
+            stonePos.Add(point);
+
+            for (int j = 0; j < 8; j++)
+            {
+                Vector2 n = point + new Vector2(maskX[j], maskY[j]);
+                if (!path.Contains(n))
+                    stonePos.Add(n);
+            }
+
+
+        }
+
+
+        return stonePos;
+    }
+
+
+
+
+
+    static Vector2 GetRandomPointInRoom(Room r)
+    {
+        Boundary b = r.GetBoundary();
+
+        int randomX = UnityEngine.Random.Range(b.startX + 1, b.endX);
+        int randomY = UnityEngine.Random.Range(b.startY + 1, b.endY);
+
+
+        Vector2 point = new Vector2(randomX, randomY);
+
+        return point;
+    }
 
 }
 

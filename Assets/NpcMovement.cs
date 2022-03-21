@@ -18,7 +18,7 @@ public class NpcMovement : MonoBehaviour
     private TargetSystem targetSystem;
     private AttributeSystem attributeSystem;
     private FoVTargetSystem fov;
-    private Attack attack;
+    private AttackSystem attack;
 
 
     private Room r;
@@ -33,7 +33,7 @@ public class NpcMovement : MonoBehaviour
         attributeSystem = this.GetComponent<AttributeSystem>();
         r = this.GetComponent<NpcBase>().r;
         fov = this.GetComponent<FoVTargetSystem>();
-        attack = this.GetComponent<Attack>();
+        attack = this.GetComponent<AttackSystem>();
     }
 
     // Update is called once per frame
@@ -56,7 +56,7 @@ public class NpcMovement : MonoBehaviour
                 run = true;
             else
             {
-                attack.Shot(fov.player.transform.position);
+                //attack.Shot(fov.player.transform.position);
             }
         }
 

@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Stylesheets/MainStyle.uss" />
+    <ui:VisualElement style="align-items: center; width: 100%; height: 100%; justify-content: flex-start; flex-direction: column;">
+        <ui:VisualElement name="Inventory" class="rounded border-slim" style="width: 80%; height: 80%; -unity-slice-left: 0; padding-left: 0; padding-top: 0; margin-top: 5%; flex-grow: 0; flex-shrink: 1; justify-content: space-between; background-color: rgba(108, 108, 108, 0.52); margin-bottom: 0;">
+            <ui:VisualElement name="header-bar" class="rounded" style="height: 10%; width: 100%; background-color: rgb(67, 61, 61); align-items: center; justify-content: center;">
+                <ui:Label text="Inventory" display-tooltip-when-elided="true" style="-unity-text-align: lower-right;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="content-container" class="rounded" style="flex-grow: 1; flex-direction: row; border-left-color: rgb(70, 70, 70); border-right-color: rgb(70, 70, 70); border-top-color: rgb(70, 70, 70); border-bottom-color: rgb(70, 70, 70);">
+                <ui:VisualElement style="width: 25%;" />
+                <ui:VisualElement name="item-side" style="width: 75%;">
+                    <ui:VisualElement name="top" class="border-slim" style="width: 100%; height: 10%; align-items: center; justify-content: space-around;">
+                        <ui:Label text="Items" display-tooltip-when-elided="true" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="middle" class="border-slim" style="height: 80%; flex-direction: row; flex-wrap: wrap;" />
+                    <ui:VisualElement name="bottom" class="border-slim" style="height: 10%;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

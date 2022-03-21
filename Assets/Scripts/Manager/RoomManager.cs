@@ -25,6 +25,8 @@ public class RoomManager : MonoBehaviour
     public List<Room> activeRooms = new List<Room>();
     public List<Room> activeDebug = new List<Room>();
 
+    public bool SpawnCorruptionCore;
+
     public bool ShowWalkableArea = false;
 
     //Singelton Approach
@@ -34,6 +36,15 @@ public class RoomManager : MonoBehaviour
             Instance = this;
         else
             Destroy(this);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void SpawnInHub()
+    {
+
     }
 
 

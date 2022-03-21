@@ -45,7 +45,6 @@ public class FoVTargetSystem : MonoBehaviour
                 float dstToTarget = Vector2.Distance(transform.position, target.position);
                 if (Physics2D.Raycast(transform.position, target.position, dstToTarget, obstacleMask).collider == null)
                 {
-                    Debug.Log("add");
                     player = target;
                 }
             }

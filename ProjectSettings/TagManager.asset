@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Wall
   - Enemy
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Projectile
   - Enemies
   - Obstacle
-  - 
+  - Weapon
   - 
   - 
   - 
