@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
 
     public bool GamePaused;
+    public bool HubMethod;
 
     private void Awake()
     {
@@ -24,15 +25,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = Instantiate(player);
-        if (StartParameters.newGame == true)
-        {
-            RoomManager.Instance.InitialRoom();
-            player.GetComponent<PlayerSystem>().InitPlayer();
-        }
-        else
-        {
-            SaveStateManager.Instance.LoadGame();
-        }
+        player.GetComponent<PlayerSystem>().InitPlayer();
+        RoomManager.Instance.currentRoom = RoomManager.Instance.LoadHub(StartParameters.newGame);
+
+
         Room r = RoomManager.Instance.GetCurrentRoom();
         SpawnPlayer(r.center);
 
@@ -51,6 +47,8 @@ public class GameManager : MonoBehaviour
     {
 
     }
+
+
 
     /// <summary>
     /// Returns the player object

@@ -93,7 +93,10 @@ public class AttributeSystem : MonoBehaviour
 
     void Die()
     {
-        Destroy(this.gameObject);
+        if (!this.gameObject.CompareTag("Player"))
+            Destroy(this.gameObject);
+        else
+            RoomManager.Instance.ReturnToHub();
     }
 }
 

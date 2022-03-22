@@ -41,6 +41,35 @@ public class SaveStateManager : MonoBehaviour
         }
     }
 
+
+    public void SaveHub(int index)
+    {
+        var settings = new Newtonsoft.Json.JsonSerializerSettings();
+        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+        SaveData s = CreateSaveDataObject();
+        string json = JsonConvert.SerializeObject(s, settings);
+
+        string fileUrl = Path.Combine(saveUrl, $"saveGame/{index}/rooms.txt");
+
+        using (StreamWriter sw = new StreamWriter(fileUrl))
+        {
+            sw.Write(json);
+        }
+    }
+
+    public void LoadHub()
+    {
+        int saveIndex = StartParameters.saveGame;
+
+        string fileUrl = Path.Combine(saveUrl, $"saveGame/{saveIndex}/rooms.txt");
+        StreamReader sr = new StreamReader(fileUrl);
+        SaveData s = JsonConvert.DeserializeObject<SaveData>(sr.ReadToEnd());
+
+        RoomManager.Instance.StartFromSave(s.rooms, s.playerRoomIndex, s.playerPosition);
+        GameManager.Instance.GetPlayer().GetComponent<PlayerSystem>().LoadAttributes(s.playerAtts);
+    }
+
     /// <summary>
     /// Loads a game state with selected index
     /// Index was set by selecting a specific save from the menu
@@ -68,12 +97,12 @@ public class SaveStateManager : MonoBehaviour
         Vector2 playerPos = (Vector2)GameManager.Instance.GetPlayer().transform.position;
         Vector2 playerRoomIndex = RoomManager.Instance.currentRoom.index;
 
-        foreach (Room r in RoomManager.Instance.roomMap)
+        foreach (Room r in RoomManager.Instance.GetRoomMap())
         {
             r.GenerateTileDataString();
         }
 
-        List<Room> rooms = RoomManager.Instance.roomMap;
+        List<Room> rooms = RoomManager.Instance.GetRoomMap();
         float currency = 0;
 
         SaveData s = new SaveData(playerRoomIndex, playerPos, currency, rooms, GameManager.Instance.GetPlayer().GetComponent<AttributeSystem>().attributes);

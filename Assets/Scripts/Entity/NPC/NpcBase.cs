@@ -29,6 +29,12 @@ public class NpcBase : MonoBehaviour
 
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+            collision.collider.gameObject.GetComponent<AttributeSystem>().ChangeHealth(-1);
+    }
+
 
     public void SetDifficulty(Room r)
     {

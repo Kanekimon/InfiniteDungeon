@@ -23,6 +23,7 @@ public class Room
     public Boundary bounds;
     public Biome biome;
 
+    [JsonIgnore]
     public CorruptionCore core;
 
     public bool[,] aMap;
@@ -225,6 +226,7 @@ public class Room
     /// </summary>
     public void GenerateTileDataString()
     {
+        Debug.Log("TileData Size: " + RoomTiles.Count);
         if (RoomTiles.Count > 0)
         {
             tileData = "";
@@ -249,4 +251,7 @@ public class Room
             core = g.GetComponent<CorruptionCore>();
         }
     }
+
+
+
 }

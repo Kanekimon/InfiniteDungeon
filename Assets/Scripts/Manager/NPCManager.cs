@@ -54,8 +54,9 @@ public class NPCManager : MonoBehaviour
     public void SpawnFromPosition(Room r, Vector2 position)
     {
         Boundary bounds = r.bounds;
-
-        roomEnemies[r].Add(InstantiateEnemy(r, (int)position.x, (int)position.y));
+        GameObject en = InstantiateEnemy(r, (int)position.x, (int)position.y);
+        en.transform.parent = r.GetParent().transform;
+        roomEnemies[r].Add(en);
     }
 
     /// <summary>
@@ -67,7 +68,9 @@ public class NPCManager : MonoBehaviour
         Boundary bounds = r.bounds;
         int randX = UnityEngine.Random.Range(bounds.startX, bounds.endX);
         int randY = UnityEngine.Random.Range(bounds.startY, bounds.endY);
-        roomEnemies[r].Add(InstantiateEnemy(r, randX, randY));
+        GameObject en = InstantiateEnemy(r, randX, randY);
+        en.transform.parent = r.GetParent().transform;
+        roomEnemies[r].Add(en);
     }
 
     /// <summary>

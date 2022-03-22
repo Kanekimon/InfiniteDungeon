@@ -137,6 +137,13 @@ public class RoomGeneratorManager : MonoBehaviour
     {
         Vector2 startPoint = new Vector2(index.x * xSize, index.y * ySize);
 
+        GameObject runParent = RoomManager.Instance.GetMapParent();
+        if(runParent == null)
+        {
+            runParent = new GameObject("Run");
+            RoomManager.Instance.Run = runParent;
+        }
+
         GameObject g = new GameObject();
 
 
@@ -203,6 +210,7 @@ public class RoomGeneratorManager : MonoBehaviour
         if (RoomManager.Instance.SpawnCorruptionCore)
             r.CreateCorruptionCore();
 
+        g.transform.parent = runParent.transform;
         return r;
     }
 
@@ -271,7 +279,7 @@ public class RoomGeneratorManager : MonoBehaviour
         }
         else
         {
-            
+
         }
 
         return hub;

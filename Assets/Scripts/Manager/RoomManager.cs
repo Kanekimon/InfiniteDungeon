@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Enum;
+using Assets.Scripts.Generator;
 using Assets.Scripts.UI;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,11 @@ public class RoomManager : MonoBehaviour
     public List<Room> roomMap = new List<Room>();
     public Room currentRoom;
     public List<Room> activeRooms = new List<Room>();
+    public List<Room> hubRooms = new List<Room>();
     public List<Room> activeDebug = new List<Room>();
+
+    public GameObject Hub;
+    public GameObject Run;
 
     public bool SpawnCorruptionCore;
 
@@ -42,9 +47,41 @@ public class RoomManager : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    public void SpawnInHub()
+    public Room LoadHub(bool newGame)
     {
+        Room hub = null;
+        hub = LoadHubFromSave();
 
+
+
+        return hub;
+    }
+
+
+    //public Room CreateHub()
+    //{
+
+    //}
+
+    public Room LoadHubFromSave()
+    {
+        int saveId = StartParameters.newGame ? -1 : StartParameters.saveGame;
+        Room r = null;
+
+        string urlRoom = "";
+
+        if (saveId == -1)
+        {
+            r = RoomGenerator.CreateFromPreset("main_hub");
+            hubRooms.Add(r);
+        }
+        else
+        {
+
+        }
+
+
+        return r;
     }
 
 
@@ -82,7 +119,6 @@ public class RoomManager : MonoBehaviour
     /// <param name="d"></param>
     public void MoveToNextRoom(Direction d)
     {
-
         Vector2 index = Vector2.zero;
         if (currentRoom != null)
         {
@@ -99,6 +135,23 @@ public class RoomManager : MonoBehaviour
 
         if (oldTemp.core != null)
             NPCManager.Instance.SetActiveStatusForRoom(oldTemp, true);
+    }
+
+
+    public void AddToRoomMap(Room r)
+    {
+        if(Hub.activeInHierarchy)
+            hubRooms.Add(r);
+        else
+            roomMap.Add(r);
+    }
+
+    public List<Room> GetRoomMap()
+    {
+        if(Hub.activeInHierarchy)
+            return hubRooms;
+        else
+            return roomMap;
     }
 
     /// <summary>
@@ -120,18 +173,20 @@ public class RoomManager : MonoBehaviour
     public Room GenerateRoom(Vector2 index, Direction d)
     {
         Room r = null;
-        if (!roomMap.Any(a => a.index == index))
+        List<Room> map = GetRoomMap();
+        if (!map.Any(a => a.index == index))
         {
             r = RoomGeneratorManager.GenerateRoom(currentRoom, index, d, xSize, ySize, genRa);
-            roomMap.Add(r);
+            map.Add(r);
         }
         else
         {
-            r = roomMap.Where(a => a.index == index).First();
+            r = map.Where(a => a.index == index).First();
             if (!activeRooms.Contains(r))
                 RoomGeneratorManager.ReGenerateRoom(r, d);
 
-            NPCManager.Instance.SetActiveStatusForRoom(r, false);
+            if (r.core != null)
+                NPCManager.Instance.SetActiveStatusForRoom(r, false);
         }
 
         r.playerSpawnPoint = RoomGeneratorManager.GetRoomStartPoint(d, r);
@@ -225,7 +280,7 @@ public class RoomManager : MonoBehaviour
     /// <returns>Room at index or null</returns>
     public Room GetRoomFromIndex(Vector2 ind)
     {
-        return roomMap.Where(a => a.index == ind).FirstOrDefault();
+        return GetRoomMap().Where(a => a.index == ind).FirstOrDefault();
     }
 
     /// <summary>
@@ -236,7 +291,7 @@ public class RoomManager : MonoBehaviour
     {
         if (act)
         {
-            foreach (Room room in roomMap)
+            foreach (Room room in GetRoomMap())
             {
                 if (!activeRooms.Any(a => a == room))
                 {
@@ -295,6 +350,33 @@ public class RoomManager : MonoBehaviour
         }
 
         return ind;
+    }
+
+    public void LeaveHub()
+    {
+        Hub.SetActive(false);
+
+        currentRoom = InitialRoom();
+        GameManager.Instance.SpawnPlayer(currentRoom.center);
+    }
+
+    public void ReturnToHub()
+    {
+        GetRoomMap().Clear();
+        Destroy(Run);
+        Run = new GameObject();
+        Hub.SetActive(true);
+
+
+        //GameManager.Instance.SpawnPlayer();
+    }
+
+    public GameObject GetMapParent()
+    {
+        if (Hub.activeSelf)
+            return Hub;
+        else
+            return Run;
     }
 
     private void OnDrawGizmos()

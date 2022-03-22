@@ -20,7 +20,9 @@ public class GameManagerEditor : Editor
 
         if(GUILayout.Button("Spawn Enemies"))
         {
-            gameManager.SpawnEnemies();
+            SaveStateManager.Instance.SaveGame(0);
+
+            //gameManager.SpawnEnemies();
         }
         if(GUILayout.Button("Random Ceiling Test"))
         {

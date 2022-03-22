@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +29,19 @@ public class RoomManagerEditor : Editor
                 showButton = "Show All Rooms";
                 roomManager.ToggleRooms(false);
             }
+        }
+
+        if (GUILayout.Button("SaveCurrentRoom"))
+        {
+            var settings = new Newtonsoft.Json.JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+            roomManager.currentRoom.GenerateTileDataString();
+
+            string json = JsonConvert.SerializeObject(roomManager.currentRoom, settings);
+
+            StreamWriter sw = new StreamWriter(@"D:\Unity Workspace\InfiniteDungeon\Assets\Resources\Rooms\room.txt");
+            sw.Write(json); 
         }
 
     }
