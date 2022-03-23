@@ -91,6 +91,8 @@ public class InventorySystem : MonoBehaviour
             if (items[i] == 0)
                 items.Remove(i);
         }
+        UiManager.Instance.UpdateInventory();
+
     }
 
     /// <summary>
@@ -129,5 +131,9 @@ public class InventorySystem : MonoBehaviour
         return items;
     }
 
+    public Item GetItemFromInventory()
+    {
+        return items.First().Key;
+    }
 
 }

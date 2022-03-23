@@ -7,6 +7,8 @@ public class InventoryWindow : MonoBehaviour
 {
     public VisualTreeAsset itemSlot;
 
+    delegate void ButtonCallBack();
+
     VisualElement root;
 
     private void OnEnable()
@@ -36,20 +38,86 @@ public class InventoryWindow : MonoBehaviour
 
     }
 
+    public void AddItemToSlot(string slotName, Item i)
+    {
+        VisualElement slot = root.Q<VisualElement>(slotName);
+
+        if (slot == null)
+            return;
+
+        if (i != null)
+        {
+            slot.style.backgroundImage = GetBackgroundImage(i.ItemName);
+            slot.RegisterCallback<MouseDownEvent>((e) =>
+            {
+                if (e.button == 1)
+                {
+                    System.Action action = () =>
+                    {
+                        GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().Unequip(i.equipmentType);
+                        root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
+                    };
+                    SetUpContextMenu(e.mousePosition, i, "Unequip", action);
+                }
+                else if(e.button == 0 && e.clickCount == 2)
+                {
+                    GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().Unequip(i.equipmentType);
+                    root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
+                }
+
+            });
+        }
+
+        else
+        {
+            slot.style.backgroundImage = null;
+        }
+
+    }
+
+    public Background GetBackgroundImage(string name)
+    {
+        return Background.FromSprite(Resources.Load<Sprite>($"items/{name}"));
+    }
 
     public void AddItemToUi(Item i, int amount)
     {
         VisualElement itemContainer = root.Q<VisualElement>("middle");
-
         TemplateContainer tmpContainer = itemSlot.Instantiate();
-
         VisualElement itemSlotElement = tmpContainer.Q<VisualElement>("item-container");
-
-        itemSlotElement.style.backgroundImage = Background.FromSprite(Resources.Load<Sprite>($"items/{i.ItemName}"));
-
+        itemSlotElement.name = i.ItemName;
+        itemSlotElement.style.backgroundImage = GetBackgroundImage(i.ItemName);
         tmpContainer.Q<Label>("item-amount").text = "" + amount;
-
         itemContainer.Add(itemSlotElement);
+
+        itemSlotElement.RegisterCallback<MouseDownEvent>((e) =>
+        {
+            if (e.button == 1)
+            {
+                System.Action action = () => {
+                    GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().EquipItem(i);
+                    root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
+                };
+                SetUpContextMenu(e.mousePosition, i, "Equip", action);
+
+            }
+            else if (e.button == 0 && e.clickCount == 2)
+            {
+                GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().EquipItem(i);
+                root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
+            }
+        });
+    }
+
+    void SetUpContextMenu(Vector3 mousePos, Item i, string buttonText, System.Action callback)
+    {
+        root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.Flex;
+        root.Q<VisualElement>("contextmenu").transform.position = mousePos;
+        root.Q<Label>("context-header").text = i.ItemName;
+        Button b = root.Q<Button>("equip");
+        b.text = buttonText;
+        b.clickable = null;
+        b.clicked += callback;
     }
 
 }

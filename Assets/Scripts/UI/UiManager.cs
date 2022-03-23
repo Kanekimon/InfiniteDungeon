@@ -139,5 +139,15 @@ namespace Assets.Scripts.UI
             }
         }
 
+
+        public void UpdateEquipment(Dictionary<EquipmentType, Item> equipment)
+        {
+            foreach(KeyValuePair<EquipmentType, Item> item in equipment)
+            {
+                string slotName = $"slot-{item.Key}";
+                uiWindows["inventory-menu"].GetComponent<InventoryWindow>().AddItemToSlot(slotName, item.Value);
+            }
+        }
+
     }
 }

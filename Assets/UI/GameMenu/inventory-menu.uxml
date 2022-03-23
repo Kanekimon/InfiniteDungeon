@@ -6,7 +6,13 @@
                 <ui:Label text="Inventory" display-tooltip-when-elided="true" style="-unity-text-align: lower-right;" />
             </ui:VisualElement>
             <ui:VisualElement name="content-container" class="rounded" style="flex-grow: 1; flex-direction: row; border-left-color: rgb(70, 70, 70); border-right-color: rgb(70, 70, 70); border-top-color: rgb(70, 70, 70); border-bottom-color: rgb(70, 70, 70);">
-                <ui:VisualElement style="width: 25%;" />
+                <ui:VisualElement name="equipped" class="border" style="width: 25%; flex-direction: row;">
+                    <ui:VisualElement name="equip-left" style="width: 40%;">
+                        <ui:VisualElement name="slot-weapon" class="rounded border" style="width: 50%; height: 15%;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="equip-mid" style="width: 20%;" />
+                    <ui:VisualElement name="equip-right" style="width: 40%;" />
+                </ui:VisualElement>
                 <ui:VisualElement name="item-side" style="width: 75%;">
                     <ui:VisualElement name="top" class="border-slim" style="width: 100%; height: 10%; align-items: center; justify-content: space-around;">
                         <ui:Label text="Items" display-tooltip-when-elided="true" />
@@ -16,5 +22,9 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="contextmenu" class="border" style="width: 150px; height: auto; position: absolute; background-color: rgb(128, 128, 128); flex-direction: column; align-items: center; justify-content: space-between; flex-wrap: wrap-reverse; display: none;">
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="context-header" />
+        <ui:Button text="Equip" display-tooltip-when-elided="true" name="equip" class="rounded border" style="background-color: rgba(255, 255, 255, 0);" />
     </ui:VisualElement>
 </ui:UXML>

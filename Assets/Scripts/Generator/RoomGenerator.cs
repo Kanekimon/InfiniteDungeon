@@ -151,6 +151,35 @@ namespace Assets.Scripts.Generator
             return pos.ElementAt(Random.Range(0, pos.Count));
         }
 
+
+        static Biome GetBiomeBasedOnIndex(Room r)
+        {
+            int x = (int)r.index.x;
+            int y = (int)r.index.y;
+
+            if (x == 0 && y == 0)
+                return Biome.grassland;
+
+            float value = (float)((Mathf.Atan2(x, y) / Mathf.PI) * 180f);
+            if (value < 0) value += 360f;
+
+            Debug.Log($"Angle: {value}");
+
+            if ((value >= 315) || (value < 45))
+                return Biome.snowy;
+            if (value >= 45 && value < 135)
+                return Biome.earth;
+            if (value >= 135 && value < 225)
+                return Biome.desert;
+            if (value >= 225 && value < 315)
+                return Biome.grassland;
+
+
+
+
+            return Biome.grassland;
+        }
+
         /// <summary>
         /// Gets the new startpoint for the room, relative to the 
         /// direction the player came from
@@ -244,7 +273,8 @@ namespace Assets.Scripts.Generator
             GameObject roomContainer = new GameObject();
 
             Room room = new Room(System.Guid.NewGuid().ToString(), index, xSize, ySize, (int)startPoint.x, (int)startPoint.y, roomContainer);
-            room.SetBiome(GetBiome(room, dir));
+            room.SetBiome(GetBiomeBasedOnIndex(room));
+            //room.SetBiome(GetBiome(room, dir));
             roomContainer.name = $"Room: ({index.x} | {index.y})";
 
             Vector2 startPointPath = GetRoomStartPoint(dir, room);

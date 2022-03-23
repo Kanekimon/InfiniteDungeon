@@ -22,6 +22,11 @@ public class PlayerSystem : MonoBehaviour
         AttributeSystem = this.GetComponent<AttributeSystem>();
         InventorySystem = this.GetComponent<InventorySystem>();
         AddAttributes();
+
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(0), 1);
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(1), 1);
+
+
     }
 
     public void LoadAttributes(List<Attribute> attr)

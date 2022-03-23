@@ -25,7 +25,7 @@ public class InventoryWindowEditor : Editor
 
         if (GUILayout.Button("Add Random Item"))
         {
-            GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(new Item(int.Parse(ItemId), ItemName), UnityEngine.Random.Range(1, 100));
+            GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(new Item(int.Parse(ItemId), ItemName, EquipmentType.none), UnityEngine.Random.Range(1, 100));
         }
 
 

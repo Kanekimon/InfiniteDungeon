@@ -1,0 +1,40 @@
+[
+  {
+    "ItemId": 0,
+    "ItemName": "sword",
+    "itemsTypes": [
+      1,
+      2
+    ],
+    "equipmentType": 1,
+    "properties": [
+      {
+        "Name": "durability",
+        "Value": 10.0
+      },
+      {
+        "Name": "dmg",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "ItemId": 1,
+    "ItemName": "dagger",
+    "itemsTypes": [
+      1,
+      2
+    ],
+    "equipmentType": 1,
+    "properties": [
+      {
+        "Name": "durability",
+        "Value": 10.0
+      },
+      {
+        "Name": "dmg",
+        "Value": 10.0
+      }
+    ]
+  }
+]
