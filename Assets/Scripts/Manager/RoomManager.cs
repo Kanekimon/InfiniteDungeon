@@ -109,7 +109,7 @@ public class RoomManager : MonoBehaviour
 
         NPCManager.Instance.SpawnFromSave(currentRoom.GetEnemies(), currentRoom);
 
-        activeRooms.Add(RoomGeneratorManager.ReGenerateRoomFromSave(currentRoom));
+        activeRooms.Add(RoomGenerator.ReGenerateRoomFromSave(currentRoom));
         GameManager.Instance.SetPlayerPos(playerPos);
     }
 
@@ -128,7 +128,6 @@ public class RoomManager : MonoBehaviour
 
         Room oldTemp = currentRoom;
         currentRoom = GenerateRoom(index, d);
-        //NPCManager.Instance.SpawnEnemies(currentRoom,1);
 
         ActivateCorrectRooms(currentRoom);
         UiManager.Instance.ChangeDepth(currentRoom);
@@ -140,7 +139,7 @@ public class RoomManager : MonoBehaviour
 
     public void AddToRoomMap(Room r)
     {
-        if(Hub.activeInHierarchy)
+        if (Hub.activeInHierarchy)
             hubRooms.Add(r);
         else
             roomMap.Add(r);
@@ -148,7 +147,7 @@ public class RoomManager : MonoBehaviour
 
     public List<Room> GetRoomMap()
     {
-        if(Hub.activeInHierarchy)
+        if (Hub.activeInHierarchy)
             return hubRooms;
         else
             return roomMap;
@@ -176,20 +175,20 @@ public class RoomManager : MonoBehaviour
         List<Room> map = GetRoomMap();
         if (!map.Any(a => a.index == index))
         {
-            r = RoomGeneratorManager.GenerateRoom(currentRoom, index, d, xSize, ySize, genRa);
-            map.Add(r);
+            r = RoomGenerator.GenerateRoom(index, d, xSize, ySize);
+            AddToRoomMap(r);
         }
         else
         {
             r = map.Where(a => a.index == index).First();
             if (!activeRooms.Contains(r))
-                RoomGeneratorManager.ReGenerateRoom(r, d);
+                RoomGenerator.ReGenerateRoom(r);
 
             if (r.core != null)
                 NPCManager.Instance.SetActiveStatusForRoom(r, false);
         }
 
-        r.playerSpawnPoint = RoomGeneratorManager.GetRoomStartPoint(d, r);
+        r.playerSpawnPoint = RoomGenerator.GetRoomStartPoint(d, r);
 
         GameManager.Instance.SetPlayerPos(r.playerSpawnPoint);
 
@@ -269,7 +268,7 @@ public class RoomManager : MonoBehaviour
         if (!activeRooms.Any(a => a.index == r.index))
         {
             activeRooms.Add(r);
-            RoomGeneratorManager.ReGenerateRoom(r);
+            RoomGenerator.ReGenerateRoom(r);
         }
     }
 
@@ -296,9 +295,9 @@ public class RoomManager : MonoBehaviour
                 if (!activeRooms.Any(a => a == room))
                 {
                     if (room.GetTiles().Count > 0)
-                        activeDebug.Add(RoomGeneratorManager.ReGenerateRoom(room));
+                        activeDebug.Add(RoomGenerator.ReGenerateRoom(room));
                     else
-                        activeDebug.Add(RoomGeneratorManager.ReGenerateRoomFromSave(room));
+                        activeDebug.Add(RoomGenerator.ReGenerateRoomFromSave(room));
                 }
             }
         }

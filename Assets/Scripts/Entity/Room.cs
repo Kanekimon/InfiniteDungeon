@@ -14,6 +14,8 @@ public class Room
     private List<Tile> RoomTiles = new List<Tile>();
     private Dictionary<Tile, GameObject> resourceMap = new Dictionary<Tile, GameObject>();
 
+    private Dictionary<Vector2, Resource> resources = new Dictionary<Vector2, Resource>();
+
     public int xLength;
     public int yLength;
     public int depth;
@@ -95,6 +97,15 @@ public class Room
         resourceMap[RoomTiles.Where(a => a.x == (int)tileCoord.x && a.y == (int)tileCoord.y).First()] = resource;
     }
 
+    public void AddResource(Resource r)
+    {
+        if (!resources.ContainsKey(r.Position))
+        {
+            resources.Add(r.Position, r);
+        }
+    }
+
+   
     /// <summary>
     /// Returns all enemies in this room
     /// Dictionary Key: Enemy Id

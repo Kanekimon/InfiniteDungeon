@@ -61,6 +61,54 @@ public static class RandomResourceGenerator
     }
 
 
+    public static List<Resource> GenerateStone(Room r, List<Vector2> path, int seedPoints)
+    {
+        List<Resource> stonePos = new List<Resource>();
+
+
+        for (int i = 0; i < seedPoints; i++)
+        {
+            Vector2 point = GetRandomPointInRoom(r);
+
+            while (path.Contains(point))
+                point = GetRandomPointInRoom(r);
+
+            stonePos.Add(new Resource(point, "stone"));
+
+            for (int j = 0; j < 8; j++)
+            {
+                Vector2 n = point + new Vector2(maskX[j], maskY[j]);
+                if (!path.Contains(n) && r.bounds.IsInsideWalls(n))
+                    stonePos.Add(new Resource(n,"stone"));
+            }
+
+
+        }
+
+
+        return stonePos;
+    }
+
+
+
+
+    /// <summary>
+    /// Adds a resource with given name, to the tile
+    /// </summary>
+    /// <param name="room">Room in which the tile is</param>
+    /// <param name="parent">Parent tile gameobject</param>
+    /// <param name="resource">Name of the resource</param>
+    /// <returns></returns>
+    public static GameObject GenerateResource(Room room, GameObject parent, Resource res)
+    {
+        GameObject resObj = GameObject.Instantiate(Resources.Load<GameObject>($"tiles/resources/{res.ResourceName}"));
+        res.ResourceObject = resObj;
+        room.AddResource(res);
+        resObj.transform.position = parent.transform.position;
+        resObj.transform.parent = parent.transform;
+        return resObj;
+    }
+
 
 
 
@@ -68,8 +116,8 @@ public static class RandomResourceGenerator
     {
         Boundary b = r.GetBoundary();
 
-        int randomX = UnityEngine.Random.Range(b.startX + 1, b.endX);
-        int randomY = UnityEngine.Random.Range(b.startY + 1, b.endY);
+        int randomX = UnityEngine.Random.Range(b.startX + 1, b.endX-1);
+        int randomY = UnityEngine.Random.Range(b.startY + 1, b.endY-1);
 
 
         Vector2 point = new Vector2(randomX, randomY);

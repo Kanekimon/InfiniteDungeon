@@ -18,5 +18,10 @@ public class Tile
         this.tileObject = tileOb;
     }
 
+    public bool SamePosition(Vector2 pos)
+    {
+        return pos.x == x && pos.y == y;
+    }
+
 }
 

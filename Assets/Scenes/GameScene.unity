@@ -1032,6 +1032,7 @@ MonoBehaviour:
   hubRooms: []
   activeDebug: []
   Hub: {fileID: 0}
+  Run: {fileID: 0}
   SpawnCorruptionCore: 1
   ShowWalkableArea: 0
 --- !u!1 &436768234
