@@ -44,7 +44,7 @@ Also influenced by several manhwas.
     <li>
       UI System
       <ul>
-        <li>Window System | 0%</li>
+        <li>Window System | 10%</li>
         <li>Tab System | 0%</li>
         <li>Interaction Menues | 0%</li>
         <li>Trading Window | 0%</li>
@@ -53,8 +53,8 @@ Also influenced by several manhwas.
     <li>
       Resource Managment
       <ul>
-        <li>Algorithm for intelligent spawning of resources | 0%</li>
-        <li>smart resource respawn | 0%</li>
+        <li>Algorithm for intelligent spawning of resources | 10%</li>
+        <li>smart resource respawn | 10%</li>
       </ul>
     </li>
     <li>
