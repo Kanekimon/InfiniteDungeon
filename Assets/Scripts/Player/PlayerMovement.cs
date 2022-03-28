@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     Vector2 movement;
     float angle;
+    Animator animator;
 
     PlayerTargeting pTarget;
 
@@ -17,7 +18,8 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         pTarget = GetComponent<PlayerTargeting>();
-        SetRotation();
+        animator = GetComponent<Animator>();
+        //SetRotation();
     }
 
     // Update is called once per frame
@@ -27,7 +29,13 @@ public class PlayerMovement : MonoBehaviour
         movement.x = Input.GetAxis("Horizontal");
         movement.y = Input.GetAxis("Vertical");
 
-        SetRotation();
+        GetComponent<SpriteRenderer>().flipX = movement.x > 0;
+
+        animator.SetFloat("Vertical", movement.y);
+        animator.SetFloat("Horizontal", movement.x);
+
+        animator.SetFloat("Speed", movement.magnitude);
+        //SetRotation();
 
 
         //this.transform.rotation = Quaternion.LookRotation(RelMouseCoords());
@@ -37,7 +45,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime * this.GetComponent<AttributeSystem>().GetAttributeValue("dex"));
+        Vector2 motionVector = rb.position + movement * Time.fixedDeltaTime * this.GetComponent<AttributeSystem>().GetAttributeValue("dex");
+        rb.MovePosition(motionVector);
+      
+
     }
 
     private void SetRotation()

@@ -44,11 +44,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Player
-    uniqueID: 2841725777
-    locked: 0
   - name: Tile
     uniqueID: 3700998167
+    locked: 0
+  - name: Player
+    uniqueID: 2841725777
     locked: 0
   - name: Projectiles
     uniqueID: 3883402137

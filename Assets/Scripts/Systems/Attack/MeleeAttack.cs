@@ -6,13 +6,18 @@ public class MeleeAttack : Attack
 {
     Vector3 orgPos;
     public GameObject attackPoint;
-
+    public AnimatorOverrideController aoController;
     bool attack = false;
 
     private void Start()
     {
         orgPos = transform.localPosition;
         attackPoint = this.transform.Find("AttackPoint").gameObject;
+        animator = this.transform.parent.GetComponent<Animator>();
+
+
+        aoController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+        animator.runtimeAnimatorController = aoController;
     }
 
     private void Update()
@@ -24,40 +29,20 @@ public class MeleeAttack : Attack
     public override void AttackAction(Vector2 targetCoords)
     {
         Direction = (targetCoords - (Vector2)this.transform.position).normalized;
+        aoController["default-attack"] = config.GetAttackAnimation();
+        animator.SetTrigger("attack");
 
-        this.transform.position = this.transform.parent.position + (new Vector3(Direction.x, Direction.y) * AttackRange);
-        if (attackPoint != null)
-        {
-            GameObject owner = this.transform.parent.GetComponent<AttackSystem>().gameObject;
-            float damage = this.BaseDamage + owner.GetComponent<AttributeSystem>().GetAttributeValue("str");
-            RaycastHit2D hit = Physics2D.BoxCast(attackPoint.transform.position, new Vector2(this.transform.lossyScale.x, this.transform.lossyScale.y), 0f, Direction, this.transform.lossyScale.y, LayerMask.GetMask(owner.GetComponent<AttackSystem>().Targets.ToArray()));
-            DrawBoxCast(new Vector2(this.transform.lossyScale.x, this.transform.lossyScale.y), 0f, attackPoint.transform.position, Direction, this.transform.lossyScale.y, hit);
-            if (hit.collider != null)
-            {
-                GameObject hitG = hit.collider.gameObject;
-
-                if (!hitG.CompareTag("Wall"))
-                {
-                    Debug.Log($"Hit with: {hitG.tag}");
-                    AttributeSystem att = null;
-                    hitG.TryGetComponent(out att);
-                    if (att != null)
-                    {
-                        Attribute health = att.GetAttribute("hp");
-                        att.ChangeHealth(-damage);
-                        if (hitG.CompareTag("Player"))
-                            UiManager.Instance.SetHp(health.BaseValue, health.ChangableValue);
-                    }
-                }
-            }
-
-        }
         attack = true;
+        //animator.ResetTrigger("attack");
+        //StartCoroutine(WaitForFinish(animator.GetCurrentAnimatorStateInfo(0).length, "attack"));
+        //animator.ResetTrigger("attack");
+        animator.SetTrigger("idle");
+    }
 
-
-
-
-        StartCoroutine(Retract());
+    IEnumerator WaitForFinish(float length, string triggerName)
+    {
+        yield return new WaitForSeconds(length);
+        
     }
 
     void DrawBoxCast(Vector2 size, float angle, Vector2 origen, Vector2 direction, float distance, RaycastHit2D hit)
@@ -115,6 +100,36 @@ public class MeleeAttack : Attack
         this.transform.position = orgPos + parentPos;
     }
 
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (attack)
+        {
+            if (collision.CompareTag("Enemy"))
+            {
+
+                GameObject hitG = collision.gameObject;
+                GameObject owner = this.transform.parent.GetComponent<AttackSystem>().gameObject;
+                float damage = this.BaseDamage + owner.GetComponent<AttributeSystem>().GetAttributeValue("str");
+
+                hitG.GetComponent<Renderer>().material.color = Color.blue;
+
+                if (!hitG.CompareTag("Wall"))
+                {
+                    Debug.Log($"Hit with: {hitG.tag}");
+                    AttributeSystem att = null;
+                    hitG.TryGetComponent(out att);
+                    if (att != null)
+                    {
+                        Attribute health = att.GetAttribute("hp");
+                        att.ChangeHealth(-damage);
+                        if (hitG.CompareTag("Player"))
+                            UiManager.Instance.SetHp(health.BaseValue, health.ChangableValue);
+                    }
+                }
+            }
+        }
+    }
 
 
 

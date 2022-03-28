@@ -14,6 +14,7 @@ public class AttackSystem : MonoBehaviour
     public List<string> Targets;
     public AttackMode AttackMode;
     public GameObject Owner;
+    public Attack attack;
 
     // Start is called before the first frame update
     void Start()
@@ -26,14 +27,13 @@ public class AttackSystem : MonoBehaviour
     {
         AttacksPerSecond = 1;//this.GetComponent<AttributeSystem>().GetAttributeValue("dex");
 
-        if (timer > 1f / AttacksPerSecond)
+        if (!canShot)
         {
-            canShot = true;
-            timer = 0;
-        }
-        else
-        {
-            canShot = false;
+            if (timer > 1f / AttacksPerSecond)
+            {
+                canShot = true;
+                timer = 0;
+            }
         }
         timer += Time.deltaTime;
     }
@@ -41,17 +41,19 @@ public class AttackSystem : MonoBehaviour
 
     public void Attack(Vector2 targetCoords)
     {
-        if (canShot)
-        {
-            GameObject weapon = null;
-            foreach (Transform t in this.transform)
-            {
-                if (t.gameObject.CompareTag("Weapon"))
-                    weapon = t.gameObject;
-            }
 
+        GameObject weapon = null;
+        foreach (Transform t in this.transform)
+        {
+            if (t.gameObject.CompareTag("Weapon"))
+                weapon = t.gameObject;
+        }
+        if (weapon != null && canShot)
+        {
+            canShot = false;
             weapon.GetComponent<Attack>().AttackAction(targetCoords);
         }
+
     }
 
 

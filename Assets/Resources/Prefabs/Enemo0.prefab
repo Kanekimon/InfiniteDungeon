@@ -182,6 +182,7 @@ MonoBehaviour:
       endY: 0
     biome: 0
     core: {fileID: 0}
+  lootTable: {fileID: 11400000, guid: 49a72d48b74892f48b007fd9bdfaf691, type: 2}
 --- !u!114 &2023928489291626838
 MonoBehaviour:
   m_ObjectHideFlags: 0

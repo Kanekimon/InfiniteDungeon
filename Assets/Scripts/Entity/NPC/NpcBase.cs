@@ -7,6 +7,7 @@ public class NpcBase : MonoBehaviour
     int entityId;
     float roomDepth;
     public Room r;
+    public LootTable lootTable;
 
     private void Start()
     {
@@ -23,8 +24,22 @@ public class NpcBase : MonoBehaviour
     {
         if (aSystem.GetAttribute("hp").ChangableValue <= 0)
         {
-            GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(1f, 10f) * Mathf.Max(r.depth, 1f));
-            GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(new Item(0, "rock", EquipmentType.none), 1);
+            foreach(Loot loot in lootTable.GetLoot())
+            {
+                if (loot.Name.Equals("gold"))
+                {
+                    GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(loot.Min, loot.Max+1) * Mathf.Max(r.depth, 1f));
+                }
+                else
+                {
+                    if(UnityEngine.Random.Range(0,1f) < loot.BaseProbability)
+                        GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(ItemManager.Instance.GetItemByName(loot.Name), UnityEngine.Random.Range(loot.Min, loot.Max+1));
+                }
+            }
+
+
+
+
         }
 
     }

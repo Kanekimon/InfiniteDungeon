@@ -105,7 +105,7 @@ public class Room
         }
     }
 
-   
+
     /// <summary>
     /// Returns all enemies in this room
     /// Dictionary Key: Enemy Id

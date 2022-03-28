@@ -2,6 +2,12 @@
 
 public class RangedAttack : Attack
 {
+
+    private void Start()
+    {
+        animator = this.transform.parent.GetComponent<Animator>();
+    }
+
     public override void AttackAction(Vector2 targetCoords)
     {
         GameObject g = ProjectilePoolManager.Instance.GetProjectileFromPool();

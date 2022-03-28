@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(GameManager))]
@@ -18,13 +13,13 @@ public class GameManagerEditor : Editor
         GameManager gameManager = (GameManager)target;
 
 
-        if(GUILayout.Button("Spawn Enemies"))
+        if (GUILayout.Button("Spawn Enemies"))
         {
             SaveStateManager.Instance.SaveGame(0);
 
             //gameManager.SpawnEnemies();
         }
-        if(GUILayout.Button("Random Ceiling Test"))
+        if (GUILayout.Button("Random Ceiling Test"))
         {
             float x = UnityEngine.Random.Range(-10f, 10f);
             float y = UnityEngine.Random.Range(-10f, 10f);

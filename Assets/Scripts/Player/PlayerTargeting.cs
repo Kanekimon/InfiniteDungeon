@@ -7,8 +7,6 @@ namespace Assets.Scripts.Player
 
         public LayerMask mask;
         public float interActionRange;
-        public TMPro.TextMeshProUGUI interactionText;
-
 
         private void Start()
         {

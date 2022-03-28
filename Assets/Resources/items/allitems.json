@@ -36,5 +36,78 @@
         "Value": 10.0
       }
     ]
+  },
+  {
+    "ItemId": 2,
+    "ItemName": "spear",
+    "itemsTypes": [
+      1,
+      2
+    ],
+    "equipmentType": 1,
+    "properties": [
+      {
+        "Name": "durability",
+        "Value": 10.0
+      },
+      {
+        "Name": "dmg",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "ItemId": 3,
+    "ItemName": "scrap",
+    "itemsTypes": [
+      3
+    ],
+    "equipmentType": 0,
+    "properties": [
+      {
+        "Name": "durability",
+        "Value": 10.0
+      },
+      {
+        "Name": "dmg",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "ItemId": 4,
+    "ItemName": "wood",
+    "itemsTypes": [
+      3
+    ],
+    "equipmentType": 0,
+    "properties": [
+      {
+        "Name": "durability",
+        "Value": 10.0
+      },
+      {
+        "Name": "dmg",
+        "Value": 10.0
+      }
+    ]
+  },
+  {
+    "ItemId": 5,
+    "ItemName": "stone",
+    "itemsTypes": [
+      3
+    ],
+    "equipmentType": 0,
+    "properties": [
+      {
+        "Name": "durability",
+        "Value": 10.0
+      },
+      {
+        "Name": "dmg",
+        "Value": 10.0
+      }
+    ]
   }
 ]

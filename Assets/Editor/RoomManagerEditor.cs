@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -41,7 +36,7 @@ public class RoomManagerEditor : Editor
             string json = JsonConvert.SerializeObject(roomManager.currentRoom, settings);
 
             StreamWriter sw = new StreamWriter(@"D:\Unity Workspace\InfiniteDungeon\Assets\Resources\Rooms\room.txt");
-            sw.Write(json); 
+            sw.Write(json);
         }
 
     }

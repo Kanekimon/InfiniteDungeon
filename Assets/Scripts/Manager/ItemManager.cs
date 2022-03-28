@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
@@ -12,7 +9,7 @@ public class ItemManager : MonoBehaviour
 
 
     public static ItemManager Instance;
-    public List<Item> items = new List<Item>(); 
+    public List<Item> items = new List<Item>();
 
 
     private void Awake()
@@ -54,6 +51,11 @@ public class ItemManager : MonoBehaviour
     public Item GetItem(int id)
     {
         return ItemFactory.CreateItem(items.Where(a => a.ItemId == id).FirstOrDefault());
+    }
+
+    public Item GetItemByName(string name)
+    {
+        return ItemFactory.CreateItem(items.Where(a => a.ItemName.ToLower().Equals(name.ToLower())).FirstOrDefault());
     }
 
 }

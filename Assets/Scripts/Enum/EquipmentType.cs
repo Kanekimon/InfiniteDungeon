@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-public enum EquipmentType
+﻿public enum EquipmentType
 {
-    none = 0, 
+    none = 0,
     weapon = 1,
     tool = 2,
     shield = 3,

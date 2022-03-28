@@ -1,14 +1,10 @@
 ﻿using Assets.Scripts.UI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class EquipmentSystem : MonoBehaviour
 {
-    private Dictionary<EquipmentType, Item> equipment = new Dictionary<EquipmentType,Item>();
+    private Dictionary<EquipmentType, Item> equipment = new Dictionary<EquipmentType, Item>();
     private GameObject owner;
     private InventorySystem inv;
 
@@ -40,10 +36,17 @@ public class EquipmentSystem : MonoBehaviour
         else
         {
             if (equipment[i.equipmentType] != null)
-                inv.AddItem(equipment[i.equipmentType],1);
+                Unequip(i.equipmentType);
             equipment[i.equipmentType] = i;
             inv.RemoveItem(i, 1);
         }
+        if (i.equipmentType == EquipmentType.weapon)
+        {
+            GameObject weap = Instantiate(Resources.Load<GameObject>($"items/{i.ItemName}/{i.ItemName}_prefab"));
+            weap.name = "weapon";
+            weap.transform.SetParent(transform, false);
+        }
+
         Debug.Log("Equip");
 
         UiManager.Instance.UpdateEquipment(equipment);
@@ -51,12 +54,27 @@ public class EquipmentSystem : MonoBehaviour
 
     public void Unequip(EquipmentType et)
     {
-        if(equipment.ContainsKey(et) && equipment[et] != null)
+        if (equipment.ContainsKey(et) && equipment[et] != null)
         {
-            inv.AddItem(equipment[et],1);
+            if (et == EquipmentType.weapon)
+            {
+                Transform deleteThis = null;
+
+                foreach (Transform c in this.transform)
+                {
+                    if (c.name.Contains("weapon"))
+                        deleteThis = c;
+
+                }
+                if (deleteThis != null)
+                    Destroy(deleteThis.gameObject);
+            }
+
+
+            inv.AddItem(equipment[et], 1);
             equipment[et] = null;
         }
-        Debug.Log("Unequip");
+
 
 
         UiManager.Instance.UpdateEquipment(equipment);

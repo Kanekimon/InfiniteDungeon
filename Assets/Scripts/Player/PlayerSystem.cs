@@ -25,7 +25,12 @@ public class PlayerSystem : MonoBehaviour
 
         InventorySystem.AddItem(ItemManager.Instance.GetItem(0), 1);
         InventorySystem.AddItem(ItemManager.Instance.GetItem(1), 1);
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(2), 1);
 
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(3), 100);
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(4), 100);
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(5), 100);
+        this.GetComponent<Animator>().enabled = true;
 
     }
 

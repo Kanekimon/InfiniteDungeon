@@ -65,8 +65,11 @@ public class InventorySystem : MonoBehaviour
     /// <param name="amount">Amount of item</param>
     public void AddItem(Item i, int amount)
     {
-        Item item = items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Key ?? null;
+        Debug.Log(i);
 
+        Item item = null;
+        if (items.Any(a => a.Key.ItemId != i.ItemId))
+            item = items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Key;
 
         if (item != null)
             items[item] += amount;
@@ -102,8 +105,8 @@ public class InventorySystem : MonoBehaviour
     /// <returns>Quantity of item or -1 if not in inventory</returns>
     public int GetItemAmount(Item i)
     {
-        if (items.ContainsKey(i))
-            return items[i];
+        if(items.Any(a => a.Key.ItemId == i.ItemId))
+            return items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Value;
 
         return -1;
     }

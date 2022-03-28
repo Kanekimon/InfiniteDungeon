@@ -79,7 +79,7 @@ public static class RandomResourceGenerator
             {
                 Vector2 n = point + new Vector2(maskX[j], maskY[j]);
                 if (!path.Contains(n) && r.bounds.IsInsideWalls(n))
-                    stonePos.Add(new Resource(n,"stone"));
+                    stonePos.Add(new Resource(n, "stone"));
             }
 
 
@@ -116,8 +116,8 @@ public static class RandomResourceGenerator
     {
         Boundary b = r.GetBoundary();
 
-        int randomX = UnityEngine.Random.Range(b.startX + 1, b.endX-1);
-        int randomY = UnityEngine.Random.Range(b.startY + 1, b.endY-1);
+        int randomX = UnityEngine.Random.Range(b.startX + 1, b.endX - 1);
+        int randomY = UnityEngine.Random.Range(b.startY + 1, b.endY - 1);
 
 
         Vector2 point = new Vector2(randomX, randomY);

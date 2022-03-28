@@ -62,6 +62,10 @@ namespace Assets.Scripts.UI
             {
                 ToggleMenu("inventory-menu");
             }
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                ToggleMenu("crafting-menu");
+            }
         }
 
         public void ToggleMenu(string menuName)
@@ -142,7 +146,7 @@ namespace Assets.Scripts.UI
 
         public void UpdateEquipment(Dictionary<EquipmentType, Item> equipment)
         {
-            foreach(KeyValuePair<EquipmentType, Item> item in equipment)
+            foreach (KeyValuePair<EquipmentType, Item> item in equipment)
             {
                 string slotName = $"slot-{item.Key}";
                 uiWindows["inventory-menu"].GetComponent<InventoryWindow>().AddItemToSlot(slotName, item.Value);

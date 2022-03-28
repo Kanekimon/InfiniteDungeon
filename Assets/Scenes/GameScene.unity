@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 137649255}
   - component: {fileID: 137649256}
   - component: {fileID: 137649257}
+  - component: {fileID: 137649258}
   m_Layer: 0
   m_Name: Overlay
   m_TagString: Untagged
@@ -184,6 +185,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WindowParent: {fileID: 1294881754}
+--- !u!114 &137649258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137649254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613ccfccbd44f92478088de02c28bfce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &158160802
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,11 +1004,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0796434d7e7e241a4ffb5a53a9b784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WallPrefab: {fileID: 7670428619007317825, guid: 82b8042348fef7846a57c6fe162bd352, type: 3}
-  FloorPrefab: {fileID: 8080606201525099023, guid: c27e9f26685776448bee2d4ba6ccb0fb, type: 3}
-  DoorPrefab: {fileID: 2354823893750413473, guid: 1ae702eaa1e7a7743b65c417cbf119a5, type: 3}
-  PathPrefab: {fileID: 7741216997292334676, guid: 159134aef651ee54e99d73112c55b01d, type: 3}
-  ResourcePrefab: {fileID: 8839403842275313696, guid: 7ad13f0247be892479cacc09d2d46165, type: 3}
 --- !u!4 &417431538
 Transform:
   m_ObjectHideFlags: 0
@@ -1834,6 +1842,7 @@ Transform:
   - {fileID: 290671182}
   - {fileID: 359930236}
   - {fileID: 2084386939}
+  - {fileID: 1620228329}
   m_Father: {fileID: 1144109237}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2063,6 +2072,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576411391}
   m_CullTransparentMesh: 1
+--- !u!1 &1620228328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1620228329}
+  - component: {fileID: 1620228330}
+  - component: {fileID: 1620228331}
+  m_Layer: 0
+  m_Name: crafting-menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1620228329
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620228328}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1294881755}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1620228330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620228328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4bccffc5c5cae42ba511c0c0bfde67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemSlot: {fileID: 9197481963319205126, guid: 686ac81d04c21b1428232132be7515d6, type: 3}
+--- !u!114 &1620228331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620228328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 41da1ffe43b797e429b43aef1c55168f, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: e751c9563bb61934ea727f6a1fd5f943, type: 3}
+  m_SortingOrder: 0
 --- !u!1 &1765426165
 GameObject:
   m_ObjectHideFlags: 0

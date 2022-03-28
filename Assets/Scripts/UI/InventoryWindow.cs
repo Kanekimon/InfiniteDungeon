@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.UI;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -59,11 +60,16 @@ public class InventoryWindow : MonoBehaviour
                     };
                     SetUpContextMenu(e.mousePosition, i, "Unequip", action);
                 }
-                else if(e.button == 0 && e.clickCount == 2)
+                else if (e.button == 0)
                 {
-                    GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().Unequip(i.equipmentType);
-                    root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
+                    if (e.clickCount == 2)
+                    {
+                        GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().Unequip(i.equipmentType);
+                        root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
+                    }
+
                 }
+
 
             });
         }
@@ -77,7 +83,7 @@ public class InventoryWindow : MonoBehaviour
 
     public Background GetBackgroundImage(string name)
     {
-        return Background.FromSprite(Resources.Load<Sprite>($"items/{name}"));
+        return Background.FromSprite(Resources.Load<Sprite>($"items/{name}/{name}_icon"));
     }
 
     public void AddItemToUi(Item i, int amount)
@@ -90,23 +96,39 @@ public class InventoryWindow : MonoBehaviour
         tmpContainer.Q<Label>("item-amount").text = "" + amount;
         itemContainer.Add(itemSlotElement);
 
-        itemSlotElement.RegisterCallback<MouseDownEvent>((e) =>
-        {
-            if (e.button == 1)
-            {
-                System.Action action = () => {
-                    GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().EquipItem(i);
-                    root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
-                };
-                SetUpContextMenu(e.mousePosition, i, "Equip", action);
 
-            }
-            else if (e.button == 0 && e.clickCount == 2)
+        itemSlotElement.RegisterCallback<MouseDownEvent>((e) => { ClickHandler(itemSlotElement, e, i); });
+    }
+
+    private void ClickHandler(VisualElement itemSlotElement, MouseDownEvent e, Item i)
+    {
+        if (e.button == 1)
+        {
+            System.Action action = () =>
+            {
+                GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().EquipItem(i);
+                root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
+            };
+            SetUpContextMenu(e.mousePosition, i, "Equip", action);
+
+        }
+        else if (e.button == 0)
+        {
+            if (e.clickCount == 2)
             {
                 GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().EquipItem(i);
                 root.Q<VisualElement>("contextmenu").style.display = DisplayStyle.None;
             }
-        });
+            else if (e.clickCount == 1)
+            {
+                itemSlotElement.RegisterCallback<MouseMoveEvent>((m) =>
+                {
+                    GameObject.Find("Overlay").GetComponent<DragHelper>().Drag(itemSlotElement, m);
+                });
+
+
+            }
+        }
     }
 
     void SetUpContextMenu(Vector3 mousePos, Item i, string buttonText, System.Action callback)
