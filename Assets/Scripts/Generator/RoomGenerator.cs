@@ -3,6 +3,7 @@ using Assets.Scripts.Enum;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Generator
@@ -42,6 +43,13 @@ namespace Assets.Scripts.Generator
                     y++;
                 }
 
+                if(x == 20 && y == 15)
+                {
+                    GameObject portal = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Portal"));
+                    portal.transform.position = new Vector3(x, y, 0);  
+                    portal.transform.parent = room.transform;
+                }
+
                 int index = (x) + (y * (hub_room.xLength));
                 GenerateTile(room, x + hub_room.bounds.startX, y + hub_room.bounds.startY, (TileType)int.Parse(tD[index].ToString()), hub_room);
                 x++;
@@ -73,10 +81,16 @@ namespace Assets.Scripts.Generator
             {
                 r.SetupDoor(new Vector2(x, y), w);
             }
+
+            Biome b = Biome.grassland;
+
+            if(r.BiomeMatrix != null)
+                b = r.BiomeMatrix[(int)(x - r.bounds.startX), (int)y - r.bounds.startY];
+
             if (tileType == TileType.floor)
-                w.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Textures/Tiles/{r.biome}/base");
+                w.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Textures/Tiles/{b}/base");
             if (tileType == TileType.path)
-                w.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Textures/Tiles/{r.biome}/path");
+                w.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Textures/Tiles/{b}/path");
 
 
             return w;
@@ -151,6 +165,130 @@ namespace Assets.Scripts.Generator
             return pos.ElementAt(Random.Range(0, pos.Count));
         }
 
+        static System.Tuple<List<Biome>, Biome[,]> GetRoomBiomeMatrix(Room r)
+        {
+            int x = (int)r.index.x;
+            int y = (int)r.index.y;
+
+            List<Biome> biomes = new List<Biome>();
+            Biome[,] biomeMatrix = new Biome[r.xLength, r.yLength];
+            if (x == 0 && y == 0) {
+                biomes.Add(Biome.grassland);
+                return new System.Tuple<List<Biome>, Biome[,]>(biomes, biomeMatrix);
+            }
+
+            float value = (float)((Mathf.Atan2(x, y) / Mathf.PI) * 180f);
+            if (value < 0) value += 360f;
+
+            if(value == 45 || value == 135 || value == 225 || value == 315)
+            {
+                Vector2 startCoord = new Vector2(r.bounds.startX, r.bounds.startY);
+                Vector2 endCoord = (Vector2)(Quaternion.AngleAxis(value, Vector3.forward) * Vector2.up);
+
+                //position = sign((Bx - Ax) * (Y - Ay) - (By - Ay) * (X - Ax))
+
+                if(value == 45)
+                {
+                    biomes.Add(Biome.snowy);
+                    biomes.Add(Biome.earth);
+                }
+                if(value == 135)
+                {
+                    biomes.Add(Biome.earth);
+                    biomes.Add(Biome.desert);
+                }
+                if (value == 225)
+                {
+                    biomes.Add(Biome.desert);
+                    biomes.Add(Biome.grassland);
+                }
+                if (value == 315)
+                {
+                    biomes.Add(Biome.grassland);
+                    biomes.Add(Biome.snowy);
+                }
+
+                for (int w = 0; w < r.xLength; w++)
+                {
+                    for (int v = 0; v < r.yLength; v++)
+                    {
+                        int xRoom = w + r.bounds.startX;
+                        int yRoom = v + r.bounds.startY;
+
+                        float onPoint = Mathf.Sign((endCoord.x - startCoord.x) * (yRoom - startCoord.y) - (endCoord.y - startCoord.y) * (xRoom - startCoord.x));
+
+                        if(value == 45)
+                        {
+                            if (onPoint == -1)
+                                biomeMatrix[w, v] = Biome.snowy;
+                            else if(onPoint == 1)
+                                biomeMatrix[w, v] = Biome.earth;
+                            else
+                                biomeMatrix[w, v] = Random.Range(0f,1f) < 0.5f ? Biome.snowy : Biome.earth;
+                        }
+
+                        if (value == 135)
+                        {
+                            if (onPoint == -1)
+                                biomeMatrix[w, v] = Biome.earth;
+                            else if (onPoint == 1)
+                                biomeMatrix[w, v] = Biome.desert;
+                            else
+                                biomeMatrix[w, v] = Random.Range(0f, 1f) < 0.5f ? Biome.earth : Biome.desert;
+                        }
+
+                        if (value == 225)
+                        {
+                            if (onPoint == -1)
+                                biomeMatrix[w, v] = Biome.desert;
+                            else if (onPoint == 1)
+                                biomeMatrix[w, v] = Biome.grassland;
+                            else
+                                biomeMatrix[w, v] = Random.Range(0f, 1f) < 0.5f ? Biome.desert : Biome.grassland;
+                        }
+
+                        if (value == 315)
+                        {
+                            if (onPoint == -1)
+                                biomeMatrix[w, v] = Biome.grassland;
+                            else if (onPoint == 1)
+                                biomeMatrix[w, v] = Biome.snowy;
+                            else
+                                biomeMatrix[w, v] = Random.Range(0f, 1f) < 0.5f ? Biome.grassland : Biome.snowy;
+                        }
+
+                    }
+                }
+                return new System.Tuple<List<Biome>, Biome[,]>(biomes, biomeMatrix);
+            }
+
+            else
+            {
+                Biome b = Biome.grassland;
+
+                if ((value > 315) || (value < 45))
+                    b = Biome.snowy;
+                if (value > 45 && value < 135)
+                    b = Biome.earth;
+                if (value > 135 && value < 225)
+                    b = Biome.desert;
+                if (value > 225 && value < 315)
+                    b = Biome.grassland;
+
+                biomes.Add(b);
+
+                for(int w = 0;w < r.xLength; w++)
+                {
+                    for(int v = 0; v < r.yLength; v++)
+                    {
+                        biomeMatrix[w, v] = b;
+                    }
+                }
+
+            }
+            return new System.Tuple<List<Biome>, Biome[,]>(biomes, biomeMatrix);
+        }
+
 
         static Biome GetBiomeBasedOnIndex(Room r)
         {
@@ -163,7 +301,7 @@ namespace Assets.Scripts.Generator
             float value = (float)((Mathf.Atan2(x, y) / Mathf.PI) * 180f);
             if (value < 0) value += 360f;
 
-            Debug.Log($"Angle: {value}");
+            //Debug.Log($"Angle: {value}");
 
             if ((value >= 315) || (value < 45))
                 return Biome.snowy;
@@ -270,12 +408,21 @@ namespace Assets.Scripts.Generator
                 RoomManager.Instance.Run = runParent;
             }
 
+ 
+
             GameObject roomContainer = new GameObject();
 
             Room room = new Room(System.Guid.NewGuid().ToString(), index, xSize, ySize, (int)startPoint.x, (int)startPoint.y, roomContainer);
-            room.SetBiome(GetBiomeBasedOnIndex(room));
+            System.Tuple<List<Biome>, Biome[,]> BiomeList = GetRoomBiomeMatrix(room);
+            //room.SetBiome(GetBiomeBasedOnIndex(room));
+            room.SetBiomes(BiomeList.Item1, BiomeList.Item2);
             //room.SetBiome(GetBiome(room, dir));
             roomContainer.name = $"Room: ({index.x} | {index.y})";
+
+            Vector2 firstCenter = Vector2.zero;
+
+            Vector2 rightEdge = new Vector2(room.bounds.endX, room.bounds.endY);
+
 
             Vector2 startPointPath = GetRoomStartPoint(dir, room);
             room.playerSpawnPoint = startPointPath;
@@ -298,6 +445,13 @@ namespace Assets.Scripts.Generator
                     Vector2 tileCoords = new Vector2(xCord, yCord);
 
                     TileType tileType = GetTileTypeForPosition(x, y, xSize, ySize, xCord, yCord, path);
+
+                    //sign((Bx - Ax) * (Y - Ay) - (By - Ay) * (X - Ax))
+
+
+                    if (RoomManager.Instance.GetRoomMap().Count != 0)
+                        firstCenter = RoomManager.Instance.GetRoomMap().First().center;
+
 
                     GameObject tile = GenerateTile(roomContainer, xCord, yCord, tileType, room);
                     room.AddTileToRoom(tileCoords, tile, tileType);

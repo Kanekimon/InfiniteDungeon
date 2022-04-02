@@ -60,15 +60,19 @@ namespace Assets.Scripts.UI
 
             if (Input.GetKeyDown(KeyCode.I))
             {
-                ToggleMenu("inventory-menu");
+                if(ToggleMenu("inventory-menu"))
+                    InventoryWindow.Instance.SetContentArea("equipment");
+
+
             }
             if (Input.GetKeyDown(KeyCode.C))
             {
-                ToggleMenu("crafting-menu");
+                if(ToggleMenu("inventory-menu"))
+                    InventoryWindow.Instance.SetContentArea("crafting");
             }
         }
 
-        public void ToggleMenu(string menuName)
+        public bool ToggleMenu(string menuName)
         {
             GameObject window = uiWindows[menuName];
             bool newstate = !window.activeInHierarchy;
@@ -86,7 +90,7 @@ namespace Assets.Scripts.UI
                 currentActive = null;
 
             window.SetActive(newstate);
-
+            return newstate;
             //VisualElement men = root.Q<VisualElement>(menuName);
             //men.style.display = men.style.display != DisplayStyle.Flex ? DisplayStyle.Flex : DisplayStyle.None;
         }
@@ -120,7 +124,6 @@ namespace Assets.Scripts.UI
         {
             Label money = root.Q<Label>("money");
             string currentCurrency = money.text.Replace("Money: ", "");
-            Debug.Log(currentCurrency);
             if (currentCurrency == string.Empty)
                 currentCurrency = "0";
             float val = float.Parse(currentCurrency);

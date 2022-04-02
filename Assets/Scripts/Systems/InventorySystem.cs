@@ -65,17 +65,32 @@ public class InventorySystem : MonoBehaviour
     /// <param name="amount">Amount of item</param>
     public void AddItem(Item i, int amount)
     {
-        Debug.Log(i);
+        //Debug.Log(i);
+        try
+        {
+            Item item = null;
 
-        Item item = null;
-        if (items.Any(a => a.Key.ItemId != i.ItemId))
-            item = items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Key;
+            if (i.ItemName.Equals("gold"))
+            {
+                ChangeCurrency(amount);
+            }
+            else
+            {
 
-        if (item != null)
-            items[item] += amount;
-        else
-            items[i] = amount;
+                if (items.Any(a => a.Key.ItemId != i.ItemId))
+                    item = items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Key;
 
+                if (item != null)
+                    items[item] += amount;
+                else
+                    items[i] = amount;
+            }
+        }
+        catch(System.Exception ex)
+        {
+            Debug.Log(i.ItemName);
+            Debug.LogException(ex);
+        }
         UiManager.Instance.UpdateInventory();
 
     }
@@ -88,14 +103,22 @@ public class InventorySystem : MonoBehaviour
     /// <param name="amount">Amount to remove</param>
     public void RemoveItem(Item i, int amount)
     {
-        if (items.ContainsKey(i) && HasEnoughOfItem(i, amount))
+        if (HasItem(i) && HasEnoughOfItem(i, amount))
         {
-            items[i] -= amount;
-            if (items[i] == 0)
-                items.Remove(i);
+            Item fromInv = GetItemFromInventory(i);
+
+            items[fromInv] -= amount;
+            if (items[fromInv] == 0)
+                items.Remove(fromInv);
         }
         UiManager.Instance.UpdateInventory();
 
+    }
+
+
+    public bool HasItem(Item i)
+    {
+        return items.Any(a => a.Key.ItemId == i.ItemId);
     }
 
     /// <summary>
@@ -105,7 +128,7 @@ public class InventorySystem : MonoBehaviour
     /// <returns>Quantity of item or -1 if not in inventory</returns>
     public int GetItemAmount(Item i)
     {
-        if(items.Any(a => a.Key.ItemId == i.ItemId))
+        if(HasItem(i))
             return items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Value;
 
         return -1;
@@ -134,9 +157,9 @@ public class InventorySystem : MonoBehaviour
         return items;
     }
 
-    public Item GetItemFromInventory()
+    public Item GetItemFromInventory(Item i)
     {
-        return items.First().Key;
+        return items.Where(a => a.Key.ItemId == i.ItemId).FirstOrDefault().Key;
     }
 
 }

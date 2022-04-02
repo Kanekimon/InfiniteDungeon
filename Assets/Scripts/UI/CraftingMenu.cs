@@ -9,26 +9,41 @@ using UnityEngine.UIElements;
 public class CraftingMenu : MonoBehaviour
 {
 
+    public static CraftingMenu Instance;
+
     VisualElement root;
     List<Recipe> recipes = new List<Recipe>();
     ListView listView;
     public VisualTreeAsset itemSlot;
 
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
+    }
+
     private void OnEnable()
     {
-        root = GetComponent<UIDocument>().rootVisualElement;
-        recipes.Clear();
-
-        recipes.Add(new Recipe() { ResultItemName = "Sword" , Materials = RandomMaterials() , ResultAmount = 1});
-        recipes.Add(new Recipe() { ResultItemName = "Spear", Materials = RandomMaterials(), ResultAmount = 1 });
-        recipes.Add(new Recipe() { ResultItemName = "Dagger", Materials = RandomMaterials(), ResultAmount = 1 });
-        InitializeRecipeListView();
-        AddItems();
 
 
 
     }
 
+
+    public void SetupCrafting()
+    {
+        root = GetComponent<UIDocument>().rootVisualElement;
+        recipes.Clear();
+
+        recipes.Add(new Recipe() { ResultItemName = "Sword", Materials = RandomMaterials(), ResultAmount = 1 });
+        recipes.Add(new Recipe() { ResultItemName = "Spear", Materials = RandomMaterials(), ResultAmount = 1 });
+        recipes.Add(new Recipe() { ResultItemName = "Dagger", Materials = RandomMaterials(), ResultAmount = 1 });
+        InitializeRecipeListView();
+        AddItems();
+
+    }
 
     public void AddItems()
     {
@@ -66,17 +81,17 @@ public class CraftingMenu : MonoBehaviour
     private List<RecipeMaterial> RandomMaterials()
     {
         List<RecipeMaterial> recipeMaterials = new List<RecipeMaterial>();
-        int random  = UnityEngine.Random.Range(0, 3);
+        int random = UnityEngine.Random.Range(0, 3);
 
-        if(random >= 0)
+        if (random >= 0)
         {
-            recipeMaterials.Add(new RecipeMaterial() { Material = ItemManager.Instance.GetItemByName("scrap"), Amount = UnityEngine.Random.Range(1,10) });
+            recipeMaterials.Add(new RecipeMaterial() { Material = ItemManager.Instance.GetItemByName("scrap"), Amount = UnityEngine.Random.Range(1, 10) });
         }
-        if(random >= 1)
+        if (random >= 1)
         {
             recipeMaterials.Add(new RecipeMaterial() { Material = ItemManager.Instance.GetItemByName("wood"), Amount = UnityEngine.Random.Range(1, 10) });
         }
-        if(random >= 2)
+        if (random >= 2)
         {
             recipeMaterials.Add(new RecipeMaterial() { Material = ItemManager.Instance.GetItemByName("stone"), Amount = UnityEngine.Random.Range(1, 10) });
         }
@@ -133,11 +148,11 @@ public class CraftingMenu : MonoBehaviour
         Debug.Log($"Recipe: {r.ResultItemName}");
 
         int counter = 0;
-        foreach(RecipeMaterial rm in r.Materials)
+        foreach (RecipeMaterial rm in r.Materials)
         {
             VisualElement slot = root.Q<VisualElement>("material-" + counter);
             slot.style.backgroundImage = GetBackgroundImage(rm.Material.ItemName);
-            slot.Q<Label>($"material-{counter}-amount").text = ""+rm.Amount;
+            slot.Q<Label>($"material-{counter}-amount").text = "" + rm.Amount;
             counter++;
         }
     }

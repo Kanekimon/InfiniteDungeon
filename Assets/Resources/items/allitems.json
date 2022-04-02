@@ -1,6 +1,13 @@
 [
   {
     "ItemId": 0,
+    "ItemName": "gold",
+    "itemsTypes": [],
+    "equipmentType": 0,
+    "properties": []
+  },
+  {
+    "ItemId": 1,
     "ItemName": "sword",
     "itemsTypes": [
       1,
@@ -19,7 +26,7 @@
     ]
   },
   {
-    "ItemId": 1,
+    "ItemId": 2,
     "ItemName": "dagger",
     "itemsTypes": [
       1,
@@ -38,7 +45,7 @@
     ]
   },
   {
-    "ItemId": 2,
+    "ItemId": 3,
     "ItemName": "spear",
     "itemsTypes": [
       1,
@@ -57,7 +64,7 @@
     ]
   },
   {
-    "ItemId": 3,
+    "ItemId": 4,
     "ItemName": "scrap",
     "itemsTypes": [
       3
@@ -75,7 +82,7 @@
     ]
   },
   {
-    "ItemId": 4,
+    "ItemId": 5,
     "ItemName": "wood",
     "itemsTypes": [
       3
@@ -93,7 +100,7 @@
     ]
   },
   {
-    "ItemId": 5,
+    "ItemId": 6,
     "ItemName": "stone",
     "itemsTypes": [
       3

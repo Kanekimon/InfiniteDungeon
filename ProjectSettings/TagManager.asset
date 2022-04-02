@@ -19,7 +19,7 @@ TagManager:
   - Enemies
   - Obstacle
   - Weapon
-  - 
+  - Loot
   - 
   - 
   - 
@@ -58,4 +58,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 22626299
+    locked: 0
+  - name: Drop
+    uniqueID: 4071820645
     locked: 0

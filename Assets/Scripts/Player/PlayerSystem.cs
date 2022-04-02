@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,13 +24,13 @@ public class PlayerSystem : MonoBehaviour
         InventorySystem = this.GetComponent<InventorySystem>();
         AddAttributes();
 
-        InventorySystem.AddItem(ItemManager.Instance.GetItem(0), 1);
         InventorySystem.AddItem(ItemManager.Instance.GetItem(1), 1);
         InventorySystem.AddItem(ItemManager.Instance.GetItem(2), 1);
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(3), 1);
 
-        InventorySystem.AddItem(ItemManager.Instance.GetItem(3), 100);
         InventorySystem.AddItem(ItemManager.Instance.GetItem(4), 100);
         InventorySystem.AddItem(ItemManager.Instance.GetItem(5), 100);
+        InventorySystem.AddItem(ItemManager.Instance.GetItem(6), 100);
         this.GetComponent<Animator>().enabled = true;
 
     }
@@ -75,8 +76,25 @@ public class PlayerSystem : MonoBehaviour
 
     private float GetRandom()
     {
-        return UnityEngine.Random.Range(1f, 20f);
+        return UnityEngine.Random.Range(10f, 15f);
     }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.collider.isTrigger &&  collision.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Collided with : " + collision.gameObject.name);
+            Vector2 knockVec = (collision.transform.position - this.transform.position).normalized;
+
+            collision.gameObject.GetComponent<BaseLogic>().knockedBack = true;
+            collision.gameObject.GetComponent<Rigidbody2D>().velocity = knockVec * 100f;
+            //collision.gameObject.GetComponent<BaseLogic>().knockedBack = false;
+            this.transform.GetChild(0).GetComponent<CameraShake>().Shake(0.2f, 0.15f);
+            collision.gameObject.GetComponent<AttributeSystem>().ChangeHealth(-AttributeSystem.GetAttributeValue("str"));
+        }
+    }
+
 
 }
 

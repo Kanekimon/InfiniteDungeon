@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -82,7 +83,7 @@ public class NPCManager : MonoBehaviour
     /// <returns></returns>
     public GameObject InstantiateEnemy(Room r, int x, int y)
     {
-        GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo" + UnityEngine.Random.Range(0, 2)));
+        GameObject e = Instantiate(Resources.Load<GameObject>("Prefabs/Enemo0"));//UnityEngine.Random.Range(0, 2)));
         NpcBase nBase = e.GetComponent<NpcBase>();
         nBase.SetDifficulty(r);
         e.transform.position = new Vector3(x, y, 0);

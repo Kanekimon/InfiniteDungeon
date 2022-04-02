@@ -24,24 +24,41 @@ public class NpcBase : MonoBehaviour
     {
         if (aSystem.GetAttribute("hp").ChangableValue <= 0)
         {
-            foreach(Loot loot in lootTable.GetLoot())
-            {
-                if (loot.Name.Equals("gold"))
-                {
-                    GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(loot.Min, loot.Max+1) * Mathf.Max(r.depth, 1f));
-                }
-                else
-                {
-                    if(UnityEngine.Random.Range(0,1f) < loot.BaseProbability)
-                        GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(ItemManager.Instance.GetItemByName(loot.Name), UnityEngine.Random.Range(loot.Min, loot.Max+1));
-                }
-            }
-
-
-
 
         }
 
+        foreach (Loot loot in lootTable.GetLoot())
+        {
+            if (loot.Name.Equals("gold"))
+            {
+                for (int i = 0; i < Random.Range(loot.Min, loot.Max + 1); i++)
+                {
+                    SpawnLoot("gold");
+                }
+                //GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(loot.Min, loot.Max + 1) * Mathf.Max(r.depth, 1f));
+            }
+            else
+            {
+                int randoAmount = Random.Range(loot.Min, loot.Max + 1);
+                for (int i = 0; i < randoAmount; i++)
+                {
+                    if (UnityEngine.Random.Range(0, 1f) < loot.BaseProbability)
+                        SpawnLoot(loot.Name);
+                }
+
+
+
+                // GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(ItemManager.Instance.GetItemByName(loot.Name), UnityEngine.Random.Range(loot.Min, loot.Max + 1));
+            }
+        }
+    }
+
+    void SpawnLoot(string name)
+    {
+        GameObject drop = Instantiate(Resources.Load<GameObject>("items/drop"));
+        drop.transform.position = this.transform.position;
+        drop.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"items/{name}");
+        drop.name = name;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -7,10 +7,24 @@ using UnityEngine.UIElements;
 public class InventoryWindow : MonoBehaviour
 {
     public VisualTreeAsset itemSlot;
+    public VisualTreeAsset craftingContent;
+    public VisualTreeAsset equipmentContent;
+
+    public static InventoryWindow Instance;
 
     delegate void ButtonCallBack();
 
+
+
     VisualElement root;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
+    }
 
     private void OnEnable()
     {
@@ -37,6 +51,20 @@ public class InventoryWindow : MonoBehaviour
         }
 
 
+    }
+
+    public void SetContentArea(string menuName)
+    {
+        root.Q<VisualElement>("content-container").Children().Last().RemoveFromHierarchy();
+        if (menuName.Equals("crafting"))
+        {
+            root.Q<VisualElement>("content-container").Add(craftingContent.Instantiate().Q<VisualElement>("recipes-container"));
+            CraftingMenu.Instance.SetupCrafting();
+        }
+        if (menuName.Equals("equipment"))
+        {
+            root.Q<VisualElement>("content-container").Add(equipmentContent.Instantiate().Q<VisualElement>("recipes-container"));
+        }
     }
 
     public void AddItemToSlot(string slotName, Item i)

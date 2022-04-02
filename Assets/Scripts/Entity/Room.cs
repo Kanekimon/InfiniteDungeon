@@ -24,6 +24,8 @@ public class Room
     public Vector2 playerSpawnPoint;
     public Boundary bounds;
     public Biome biome;
+    public List<Biome> biomes;
+    public Biome[,] BiomeMatrix;
 
     [JsonIgnore]
     public CorruptionCore core;
@@ -72,6 +74,12 @@ public class Room
     public void SetBiome(Biome b)
     {
         this.biome = b;
+    }
+   
+    public void SetBiomes(List<Biome> biomes, Biome[,] biomeMatrix)
+    {
+        this.biomes = biomes;
+        this.BiomeMatrix = biomeMatrix;
     }
 
 

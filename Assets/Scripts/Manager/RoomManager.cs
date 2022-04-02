@@ -73,6 +73,7 @@ public class RoomManager : MonoBehaviour
         if (saveId == -1)
         {
             r = RoomGenerator.CreateFromPreset("main_hub");
+
             hubRooms.Add(r);
         }
         else
@@ -382,6 +383,15 @@ public class RoomManager : MonoBehaviour
     {
         if (Application.isPlaying)
         {
+
+            if(GetRoomMap().Count > 0)
+            {
+                Vector2 firstRoomCenter = GetRoomMap().First().center;
+                Vector2 ne = (Vector2)(Quaternion.AngleAxis(-45, Vector3.forward) * Vector2.up);
+
+                Gizmos.DrawRay(firstRoomCenter, ne*currentRoom.center.magnitude);
+            }
+
             foreach (Room room in roomMap)
             {
                 Boundary b = room.GetBoundary();
