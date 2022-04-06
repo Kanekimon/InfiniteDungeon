@@ -71,10 +71,6 @@ public class NPCStateMachine : MonoBehaviour
             DistanceToTarget = Vector3.Distance(this.transform.position, Target.transform.position);
 
         }
-
-
-
-        
     }
 
 

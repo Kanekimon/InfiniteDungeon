@@ -120,6 +120,32 @@ namespace Assets.Scripts.UI
             hp_value.text = $"{currenthp} / {maxhp}";
         }
 
+
+        public void SetExp(float maxExp, float currentExp, int currentLevel)
+        {
+            VisualElement container = root.Q<VisualElement>("exp-container");
+            VisualElement bar = root.Q<VisualElement>("exp-bar");
+            Label exp_value = root.Q<Label>("exp-value");
+
+            Label level = root.Q<Label>("exp-label");
+            level.text = $"Exp ( Current Level: {currentLevel} )";
+
+            float percHealth = (currentExp / maxExp) * 100;
+
+            bar.style.width = new Length(percHealth, LengthUnit.Percent);
+
+            Color color = Color.cyan;
+
+            bar.style.backgroundColor = color;
+
+            container.style.backgroundColor = Color.Lerp(color, Color.black, .5f);
+
+
+
+            exp_value.text = $"{currentExp} / {maxExp}";
+        }
+
+
         public void ChangeCurrency(float value)
         {
             Label money = root.Q<Label>("money");

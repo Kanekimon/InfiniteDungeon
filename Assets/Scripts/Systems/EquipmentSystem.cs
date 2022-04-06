@@ -42,9 +42,9 @@ public class EquipmentSystem : MonoBehaviour
         }
         if (i.equipmentType == EquipmentType.weapon)
         {
-            GameObject weap = Instantiate(Resources.Load<GameObject>($"items/{i.ItemName}/{i.ItemName}_prefab"));
-            weap.name = "weapon";
-            weap.transform.SetParent(transform, false);
+            //GameObject weap = Instantiate(Resources.Load<GameObject>($"items/{i.ItemName}/{i.ItemName}_prefab"));
+            //weap.name = "weapon";
+            //weap.transform.SetParent(transform, false);
         }
 
         Debug.Log("Equip");

@@ -34,6 +34,8 @@ namespace Assets.Scripts.UI
         {
             PlayerSystem ps = GameManager.Instance.GetPlayerSystem();
 
+            root.Q<Label>("upgrade-points").text = $"Upgrade Points available: {ps.UpgradePoints}";
+
             foreach (Attribute att in ps.AttributeSystem.attributes)
             {
                 if (root.Q<VisualElement>(att.Name) != null)
@@ -46,8 +48,13 @@ namespace Assets.Scripts.UI
 
         public void IncreaseAttribute(string attr)
         {
-            GameManager.Instance.GetPlayerSystem().AttributeSystem.UpgradeAttribute(attr);
-            InitStats();
+            if (GameManager.Instance.GetPlayerSystem().UpgradePoints > 0)
+            {
+                GameManager.Instance.GetPlayerSystem().UpgradePoints--;
+                GameManager.Instance.GetPlayerSystem().AttributeSystem.UpgradeAttribute(attr);
+                InitStats();
+
+            }
         }
 
 

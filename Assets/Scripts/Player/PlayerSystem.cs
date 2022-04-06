@@ -9,11 +9,29 @@ public class PlayerSystem : MonoBehaviour
 
     public AttributeSystem AttributeSystem;
     public InventorySystem InventorySystem;
+    private int level;
+    private int currentExp;
+    private int expNeeded;
+    public int UpgradePoints;
 
+
+    private void OnEnable()
+    {
+        NpcBase.OnEnemyKilled += KillEnemy;
+    }
+
+    private void OnDisable()
+    {
+        NpcBase.OnEnemyKilled -= KillEnemy;
+
+    }
 
     private void Start()
     {
-
+        currentExp = 0;
+        level = 1;
+        expNeeded = CalculateExpNeeded();
+        UiManager.Instance.SetExp(expNeeded, currentExp, level);
     }
 
 
@@ -79,6 +97,32 @@ public class PlayerSystem : MonoBehaviour
         return UnityEngine.Random.Range(10f, 15f);
     }
 
+
+    public void KillEnemy(int depth)
+    {
+        currentExp += depth + 50;
+
+        if(currentExp >= expNeeded)
+        {
+            LevelUp();
+        }
+
+        UiManager.Instance.SetExp(expNeeded, currentExp, level);
+    }
+
+    public void LevelUp()
+    {
+        level += 1;
+        int o = Mathf.Abs(expNeeded - currentExp);
+        currentExp = 0 + o;
+        expNeeded = CalculateExpNeeded();
+        UpgradePoints += 3;
+    }
+
+    public int CalculateExpNeeded()
+    {
+        return (100 * level) + (level - 1 * (int)((float)expNeeded * 0.5f));
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

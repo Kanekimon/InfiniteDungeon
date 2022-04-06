@@ -1843,6 +1843,7 @@ Transform:
   - {fileID: 290671182}
   - {fileID: 359930236}
   - {fileID: 2084386939}
+  - {fileID: 1935898673}
   m_Father: {fileID: 1144109237}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2369,6 +2370,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1935597527}
   m_CullTransparentMesh: 1
+--- !u!1 &1935898672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1935898673}
+  - component: {fileID: 1935898674}
+  m_Layer: 0
+  m_Name: shop-menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1935898673
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935898672}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.8983088, y: 0.03805065, z: 5.3831983}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1294881755}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1935898674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935898672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 41da1ffe43b797e429b43aef1c55168f, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: fcd5384199a6add4485dda27dfddf371, type: 3}
+  m_SortingOrder: 1
 --- !u!1 &2017835212
 GameObject:
   m_ObjectHideFlags: 0
@@ -2517,7 +2565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemSlot: {fileID: 9197481963319205126, guid: 686ac81d04c21b1428232132be7515d6, type: 3}
   craftingContent: {fileID: 9197481963319205126, guid: 72e56acbeef8da1478532d5f988a8af0, type: 3}
-  equipmentContent: {fileID: 9197481963319205126, guid: 72e56acbeef8da1478532d5f988a8af0, type: 3}
+  equipmentContent: {fileID: 9197481963319205126, guid: 4727f2df7f8000440b3829afad9c61eb, type: 3}
 --- !u!114 &2084386941
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="recipes-container" style="width: 25%;">
+    <ui:VisualElement name="recipes-container" style="width: 25%; height: 100%;">
         <ui:VisualElement name="recipes-header" class="border rounded" style="height: 10%; flex-direction: column; justify-content: center;">
             <ui:Label text="Recipes" display-tooltip-when-elided="true" name="recipes-label" />
         </ui:VisualElement>
@@ -7,16 +7,16 @@
         <ui:VisualElement name="recipes-bottom" class="border" style="height: 30%; flex-direction: column;">
             <ui:VisualElement name="recipes-materials" class="border rounded" style="height: 80%; flex-direction: row; align-items: center;">
                 <ui:VisualElement name="material-0" class="rounded border" style="max-width: 25%; max-height: 100%; height: 60%; width: 25%;">
-                    <ui:Label text="100" display-tooltip-when-elided="true" name="material-0-amount" style="position: absolute; top: 25px; left: 22px; width: 50%; height: 35%;" />
+                    <ui:Label display-tooltip-when-elided="true" name="material-0-amount" style="position: absolute; top: 25px; left: 22px; height: 35%; right: -4px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="material-1" class="rounded border" style="max-width: 25%; max-height: 100%; height: 60%; width: 25%;">
-                    <ui:Label text="100" display-tooltip-when-elided="true" name="material-1-amount" style="position: absolute; top: 25px; left: 22px; width: 50%; height: 35%;" />
+                    <ui:Label display-tooltip-when-elided="true" name="material-1-amount" style="position: absolute; top: 25px; left: 22px; height: 35%; width: 50px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="material-2" class="rounded border" style="max-width: 25%; max-height: 100%; height: 60%; width: 25%;">
-                    <ui:Label text="100" display-tooltip-when-elided="true" name="material-2-amount" style="position: absolute; top: 25px; left: 22px; width: 50%; height: 35%;" />
+                    <ui:Label display-tooltip-when-elided="true" name="material-2-amount" style="position: absolute; top: 25px; left: 22px; width: 50%; height: 35%;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="material-3" class="rounded border" style="max-width: 25%; max-height: 100%; height: 60%; width: 25%;">
-                    <ui:Label text="100" display-tooltip-when-elided="true" name="material-3-amount" style="position: absolute; top: 25px; left: 22px; width: 50%; height: 35%;" />
+                    <ui:Label display-tooltip-when-elided="true" name="material-3-amount" style="position: absolute; top: 25px; left: 22px; width: 50%; height: 35%;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Button text="Craft" display-tooltip-when-elided="true" name="craft-button" class="rounded" style="background-color: rgba(188, 188, 188, 0);" />

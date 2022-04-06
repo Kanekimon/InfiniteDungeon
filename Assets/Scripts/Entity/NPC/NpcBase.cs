@@ -9,6 +9,11 @@ public class NpcBase : MonoBehaviour
     public Room r;
     public LootTable lootTable;
 
+
+    public static event HandleKill OnEnemyKilled;
+    public  delegate void HandleKill(int depth);
+
+
     private void Start()
     {
         aSystem = GetComponent<AttributeSystem>();
@@ -24,32 +29,33 @@ public class NpcBase : MonoBehaviour
     {
         if (aSystem.GetAttribute("hp").ChangableValue <= 0)
         {
+            OnEnemyKilled?.Invoke((int)roomDepth);
 
-        }
-
-        foreach (Loot loot in lootTable.GetLoot())
-        {
-            if (loot.Name.Equals("gold"))
+            foreach (Loot loot in lootTable.GetLoot())
             {
-                for (int i = 0; i < Random.Range(loot.Min, loot.Max + 1); i++)
+                if (loot.Name.Equals("gold"))
                 {
-                    SpawnLoot("gold");
+                    for (int i = 0; i < Random.Range(loot.Min, loot.Max + 1); i++)
+                    {
+                        SpawnLoot("gold");
+                    }
+                    //GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(loot.Min, loot.Max + 1) * Mathf.Max(r.depth, 1f));
                 }
-                //GameManager.Instance.GetPlayerSystem().InventorySystem.ChangeCurrency(UnityEngine.Random.Range(loot.Min, loot.Max + 1) * Mathf.Max(r.depth, 1f));
-            }
-            else
-            {
-                int randoAmount = Random.Range(loot.Min, loot.Max + 1);
-                for (int i = 0; i < randoAmount; i++)
+                else
                 {
-                    if (UnityEngine.Random.Range(0, 1f) < loot.BaseProbability)
-                        SpawnLoot(loot.Name);
+                    int randoAmount = Random.Range(loot.Min, loot.Max + 1);
+                    for (int i = 0; i < randoAmount; i++)
+                    {
+                        if (UnityEngine.Random.Range(0, 1f) < loot.BaseProbability)
+                            SpawnLoot(loot.Name);
+                    }
+
+
+
+                    // GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(ItemManager.Instance.GetItemByName(loot.Name), UnityEngine.Random.Range(loot.Min, loot.Max + 1));
                 }
-
-
-
-                // GameManager.Instance.GetPlayerSystem().InventorySystem.AddItem(ItemManager.Instance.GetItemByName(loot.Name), UnityEngine.Random.Range(loot.Min, loot.Max + 1));
             }
+
         }
     }
 
@@ -78,4 +84,6 @@ public class NpcBase : MonoBehaviour
     {
         return entityId;
     }
+
+
 }

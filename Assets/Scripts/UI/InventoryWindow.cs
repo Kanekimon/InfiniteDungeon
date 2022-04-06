@@ -55,7 +55,8 @@ public class InventoryWindow : MonoBehaviour
 
     public void SetContentArea(string menuName)
     {
-        root.Q<VisualElement>("content-container").Children().Last().RemoveFromHierarchy();
+        if(root.Q<VisualElement>("content-container").childCount > 1)
+            root.Q<VisualElement>("content-container").Children().Last().RemoveFromHierarchy();
         if (menuName.Equals("crafting"))
         {
             root.Q<VisualElement>("content-container").Add(craftingContent.Instantiate().Q<VisualElement>("recipes-container"));
@@ -63,7 +64,7 @@ public class InventoryWindow : MonoBehaviour
         }
         if (menuName.Equals("equipment"))
         {
-            root.Q<VisualElement>("content-container").Add(equipmentContent.Instantiate().Q<VisualElement>("recipes-container"));
+            root.Q<VisualElement>("content-container").Add(equipmentContent.Instantiate().Q<VisualElement>("equipment-container"));
         }
     }
 

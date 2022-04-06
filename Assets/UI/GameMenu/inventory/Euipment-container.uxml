@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="equipped" class="border" style="width: 25%; flex-direction: row; height: 100%;">
+        <ui:VisualElement name="equip-left" style="width: 40%;">
+            <ui:VisualElement name="slot-weapon" class="rounded border" style="width: 50%; height: 15%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="equip-mid" style="width: 20%;" />
+        <ui:VisualElement name="equip-right" style="width: 40%;" />
+    </ui:VisualElement>
+</ui:UXML>
